@@ -218,6 +218,7 @@ details summary {
   margin-left: 8px;
   vertical-align: middle;
 }
+.ride-card .route-name.wagon { background: #e06c00; }
 .ride-card .leg { margin: 6px 0; }
 .ride-card .fare { font-weight: bold; }
 .ride-card .transfer-note {
