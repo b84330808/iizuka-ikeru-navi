@@ -95,6 +95,16 @@ check("日曜は筑穂側へ行けない(0件)", sunRes.rides.length === 0, `rid
 const far = { name: "山奥", lat: 33.75, lon: 130.85 };
 check("遠隔地は reachable=false", E.search(yoshihara[0][1], far, MON, 0).reachable === false);
 
+// 5b) ignoreSvc: 日曜は筑穂側へ便が無い(gone)が、構造的には到達可能
+const facNearCh2 = { name: "筑穂側施設", lat: chStop0.lat, lon: chStop0.lon };
+const sunNormal = E.search(yoshihara[0][1], facNearCh2, SUN, 0, false);
+const sunIgnore = E.search(yoshihara[0][1], facNearCh2, SUN, 0, true);
+check("日曜は筑穂側へ運休(通常検索0件)", sunNormal.rides.length === 0);
+check("構造的には到達可能(ignoreSvcで検出)= gone判定の根拠", sunIgnore.rides.length > 0,
+      `ignore=${sunIgnore.rides.length}`);
+// 本当に不通の遠隔地は ignoreSvc でも 0 = dead判定
+check("遠隔地は ignoreSvc でも到達不可 = dead", E.search(yoshihara[0][1], far, MON, 0, true).rides.length === 0);
+
 // 6) 全 trip の fare 整合性: 宮若線の任意区間で fare が引けるか
 let missing = 0, checked = 0;
 for (const t of D.trips.filter(t => t.feed === "miyawaka")) {

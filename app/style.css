@@ -141,16 +141,50 @@ details summary {
   padding: 6px 10px;
   border-radius: 6px;
 }
-.stop-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.stop-btns { display: flex; flex-wrap: wrap; gap: 10px; }
 .stop-btns button {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
   font-size: 0.85em;
-  padding: 10px 14px;
+  padding: 9px 14px;
   border: 2px solid var(--c-line);
-  border-radius: 999px;
+  border-radius: 12px;
   background: var(--c-card);
   cursor: pointer;
+  text-align: left;
 }
-.stop-btns button:hover { border-color: var(--c-main); background: #eef4e8; }
+.stop-btns button .sn { font-weight: bold; }
+.stop-btns button .ss { font-size: 0.72em; color: #666; }
+
+/* 目的地のすぐそば(バス不要) */
+.stop-btns button.walk { border-color: #1565c0; }
+.stop-btns button.walk .ss { color: #1565c0; font-weight: bold; }
+.stop-btns button.walk:hover { background: #e8f0fe; }
+
+/* 今日これから乗れる */
+.stop-btns button.ok { border-color: var(--c-main); }
+.stop-btns button.ok .ss { color: var(--c-main); font-weight: bold; }
+.stop-btns button.ok:hover { background: #eef4e8; }
+
+/* 路線はあるが本日は終了(押すと明日を表示) */
+.stop-btns button.gone {
+  background: #f3f3ef;
+  border-color: #cfcabb;
+  color: #8a8575;
+}
+.stop-btns button.gone .ss { color: #a08d3a; }
+.stop-btns button.gone:hover { background: #ecebe4; }
+
+/* この行き先へは行けない(押せない) */
+.stop-btns button.dead {
+  background: #f3f3ef;
+  border-color: #e0ddd3;
+  color: #b3afa0;
+  cursor: not-allowed;
+}
+.stop-btns button.dead .ss { color: #c0bcae; }
 
 .day-toggle { display: flex; gap: 10px; margin: 10px 0; }
 .day-btn {
