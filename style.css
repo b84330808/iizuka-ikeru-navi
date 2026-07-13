@@ -221,6 +221,12 @@ details summary {
 .ride-card .route-name.wagon { background: #e06c00; }
 .ride-card .leg { margin: 6px 0; }
 .ride-card .fare { font-weight: bold; }
+.ride-card .map-link {
+  display: inline-block;
+  font-size: 0.85em;
+  color: #0d47a1;
+  font-weight: bold;
+}
 .ride-card .transfer-note {
   background: #fff3e0;
   border-radius: 8px;

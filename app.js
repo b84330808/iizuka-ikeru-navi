@@ -337,7 +337,8 @@
       box.innerHTML =
         `<div class="ride-card"><div class="dep-time">🚶 歩いてすぐ</div>
          <div class="leg"><b>${esc(state.facility.name)}</b>は、このバス停から歩いて約${walkMin(od)}分です。</div>
-         <div class="leg">バスに乗る必要はありません。</div></div>`;
+         <div class="leg">バスに乗る必要はありません。</div>
+         <div class="leg">${walkMapLink(state.facility)}</div></div>`;
       $("#wagon-card").innerHTML = "";
       return;
     }
@@ -377,7 +378,7 @@
     } else {
       html += `${esc(alightStop.name)} <b>(${fmt(r.arr)}着)</b></div>`;
     }
-    html += `<div class="leg">🚶 バス停から歩いて 約${wmin}分</div>`;
+    html += `<div class="leg">🚶 バス停から歩いて 約${wmin}分 ${walkMapLink(state.facility)}</div>`;
     html += `<div class="fare">💰 運賃: ${r.fare == null ? "車内でご確認ください" : r.fare + "円"}</div>`;
     div.innerHTML = html;
     return div;
@@ -397,6 +398,13 @@
   function esc(s) {
     return String(s ?? "").replace(/[&<>"']/g, c =>
       ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  }
+
+  // Google マップの徒歩経路リンク(出発地は端末の現在地)
+  function walkMapLink(facility) {
+    const url = "https://www.google.com/maps/dir/?api=1&travelmode=walking&destination="
+      + facility.lat + "," + facility.lon;
+    return `<a class="map-link" href="${url}" target="_blank" rel="noopener">🗺️ 地図で歩き方を見る</a>`;
   }
 
   const isWagon = feed => (D.wagonFeeds || []).includes(feed);
