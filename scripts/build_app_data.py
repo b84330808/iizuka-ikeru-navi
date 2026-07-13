@@ -95,14 +95,14 @@ def load_facilities():
         name = r["名称"]
         if "医務室" in name:  # 施設内医務室は一般の行き先ではない
             continue
+        # 注: 飯塚市の医療機関一覧オープンデータには独立した歯科診療所が
+        # 含まれないため、歯科カテゴリは設けず全て hospital に分類する。
         kind = r.get("医療機関の種類") or ""
         dept = r.get("診療科目") or ""
-        is_dental = "歯" in dept and "内科" not in dept and "外科" not in dept.replace("歯科口腔外科", "")
-        cat = "dental" if is_dental else "hospital"
         pri = 2 if "病院" in kind else (1 if "有床" in kind else 0)
         fac.append({
             "name": name, "kana": r.get("名称_カナ") or "",
-            "cat": cat, "lat": float(r["緯度"]), "lon": float(r["経度"]),
+            "cat": "hospital", "lat": float(r["緯度"]), "lon": float(r["経度"]),
             "tel": r.get("電話番号") or "", "note": dept[:60], "pri": pri,
         })
     # 公共施設
