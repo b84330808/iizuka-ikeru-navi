@@ -153,6 +153,9 @@ def load_wagon(name):
     for t in meta["trips"]:
         st = [[f"{fid}:{sn}", hms_to_min(hm), hms_to_min(hm), 0, 0]
               for sn, hm in t["stopTimes"]]
+        mins = [s[1] for s in st]
+        if any(b < a for a, b in zip(mins, mins[1:])):
+            raise ValueError(f"{name} {t.get('name')}: 時刻が逆行(起こしミス) {t['stopTimes']}")
         trips.append({"feed": fid, "service": t["service"],
                       "headsign": t.get("name", ""), "st": st})
     services = {sname: {"days": sv["days"], "start": "20000101", "end": "20991231",
