@@ -403,9 +403,14 @@
 
   function wagonHTML() {
     const w = D.wagon;
+    const tel = w.reserveTel
+      ? `<a class="tel-btn" href="tel:${w.reserveTel.replace(/-/g, "")}">📞 予約センターに電話する<span>${esc(w.reserveTel)}</span></a>
+         <p class="tel-note">${esc(w.reserveHours || "")}<br>${esc(w.reserveNote || "")}</p>`
+      : "";
     return `<div class="wagon">
       <h3>🚕 乗合タクシー・エリアワゴン という方法もあります</h3>
       <p>${esc(w.fares)}。${esc(w.note)}</p>
+      ${tel}
       <p class="districts">対象地区: ${w.districts.map(esc).join("・")}</p>
       <p><a href="${w.url}" target="_blank" rel="noopener">飯塚市の予約・時刻の案内ページを見る →</a></p>
     </div>`;
