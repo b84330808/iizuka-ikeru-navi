@@ -9,9 +9,11 @@
 ## 0. 現在進度 / 下一步(先看這段)
 
 - ✅ 選題已定案、資料盤點已完成(GTFS 已下載驗證,在 `data/gtfs/`)
-- 🎯 **下一步 = 開工做 MVP**:起 repo → 資料 pipeline(GTFS+人口CSV解析)→ 先做「殺手鐧分析圖」(§4)→ 長者友善查詢 UI
+- ✅ (2026/7/13) 殺手鐧疊圖完成:34町丁 300m 徒步圈消滅、推計約3,500名65+失去徒步圈(`app/analysis.html` + `output/killer_map.html`;人口用 e-Stat 2020国調小地域 T001082 以 KEY_CODE 結合,**不要用** BODIK 町別人口CSV 對町丁名——那是行政区單位對不上)
+- ✅ (2026/7/13) MVP app 完成:`app/index.html` 三步驟查詢(行き先→乗る場所→時刻・運賃),兩線+市役所乗換+zone運賃+平日/土日祝曆,純靜態、data.js 內嵌、無頭測試 `node scripts/test_engine.mjs` 全過
+- 🎯 **下一步**:①部署(GitHub Pages,需用戶 GitHub 帳號建 remote)→ ②ProtoPedia 作品頁文案+截圖 → ③(有餘裕)ワゴン2-3地區時刻、多語言層
 - ⏰ **締切 8/14(五)**:ProtoPedia 登錄作品(一般公開)+ 報名表送出
-- 未做:ProtoPedia 帳號註冊(要用戶本人)、報名表(要作品URL才能填)
+- 未做:ProtoPedia 帳號註冊(要用戶本人)、報名表(要作品URL才能填)、部署
 
 ### 時間軸(與都知事杯交錯,注意排程)
 | 日期 | 事項 |
