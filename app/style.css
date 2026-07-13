@@ -280,6 +280,22 @@ details summary {
 .wagon h3 { margin-top: 0; font-size: 1.05em; }
 .wagon .districts { font-size: 0.85em; color: #444; }
 .wagon a { color: #0d47a1; font-weight: bold; }
+.wagon .tel-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  background: #2e7d32;
+  color: #fff !important;
+  text-decoration: none;
+  font-size: 1.05em;
+  padding: 14px;
+  border-radius: 12px;
+  margin: 10px 0 6px;
+}
+.wagon .tel-btn span { font-size: 1.25em; font-weight: bold; letter-spacing: 1px; }
+.wagon .tel-note { font-size: 0.78em; color: #555; margin: 0 0 8px; }
 
 footer {
   max-width: 760px;
