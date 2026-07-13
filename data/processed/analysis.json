@@ -1,0 +1,1504 @@
+{
+ "headline": {
+  "walk_radius_m": 300,
+  "stops_before": 116,
+  "stops_after": 76,
+  "towns_total": 149,
+  "towns_lost": 34,
+  "towns_reduced": 2,
+  "elderly_in_lost_towns": 11585,
+  "elderly_affected_weighted": 3484
+ },
+ "towns": [
+  {
+   "key": "402050010",
+   "name": "吉原町",
+   "pop_total": 828,
+   "pop_elderly": 256,
+   "frac_before": 0.8461,
+   "frac_after": 0.8461,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050020",
+   "name": "宮町",
+   "pop_total": 435,
+   "pop_elderly": 149,
+   "frac_before": 0.4132,
+   "frac_after": 0.4132,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050030",
+   "name": "本町",
+   "pop_total": 564,
+   "pop_elderly": 191,
+   "frac_before": 0.8526,
+   "frac_after": 0.8526,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050040",
+   "name": "西町",
+   "pop_total": 1067,
+   "pop_elderly": 283,
+   "frac_before": 0.0006,
+   "frac_after": 0.0006,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050050",
+   "name": "飯塚",
+   "pop_total": 433,
+   "pop_elderly": 182,
+   "frac_before": 0.8824,
+   "frac_after": 0.8824,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050060",
+   "name": "徳前",
+   "pop_total": 129,
+   "pop_elderly": 47,
+   "frac_before": 0.1394,
+   "frac_after": 1.0,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050070",
+   "name": "東徳前",
+   "pop_total": 751,
+   "pop_elderly": 265,
+   "frac_before": 0.9785,
+   "frac_after": 1.0,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050080",
+   "name": "西徳前",
+   "pop_total": 581,
+   "pop_elderly": 229,
+   "frac_before": 0.7638,
+   "frac_after": 0.7654,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205009001",
+   "name": "片島一丁目",
+   "pop_total": 691,
+   "pop_elderly": 188,
+   "frac_before": 0.0121,
+   "frac_after": 0.0106,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205009002",
+   "name": "片島二丁目",
+   "pop_total": 681,
+   "pop_elderly": 136,
+   "frac_before": 0.0491,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 7
+  },
+  {
+   "key": "40205009003",
+   "name": "片島三丁目",
+   "pop_total": 559,
+   "pop_elderly": 163,
+   "frac_before": 0.1725,
+   "frac_after": 0.0,
+   "class": "lost",
+   "elderly_affected": 28
+  },
+  {
+   "key": "40205010000",
+   "name": "菰田",
+   "pop_total": 829,
+   "pop_elderly": 288,
+   "frac_before": 0.9226,
+   "frac_after": 0.0,
+   "class": "lost",
+   "elderly_affected": 266
+  },
+  {
+   "key": "40205010001",
+   "name": "菰田",
+   "pop_total": 119,
+   "pop_elderly": 5,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205011001",
+   "name": "菰田東一丁目",
+   "pop_total": 339,
+   "pop_elderly": 117,
+   "frac_before": 1.0,
+   "frac_after": 0.0,
+   "class": "lost",
+   "elderly_affected": 117
+  },
+  {
+   "key": "40205011002",
+   "name": "菰田東二丁目",
+   "pop_total": 660,
+   "pop_elderly": 191,
+   "frac_before": 0.4112,
+   "frac_after": 0.0,
+   "class": "lost",
+   "elderly_affected": 79
+  },
+  {
+   "key": "40205012001",
+   "name": "菰田西一丁目",
+   "pop_total": 277,
+   "pop_elderly": 108,
+   "frac_before": 0.9612,
+   "frac_after": 0.0,
+   "class": "lost",
+   "elderly_affected": 104
+  },
+  {
+   "key": "40205012002",
+   "name": "菰田西二丁目",
+   "pop_total": 386,
+   "pop_elderly": 135,
+   "frac_before": 0.9017,
+   "frac_after": 0.5396,
+   "class": "reduced",
+   "elderly_affected": 49
+  },
+  {
+   "key": "40205012003",
+   "name": "菰田西三丁目",
+   "pop_total": 615,
+   "pop_elderly": 176,
+   "frac_before": 0.0289,
+   "frac_after": 0.4634,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050130",
+   "name": "立岩",
+   "pop_total": 4238,
+   "pop_elderly": 774,
+   "frac_before": 0.3842,
+   "frac_after": 0.3842,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050140",
+   "name": "新立岩",
+   "pop_total": 858,
+   "pop_elderly": 117,
+   "frac_before": 0.6874,
+   "frac_after": 0.6874,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050150",
+   "name": "新飯塚",
+   "pop_total": 1089,
+   "pop_elderly": 298,
+   "frac_before": 0.9588,
+   "frac_after": 0.9588,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050160",
+   "name": "芳雄町",
+   "pop_total": 205,
+   "pop_elderly": 169,
+   "frac_before": 0.6652,
+   "frac_after": 0.6652,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050170",
+   "name": "柏の森",
+   "pop_total": 4799,
+   "pop_elderly": 1097,
+   "frac_before": 0.0187,
+   "frac_after": 0.0187,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050180",
+   "name": "鶴三緒",
+   "pop_total": 702,
+   "pop_elderly": 351,
+   "frac_before": 0.6513,
+   "frac_after": 0.0,
+   "class": "lost",
+   "elderly_affected": 229
+  },
+  {
+   "key": "402050190",
+   "name": "下三緒",
+   "pop_total": 3644,
+   "pop_elderly": 1389,
+   "frac_before": 0.1573,
+   "frac_after": 0.0,
+   "class": "lost",
+   "elderly_affected": 218
+  },
+  {
+   "key": "402050200",
+   "name": "上三緒",
+   "pop_total": 2633,
+   "pop_elderly": 1129,
+   "frac_before": 0.1787,
+   "frac_after": 0.0,
+   "class": "lost",
+   "elderly_affected": 202
+  },
+  {
+   "key": "402050210",
+   "name": "川島",
+   "pop_total": 1906,
+   "pop_elderly": 469,
+   "frac_before": 0.6141,
+   "frac_after": 0.6141,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050220",
+   "name": "川津",
+   "pop_total": 2784,
+   "pop_elderly": 474,
+   "frac_before": 0.5189,
+   "frac_after": 0.0004,
+   "class": "lost",
+   "elderly_affected": 246
+  },
+  {
+   "key": "402050230",
+   "name": "横田",
+   "pop_total": 3999,
+   "pop_elderly": 767,
+   "frac_before": 0.3176,
+   "frac_after": 0.0153,
+   "class": "lost",
+   "elderly_affected": 232
+  },
+  {
+   "key": "40205024000",
+   "name": "伊岐須",
+   "pop_total": 4422,
+   "pop_elderly": 1507,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205024001",
+   "name": "伊岐須",
+   "pop_total": 32,
+   "pop_elderly": 32,
+   "frac_before": 1.0,
+   "frac_after": 0.0,
+   "class": "lost",
+   "elderly_affected": 32
+  },
+  {
+   "key": "402050250",
+   "name": "伊川",
+   "pop_total": 2100,
+   "pop_elderly": 771,
+   "frac_before": 0.0884,
+   "frac_after": 0.0,
+   "class": "lost",
+   "elderly_affected": 68
+  },
+  {
+   "key": "402050260",
+   "name": "相田",
+   "pop_total": 5493,
+   "pop_elderly": 1915,
+   "frac_before": 0.0326,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 62
+  },
+  {
+   "key": "402050270",
+   "name": "幸袋",
+   "pop_total": 2983,
+   "pop_elderly": 914,
+   "frac_before": 0.3649,
+   "frac_after": 0.3635,
+   "class": "covered",
+   "elderly_affected": 1
+  },
+  {
+   "key": "402050280",
+   "name": "中",
+   "pop_total": 1752,
+   "pop_elderly": 493,
+   "frac_before": 0.46,
+   "frac_after": 0.4569,
+   "class": "covered",
+   "elderly_affected": 2
+  },
+  {
+   "key": "402050290",
+   "name": "庄司",
+   "pop_total": 1380,
+   "pop_elderly": 688,
+   "frac_before": 0.1676,
+   "frac_after": 0.1676,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050300",
+   "name": "津島",
+   "pop_total": 684,
+   "pop_elderly": 152,
+   "frac_before": 0.085,
+   "frac_after": 0.085,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050310",
+   "name": "柳橋",
+   "pop_total": 203,
+   "pop_elderly": 51,
+   "frac_before": 0.0545,
+   "frac_after": 0.0545,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050320",
+   "name": "目尾",
+   "pop_total": 1915,
+   "pop_elderly": 665,
+   "frac_before": 0.1206,
+   "frac_after": 0.1206,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050330",
+   "name": "吉北",
+   "pop_total": 779,
+   "pop_elderly": 150,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050340",
+   "name": "大日寺",
+   "pop_total": 2723,
+   "pop_elderly": 730,
+   "frac_before": 0.223,
+   "frac_after": 0.0,
+   "class": "lost",
+   "elderly_affected": 163
+  },
+  {
+   "key": "402050350",
+   "name": "花瀬",
+   "pop_total": 1985,
+   "pop_elderly": 525,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050360",
+   "name": "潤野",
+   "pop_total": 4857,
+   "pop_elderly": 1220,
+   "frac_before": 0.1328,
+   "frac_after": 0.0,
+   "class": "lost",
+   "elderly_affected": 162
+  },
+  {
+   "key": "402050370",
+   "name": "明星寺",
+   "pop_total": 1091,
+   "pop_elderly": 286,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050380",
+   "name": "八木山",
+   "pop_total": 358,
+   "pop_elderly": 190,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050390",
+   "name": "建花寺",
+   "pop_total": 414,
+   "pop_elderly": 151,
+   "frac_before": 0.0736,
+   "frac_after": 0.0,
+   "class": "lost",
+   "elderly_affected": 11
+  },
+  {
+   "key": "402050400",
+   "name": "蓮台寺",
+   "pop_total": 194,
+   "pop_elderly": 94,
+   "frac_before": 0.01,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 1
+  },
+  {
+   "key": "40205041000",
+   "name": "鯰田",
+   "pop_total": 5571,
+   "pop_elderly": 2079,
+   "frac_before": 0.1949,
+   "frac_after": 0.1029,
+   "class": "covered",
+   "elderly_affected": 191
+  },
+  {
+   "key": "40205041001",
+   "name": "鯰田",
+   "pop_total": 570,
+   "pop_elderly": 130,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050420",
+   "name": "堀池",
+   "pop_total": 1128,
+   "pop_elderly": 295,
+   "frac_before": 0.1709,
+   "frac_after": 0.2212,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050430",
+   "name": "秋松",
+   "pop_total": 1336,
+   "pop_elderly": 432,
+   "frac_before": 0.453,
+   "frac_after": 0.0929,
+   "class": "reduced",
+   "elderly_affected": 156
+  },
+  {
+   "key": "402050440",
+   "name": "忠隈",
+   "pop_total": 1692,
+   "pop_elderly": 685,
+   "frac_before": 0.2936,
+   "frac_after": 0.0,
+   "class": "lost",
+   "elderly_affected": 201
+  },
+  {
+   "key": "402050450",
+   "name": "南尾",
+   "pop_total": 1697,
+   "pop_elderly": 508,
+   "frac_before": 0.0299,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 15
+  },
+  {
+   "key": "402050460",
+   "name": "平恒",
+   "pop_total": 2301,
+   "pop_elderly": 690,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050470",
+   "name": "楽市",
+   "pop_total": 2775,
+   "pop_elderly": 577,
+   "frac_before": 0.0941,
+   "frac_after": 0.0733,
+   "class": "covered",
+   "elderly_affected": 12
+  },
+  {
+   "key": "402050480",
+   "name": "天道",
+   "pop_total": 456,
+   "pop_elderly": 192,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050490",
+   "name": "太郎丸",
+   "pop_total": 1490,
+   "pop_elderly": 415,
+   "frac_before": 0.292,
+   "frac_after": 0.292,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050500",
+   "name": "椋本",
+   "pop_total": 729,
+   "pop_elderly": 254,
+   "frac_before": 0.0473,
+   "frac_after": 0.0473,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050510",
+   "name": "久保白",
+   "pop_total": 57,
+   "pop_elderly": 24,
+   "frac_before": 0.0043,
+   "frac_after": 0.0043,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050520",
+   "name": "高田",
+   "pop_total": 431,
+   "pop_elderly": 227,
+   "frac_before": 0.2088,
+   "frac_after": 0.2088,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050530",
+   "name": "舎利蔵",
+   "pop_total": 163,
+   "pop_elderly": 74,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050540",
+   "name": "津原",
+   "pop_total": 557,
+   "pop_elderly": 212,
+   "frac_before": 0.1558,
+   "frac_after": 0.1558,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050550",
+   "name": "安恒",
+   "pop_total": 272,
+   "pop_elderly": 66,
+   "frac_before": 0.3296,
+   "frac_after": 0.3296,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050560",
+   "name": "椿",
+   "pop_total": 1460,
+   "pop_elderly": 311,
+   "frac_before": 0.2076,
+   "frac_after": 0.2076,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050570",
+   "name": "弁分",
+   "pop_total": 2181,
+   "pop_elderly": 695,
+   "frac_before": 0.3974,
+   "frac_after": 0.3974,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050580",
+   "name": "小正",
+   "pop_total": 3248,
+   "pop_elderly": 920,
+   "frac_before": 0.2611,
+   "frac_after": 0.2511,
+   "class": "covered",
+   "elderly_affected": 9
+  },
+  {
+   "key": "402050590",
+   "name": "若菜",
+   "pop_total": 486,
+   "pop_elderly": 165,
+   "frac_before": 0.2576,
+   "frac_after": 0.2576,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050600",
+   "name": "枝国",
+   "pop_total": 2511,
+   "pop_elderly": 1003,
+   "frac_before": 0.3831,
+   "frac_after": 0.3962,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205061001",
+   "name": "内住",
+   "pop_total": 80,
+   "pop_elderly": 40,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205061002",
+   "name": "内住",
+   "pop_total": 59,
+   "pop_elderly": 13,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205061003",
+   "name": "内住",
+   "pop_total": 147,
+   "pop_elderly": 62,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205061004",
+   "name": "内住",
+   "pop_total": 29,
+   "pop_elderly": 22,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205062001",
+   "name": "大分",
+   "pop_total": 632,
+   "pop_elderly": 224,
+   "frac_before": 0.1098,
+   "frac_after": 0.1098,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205062002",
+   "name": "大分",
+   "pop_total": 479,
+   "pop_elderly": 79,
+   "frac_before": 0.2081,
+   "frac_after": 0.2081,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205062003",
+   "name": "大分",
+   "pop_total": 418,
+   "pop_elderly": 143,
+   "frac_before": 0.2024,
+   "frac_after": 0.2024,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205062004",
+   "name": "大分",
+   "pop_total": 110,
+   "pop_elderly": 58,
+   "frac_before": 0.1475,
+   "frac_after": 0.1475,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205062005",
+   "name": "大分",
+   "pop_total": 93,
+   "pop_elderly": 56,
+   "frac_before": 1.0,
+   "frac_after": 1.0,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205062006",
+   "name": "大分",
+   "pop_total": 150,
+   "pop_elderly": 42,
+   "frac_before": 1.0,
+   "frac_after": 1.0,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205062007",
+   "name": "大分",
+   "pop_total": 708,
+   "pop_elderly": 256,
+   "frac_before": 0.5335,
+   "frac_after": 0.5335,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205062008",
+   "name": "大分",
+   "pop_total": 59,
+   "pop_elderly": 12,
+   "frac_before": 0.0,
+   "frac_after": 0.0582,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205062009",
+   "name": "大分",
+   "pop_total": 301,
+   "pop_elderly": 56,
+   "frac_before": 0.0606,
+   "frac_after": 0.0606,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205062010",
+   "name": "大分",
+   "pop_total": 13,
+   "pop_elderly": 4,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050630",
+   "name": "山口",
+   "pop_total": 188,
+   "pop_elderly": 97,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050640",
+   "name": "馬敷",
+   "pop_total": 149,
+   "pop_elderly": 68,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205065001",
+   "name": "筑穂元吉",
+   "pop_total": 277,
+   "pop_elderly": 98,
+   "frac_before": 0.0,
+   "frac_after": 0.0174,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205065002",
+   "name": "筑穂元吉",
+   "pop_total": 269,
+   "pop_elderly": 113,
+   "frac_before": 0.0883,
+   "frac_after": 0.1514,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205065003",
+   "name": "筑穂元吉",
+   "pop_total": 211,
+   "pop_elderly": 89,
+   "frac_before": 0.1137,
+   "frac_after": 0.3748,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205065004",
+   "name": "筑穂元吉",
+   "pop_total": 220,
+   "pop_elderly": 131,
+   "frac_before": 0.4897,
+   "frac_after": 0.9636,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205066001",
+   "name": "長尾",
+   "pop_total": 1353,
+   "pop_elderly": 494,
+   "frac_before": 0.4021,
+   "frac_after": 0.5073,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205066002",
+   "name": "長尾",
+   "pop_total": 238,
+   "pop_elderly": 114,
+   "frac_before": 0.5541,
+   "frac_after": 0.5541,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205066003",
+   "name": "長尾",
+   "pop_total": 71,
+   "pop_elderly": 26,
+   "frac_before": 0.8023,
+   "frac_after": 0.8023,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205066004",
+   "name": "長尾",
+   "pop_total": 0,
+   "pop_elderly": 0,
+   "frac_before": 1.0,
+   "frac_after": 1.0,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205066005",
+   "name": "長尾",
+   "pop_total": 0,
+   "pop_elderly": 0,
+   "frac_before": 1.0,
+   "frac_after": 1.0,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205066006",
+   "name": "長尾",
+   "pop_total": 0,
+   "pop_elderly": 0,
+   "frac_before": 1.0,
+   "frac_after": 1.0,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050670",
+   "name": "北古賀",
+   "pop_total": 629,
+   "pop_elderly": 245,
+   "frac_before": 0.3391,
+   "frac_after": 0.3391,
+   "class": "covered",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205068001",
+   "name": "平塚",
+   "pop_total": 511,
+   "pop_elderly": 173,
+   "frac_before": 0.1894,
+   "frac_after": 0.0155,
+   "class": "lost",
+   "elderly_affected": 30
+  },
+  {
+   "key": "40205068002",
+   "name": "平塚",
+   "pop_total": 277,
+   "pop_elderly": 139,
+   "frac_before": 0.7681,
+   "frac_after": 0.0,
+   "class": "lost",
+   "elderly_affected": 107
+  },
+  {
+   "key": "402050690",
+   "name": "阿恵",
+   "pop_total": 798,
+   "pop_elderly": 305,
+   "frac_before": 0.0444,
+   "frac_after": 0.0073,
+   "class": "never",
+   "elderly_affected": 11
+  },
+  {
+   "key": "402050700",
+   "name": "弥山",
+   "pop_total": 102,
+   "pop_elderly": 48,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205071001",
+   "name": "内野",
+   "pop_total": 145,
+   "pop_elderly": 81,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205071002",
+   "name": "内野",
+   "pop_total": 213,
+   "pop_elderly": 121,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205071003",
+   "name": "内野",
+   "pop_total": 153,
+   "pop_elderly": 68,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050720",
+   "name": "桑曲",
+   "pop_total": 53,
+   "pop_elderly": 24,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050730",
+   "name": "綱分",
+   "pop_total": 3337,
+   "pop_elderly": 1026,
+   "frac_before": 0.0684,
+   "frac_after": 0.0,
+   "class": "lost",
+   "elderly_affected": 70
+  },
+  {
+   "key": "402050740",
+   "name": "山倉",
+   "pop_total": 98,
+   "pop_elderly": 47,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050750",
+   "name": "赤坂",
+   "pop_total": 1884,
+   "pop_elderly": 638,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050760",
+   "name": "入水",
+   "pop_total": 66,
+   "pop_elderly": 29,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050770",
+   "name": "庄内元吉",
+   "pop_total": 200,
+   "pop_elderly": 66,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050780",
+   "name": "大門",
+   "pop_total": 92,
+   "pop_elderly": 35,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050790",
+   "name": "仁保",
+   "pop_total": 385,
+   "pop_elderly": 167,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050800",
+   "name": "多田",
+   "pop_total": 1021,
+   "pop_elderly": 257,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050810",
+   "name": "有井",
+   "pop_total": 1355,
+   "pop_elderly": 324,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050820",
+   "name": "有安",
+   "pop_total": 1920,
+   "pop_elderly": 592,
+   "frac_before": 0.1102,
+   "frac_after": 0.0,
+   "class": "lost",
+   "elderly_affected": 65
+  },
+  {
+   "key": "402050830",
+   "name": "筒野",
+   "pop_total": 149,
+   "pop_elderly": 85,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "402050840",
+   "name": "高倉",
+   "pop_total": 89,
+   "pop_elderly": 40,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205085001",
+   "name": "口原",
+   "pop_total": 303,
+   "pop_elderly": 90,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205085002",
+   "name": "口原",
+   "pop_total": 128,
+   "pop_elderly": 59,
+   "frac_before": 0.0092,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 1
+  },
+  {
+   "key": "40205085003",
+   "name": "口原",
+   "pop_total": 330,
+   "pop_elderly": 121,
+   "frac_before": 0.3928,
+   "frac_after": 0.0,
+   "class": "lost",
+   "elderly_affected": 48
+  },
+  {
+   "key": "40205085004",
+   "name": "口原",
+   "pop_total": 218,
+   "pop_elderly": 108,
+   "frac_before": 0.5399,
+   "frac_after": 0.0,
+   "class": "lost",
+   "elderly_affected": 58
+  },
+  {
+   "key": "40205085005",
+   "name": "口原",
+   "pop_total": 165,
+   "pop_elderly": 93,
+   "frac_before": 0.5371,
+   "frac_after": 0.0,
+   "class": "lost",
+   "elderly_affected": 50
+  },
+  {
+   "key": "40205085006",
+   "name": "口原",
+   "pop_total": 200,
+   "pop_elderly": 86,
+   "frac_before": 0.4168,
+   "frac_after": 0.0,
+   "class": "lost",
+   "elderly_affected": 36
+  },
+  {
+   "key": "40205086001",
+   "name": "勢田",
+   "pop_total": 371,
+   "pop_elderly": 123,
+   "frac_before": 0.5607,
+   "frac_after": 0.0,
+   "class": "lost",
+   "elderly_affected": 69
+  },
+  {
+   "key": "40205086002",
+   "name": "勢田",
+   "pop_total": 170,
+   "pop_elderly": 66,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205086003",
+   "name": "勢田",
+   "pop_total": 220,
+   "pop_elderly": 158,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205086004",
+   "name": "勢田",
+   "pop_total": 254,
+   "pop_elderly": 116,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205086005",
+   "name": "勢田",
+   "pop_total": 110,
+   "pop_elderly": 34,
+   "frac_before": 0.42,
+   "frac_after": 0.0,
+   "class": "lost",
+   "elderly_affected": 14
+  },
+  {
+   "key": "40205086006",
+   "name": "勢田",
+   "pop_total": 77,
+   "pop_elderly": 51,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205086007",
+   "name": "勢田",
+   "pop_total": 96,
+   "pop_elderly": 35,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205086008",
+   "name": "勢田",
+   "pop_total": 119,
+   "pop_elderly": 20,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205086009",
+   "name": "勢田",
+   "pop_total": 119,
+   "pop_elderly": 37,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205086010",
+   "name": "勢田",
+   "pop_total": 72,
+   "pop_elderly": 39,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205086011",
+   "name": "勢田",
+   "pop_total": 174,
+   "pop_elderly": 79,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205086012",
+   "name": "勢田",
+   "pop_total": 302,
+   "pop_elderly": 127,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205086013",
+   "name": "勢田",
+   "pop_total": 0,
+   "pop_elderly": 0,
+   "frac_before": 1.0,
+   "frac_after": 0.0,
+   "class": "lost",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205086014",
+   "name": "勢田",
+   "pop_total": 49,
+   "pop_elderly": 49,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205087001",
+   "name": "佐與",
+   "pop_total": 172,
+   "pop_elderly": 92,
+   "frac_before": 1.0,
+   "frac_after": 0.0,
+   "class": "lost",
+   "elderly_affected": 92
+  },
+  {
+   "key": "40205087002",
+   "name": "佐與",
+   "pop_total": 142,
+   "pop_elderly": 65,
+   "frac_before": 0.0374,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 2
+  },
+  {
+   "key": "40205087003",
+   "name": "佐與",
+   "pop_total": 187,
+   "pop_elderly": 75,
+   "frac_before": 0.0562,
+   "frac_after": 0.0,
+   "class": "lost",
+   "elderly_affected": 4
+  },
+  {
+   "key": "40205087004",
+   "name": "佐與",
+   "pop_total": 56,
+   "pop_elderly": 24,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205088001",
+   "name": "鹿毛馬",
+   "pop_total": 271,
+   "pop_elderly": 84,
+   "frac_before": 1.0,
+   "frac_after": 0.0,
+   "class": "lost",
+   "elderly_affected": 84
+  },
+  {
+   "key": "40205088002",
+   "name": "鹿毛馬",
+   "pop_total": 198,
+   "pop_elderly": 78,
+   "frac_before": 0.9908,
+   "frac_after": 0.0,
+   "class": "lost",
+   "elderly_affected": 77
+  },
+  {
+   "key": "40205088003",
+   "name": "鹿毛馬",
+   "pop_total": 150,
+   "pop_elderly": 65,
+   "frac_before": 0.9759,
+   "frac_after": 0.0,
+   "class": "lost",
+   "elderly_affected": 63
+  },
+  {
+   "key": "40205088004",
+   "name": "鹿毛馬",
+   "pop_total": 108,
+   "pop_elderly": 51,
+   "frac_before": 0.7979,
+   "frac_after": 0.0,
+   "class": "lost",
+   "elderly_affected": 41
+  },
+  {
+   "key": "40205088005",
+   "name": "鹿毛馬",
+   "pop_total": 126,
+   "pop_elderly": 79,
+   "frac_before": 0.1635,
+   "frac_after": 0.0,
+   "class": "lost",
+   "elderly_affected": 13
+  },
+  {
+   "key": "40205088006",
+   "name": "鹿毛馬",
+   "pop_total": 114,
+   "pop_elderly": 41,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205088007",
+   "name": "鹿毛馬",
+   "pop_total": 127,
+   "pop_elderly": 50,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205088008",
+   "name": "鹿毛馬",
+   "pop_total": 50,
+   "pop_elderly": 27,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205088009",
+   "name": "鹿毛馬",
+   "pop_total": 100,
+   "pop_elderly": 40,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  },
+  {
+   "key": "40205088010",
+   "name": "鹿毛馬",
+   "pop_total": 78,
+   "pop_elderly": 27,
+   "frac_before": 0.0,
+   "frac_after": 0.0,
+   "class": "never",
+   "elderly_affected": 0
+  }
+ ]
+}
