@@ -1,0 +1,17 @@
+{
+  "name": "いいづか のりものナビ",
+  "short_name": "のりものナビ",
+  "description": "飯塚市のコミュニティバス・エリアワゴンで病院や市役所へ行くための、高齢者にやさしい乗り物案内",
+  "lang": "ja",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fffdf5",
+  "theme_color": "#1a5c2e",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
