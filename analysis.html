@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>なぜこのアプリ? — データで見る飯塚市の交通課題</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin: 20px 0; }
+  .stat {
+    background: #fff; border: 3px solid var(--c-main); border-radius: 14px;
+    padding: 16px; text-align: center;
+  }
+  .stat .num { font-size: 2em; font-weight: bold; color: var(--c-accent); }
+  .stat .lab { font-size: 0.8em; color: #444; }
+  iframe { width: 100%; height: 70vh; border: 2px solid var(--c-line); border-radius: 12px; }
+  .src { font-size: 0.75em; color: #555; }
+  article { background: #fff; border-radius: 12px; padding: 4px 18px; margin: 16px 0; border: 1px solid var(--c-line); }
+</style>
+</head>
+<body>
+<header>
+  <h1>📊 なぜこのアプリ?</h1>
+  <div class="header-btns"><a class="chip" href="index.html">← のりものナビへ</a></div>
+</header>
+<main>
+  <article>
+    <h2>データで見る、飯塚市の「移動の困りごと」</h2>
+    <p>飯塚市の市民意識調査(令和5年度)で、40項目中<b>満足度が最も低かった</b>のは
+    「定住環境・公共交通の充実」(満足度2.57、不満率37.6%)でした。
+    市はこれを「重要だが満足度が低い=優先的に改善すべき施策」に分類しています。</p>
+    <p>その背景のひとつが、2022年3月のコミュニティバス再編です。
+    5路線が2路線になり、オープンデータ(GTFS-JP)と国勢調査を重ねると、影響が数字で見えます。</p>
+  </article>
+
+  <div class="stat-grid" id="stats"></div>
+
+  <iframe src="killer_map.html" title="廃線前後のバス徒歩圏と高齢者人口の地図"></iframe>
+  <p class="src">赤=300m徒歩圏が消滅した町丁 / 橙=大幅縮小 / 緑=現在も徒歩圏あり。
+  レイヤーで「廃止バス停」「現行バス停」を切替できます。<br>
+  出典: 飯塚市コミュニティバスGTFS-JP(BODIK、廃止4路線は令和3年版)・
+  令和2年国勢調査 小地域集計(年齢別人口)・e-Stat 町丁字等境界。
+  推計は町丁面積按分による概算です。</p>
+
+  <article>
+    <h2>だから、このアプリをつくりました</h2>
+    <p>残った2路線と乗合タクシー・エリアワゴンを、<b>高齢の方が自分で使えること</b>が
+    いま一番大切だと考えました。「病院へ行きたい」から3回押すだけで、
+    乗るバス停・時刻・運賃・歩く時間まで、大きな文字でご案内します。</p>
+  </article>
+</main>
+<footer>
+  <p>データはすべて飯塚市・国のオープンデータを使用しています。</p>
+</footer>
+<script src="data.js"></script>
+<script>
+  const h = window.APP_DATA.headline;
+  document.getElementById("stats").innerHTML = [
+    [h.stops_before + " → " + h.stops_after, "コミュニティバスのバス停数(2022年再編 前→後)"],
+    [h.towns_lost + "町丁", "バス停300m徒歩圏が消滅した地区"],
+    ["約" + h.elderly_affected_weighted.toLocaleString() + "人", "徒歩圏を失った65歳以上(面積按分推計)"],
+    ["32.3%", "飯塚市の高齢化率"],
+  ].map(([n, l]) => `<div class="stat"><div class="num">${n}</div><div class="lab">${l}</div></div>`).join("");
+</script>
+</body>
+</html>
