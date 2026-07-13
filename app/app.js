@@ -32,8 +32,8 @@
 
   // ---------- fares ----------
   function fareFor(trip, fromIdx, toIdx) {
+    if (D.fares.flat && D.fares.flat[trip.feed] != null) return D.fares.flat[trip.feed];
     const from = D.stops[fromIdx], to = D.stops[toIdx];
-    if (trip.feed === "chikuho") return D.fares.chikuho_flat;
     const p = D.fares.miyawaka[from.zone + "|" + to.zone];
     return p === undefined ? null : p;
   }
@@ -112,7 +112,7 @@
     const destIdxs = cand.map(c => c.i);
     const walkByIdx = Object.fromEntries(cand.map(c => [c.i, c.d]));
 
-    let rides = directRides(originIdx, destIdxs, date, afterMin, ignoreSvc);
+    let rides = directRides(originIdx, destIdxs, date, afterMin, ignoreSvc, walkByIdx);
     if (!rides.length) rides = transferRides(originIdx, destIdxs, date, afterMin, ignoreSvc);
     rides.forEach(r => { r.walkM = walkByIdx[r.alight]; });
     return { rides: pruneRides(rides).slice(0, 3), reachable: true };
@@ -233,7 +233,8 @@
       return;
     }
     $("#geo-btn").classList.remove("hidden");
-    for (const feed of ["miyawaka", "chikuho"]) {
+    const feeds = [...new Set(D.stops.map(s => s.feed))];
+    for (const feed of feeds) {
       const g = document.createElement("div");
       g.className = "route-group";
       g.innerHTML = `<h3>${esc(D.routeNames[feed])}</h3>`;
@@ -361,7 +362,7 @@
     const alightStop = D.stops[r.alight];
     const wmin = walkMin(r.walkM);
     let html = `<div><span class="dep-time">${fmt(r.dep)}</span> 発`;
-    html += `<span class="route-name">${esc(D.routeNames[r.legs[0].trip.feed])}</span></div>`;
+    html += routeBadge(r.legs[0].trip.feed) + `</div>`;
     html += `<div class="leg">🚏 ${esc(D.stops[r.legs[0].from].name)} → `;
     if (r.legs.length === 2) {
       const waitMin = r.legs[1].dep - r.legs[0].arr;
@@ -370,7 +371,7 @@
         : `約${waitMin}分`;
       html += `${esc(D.stops[r.legs[0].to].name)} <b>(${fmt(r.legs[0].arr)}着)</b></div>`;
       html += `<div class="transfer-note">🔁 乗り換え: ${esc(D.stops[r.legs[1].from].name)} から
-               <b>${fmt(r.legs[1].dep)}</b> 発 <span class="route-name">${esc(D.routeNames[r.legs[1].trip.feed])}</span><br>
+               <b>${fmt(r.legs[1].dep)}</b> 発 ${routeBadge(r.legs[1].trip.feed)}<br>
                ⏳ 待ち時間 ${waitStr}</div>`;
       html += `<div class="leg">🚏 → ${esc(alightStop.name)} <b>(${fmt(r.arr)}着)</b></div>`;
     } else {
@@ -396,6 +397,11 @@
   function esc(s) {
     return String(s ?? "").replace(/[&<>"']/g, c =>
       ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  }
+
+  const isWagon = feed => (D.wagonFeeds || []).includes(feed);
+  function routeBadge(feed) {
+    return `<span class="route-name${isWagon(feed) ? " wagon" : ""}">${esc(D.routeNames[feed])}</span>`;
   }
 
   // back buttons

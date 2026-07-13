@@ -135,6 +135,32 @@ WAGON = {
 }
 
 
+WAGON_FEEDS = ("honami",)  # エリアワゴン(地区別)。地区を増やすときはここに追加。
+
+
+def load_wagon(name):
+    """中間JSON(honami.json)+ geocoded.json を GTFS feed と同構造へ変換。"""
+    base = ROOT / "data" / "wagon"
+    meta = json.load(open(base / f"{name}.json", encoding="utf-8"))
+    geo = json.load(open(base / f"{name}.geocoded.json", encoding="utf-8"))
+    fid = meta["feed"]
+    stops = {}
+    for sname, g in geo.items():
+        sid = f"{fid}:{sname}"
+        stops[sid] = {"id": sid, "name": sname, "lat": g["lat"], "lon": g["lon"],
+                      "zone": "", "feed": fid}
+    trips = []
+    for t in meta["trips"]:
+        st = [[f"{fid}:{sn}", hms_to_min(hm), hms_to_min(hm), 0, 0]
+              for sn, hm in t["stopTimes"]]
+        trips.append({"feed": fid, "service": t["service"],
+                      "headsign": t.get("name", ""), "st": st})
+    services = {sname: {"days": sv["days"], "start": "20000101", "end": "20991231",
+                        "add": [], "remove": []}
+                for sname, sv in meta["services"].items()}
+    return fid, stops, trips, services, meta
+
+
 def main():
     all_stops, all_trips = {}, []
     services = {}
@@ -143,6 +169,16 @@ def main():
         all_stops.update({s["id"]: s for s in stops.values()})
         all_trips += trips
         services[name] = svcs
+
+    flat_fares = {"chikuho": 200}
+    route_names = {"miyawaka": "宮若・飯塚線", "chikuho": "筑穂・高田線"}
+    for wf in WAGON_FEEDS:
+        fid, wstops, wtrips, wsvcs, meta = load_wagon(wf)
+        all_stops.update(wstops)
+        all_trips += wtrips
+        services[fid] = wsvcs
+        flat_fares[fid] = meta["fareFlat"]
+        route_names[fid] = meta["routeName"]
 
     stop_ids = list(all_stops.keys())
     idx = {sid: i for i, sid in enumerate(stop_ids)}
@@ -156,8 +192,9 @@ def main():
         "stops": [all_stops[sid] for sid in stop_ids],
         "trips": all_trips,
         "services": services,
-        "fares": {"miyawaka": load_fare_rules_miyawaka(), "chikuho_flat": 200},
-        "routeNames": {"miyawaka": "宮若・飯塚線", "chikuho": "筑穂・高田線"},
+        "fares": {"miyawaka": load_fare_rules_miyawaka(), "flat": flat_fares},
+        "routeNames": route_names,
+        "wagonFeeds": [f"wagon_{w}" for w in WAGON_FEEDS],
         "facilities": load_facilities(),
         "wagon": WAGON,
         "headline": headline,
