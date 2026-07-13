@@ -92,14 +92,18 @@ def load_facilities():
     for r in read_csv(ROOT / "data" / "hospitals.csv", enc="cp932"):
         if not r.get("緯度") or not r.get("経度"):
             continue
+        name = r["名称"]
+        if "医務室" in name:  # 施設内医務室は一般の行き先ではない
+            continue
         kind = r.get("医療機関の種類") or ""
         dept = r.get("診療科目") or ""
         is_dental = "歯" in dept and "内科" not in dept and "外科" not in dept.replace("歯科口腔外科", "")
         cat = "dental" if is_dental else "hospital"
+        pri = 2 if "病院" in kind else (1 if "有床" in kind else 0)
         fac.append({
-            "name": r["名称"], "kana": r.get("名称_カナ") or "",
+            "name": name, "kana": r.get("名称_カナ") or "",
             "cat": cat, "lat": float(r["緯度"]), "lon": float(r["経度"]),
-            "tel": r.get("電話番号") or "", "note": dept[:60],
+            "tel": r.get("電話番号") or "", "note": dept[:60], "pri": pri,
         })
     # 公共施設
     KEEP = [("市役所", "city"), ("支所", "city"), ("出張所", "city"),
