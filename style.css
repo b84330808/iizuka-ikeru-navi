@@ -64,6 +64,7 @@ main { max-width: 760px; margin: 0 auto; padding: 16px; }
   line-height: 1.4;
 }
 .cat-btn:hover, .cat-btn.active { background: var(--c-main); color: #fff; }
+.cat-wide { grid-column: 1 / -1; }
 
 .about-banner {
   display: flex;
