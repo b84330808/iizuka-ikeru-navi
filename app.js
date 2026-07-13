@@ -89,6 +89,19 @@
     return rides;
   }
 
+  // 支配される便を除去: 同じ到着(時刻+下車停)なら出発が最も遅いものだけ残す
+  // (朝7時に乗って乗換で3時間待つ、のような案内を防ぐ)
+  function pruneRides(rides) {
+    const bestByArr = new Map();
+    for (const r of rides) {
+      const k = r.arr + "|" + r.alight;
+      const cur = bestByArr.get(k);
+      if (!cur || r.dep > cur.dep) bestByArr.set(k, r);
+    }
+    return [...bestByArr.values()]
+      .sort((a, b) => a.arr + walkMin(a.walkM ?? 0) - (b.arr + walkMin(b.walkM ?? 0)));
+  }
+
   function search(originIdx, facility, date, afterMin) {
     // 目的地に近いバス停(徒歩圏内)
     const cand = D.stops.map((s, i) => ({ i, d: distM(s.lat, s.lon, facility.lat, facility.lon) }))
@@ -101,17 +114,7 @@
     let rides = directRides(originIdx, destIdxs, date, afterMin);
     if (!rides.length) rides = transferRides(originIdx, destIdxs, date, afterMin);
     rides.forEach(r => { r.walkM = walkByIdx[r.alight]; });
-    rides.sort((a, b) => a.arr + walkMin(a.walkM) - (b.arr + walkMin(b.walkM)) || a.dep - b.dep);
-    // 同時刻重複を除去して先頭3件
-    const seen = new Set();
-    const top = [];
-    for (const r of rides) {
-      const k = r.dep + "|" + r.arr + "|" + r.alight;
-      if (seen.has(k)) continue;
-      seen.add(k); top.push(r);
-      if (top.length >= 3) break;
-    }
-    return { rides: top, reachable: true };
+    return { rides: pruneRides(rides).slice(0, 3), reachable: true };
   }
 
   // ---------- UI ----------
@@ -144,12 +147,20 @@
   });
   $("#fac-filter").addEventListener("input", e => renderFacList(e.target.value.trim()));
 
+  const toKata = s => s.replace(/[ぁ-ゖ]/g, c => String.fromCharCode(c.charCodeAt(0) + 0x60));
+
   function renderFacList(q) {
     const list = $("#fac-list");
     list.innerHTML = "";
     let items = D.facilities.filter(f => f.cat === state.cat);
-    if (q) items = items.filter(f => f.name.includes(q) || f.kana.includes(q));
-    items.sort((a, b) => (a.kana || a.name).localeCompare(b.kana || b.name, "ja"));
+    if (q) {
+      const kq = toKata(q);
+      items = items.filter(f => f.name.includes(q) || f.kana.includes(kq) ||
+                                toKata(f.name).includes(kq));
+    }
+    // 病院を先頭に(pri降順)、あとは五十音順
+    items.sort((a, b) => (b.pri || 0) - (a.pri || 0) ||
+      (a.kana || a.name).localeCompare(b.kana || b.name, "ja"));
     for (const f of items.slice(0, 60)) {
       const li = document.createElement("li");
       const b = document.createElement("button");
@@ -219,6 +230,14 @@
   }
 
   // STEP3: 結果
+  const WD = ["日", "月", "火", "水", "木", "金", "土"];
+  function dayLabel(offset, base) {
+    const d = new Date();
+    d.setDate(d.getDate() + offset);
+    return `${base}(${d.getMonth() + 1}/${d.getDate()} ${WD[d.getDay()]})`;
+  }
+  $("#day-today").textContent = dayLabel(0, "きょう");
+  $("#day-tomorrow").textContent = dayLabel(1, "あした");
   $("#day-today").addEventListener("click", () => setDay("today"));
   $("#day-tomorrow").addEventListener("click", () => setDay("tomorrow"));
   function setDay(d) {
@@ -246,8 +265,7 @@
       best.reachable = best.reachable || r.reachable;
       best.rides = best.rides.concat(r.rides);
     }
-    best.rides.sort((a, b) => a.arr - b.arr);
-    best.rides = best.rides.slice(0, 3);
+    best.rides = pruneRides(best.rides).slice(0, 3);
     renderResults(best, date);
   }
 
@@ -281,9 +299,14 @@
     html += `<span class="route-name">${esc(D.routeNames[r.legs[0].trip.feed])}</span></div>`;
     html += `<div class="leg">🚏 ${esc(D.stops[r.legs[0].from].name)} → `;
     if (r.legs.length === 2) {
+      const waitMin = r.legs[1].dep - r.legs[0].arr;
+      const waitStr = waitMin >= 60
+        ? `約${Math.floor(waitMin / 60)}時間${waitMin % 60 ? (waitMin % 60) + "分" : ""}`
+        : `約${waitMin}分`;
       html += `${esc(D.stops[r.legs[0].to].name)} <b>(${fmt(r.legs[0].arr)}着)</b></div>`;
       html += `<div class="transfer-note">🔁 のりかえ: ${esc(D.stops[r.legs[1].from].name)} から
-               <b>${fmt(r.legs[1].dep)}</b> 発 <span class="route-name">${esc(D.routeNames[r.legs[1].trip.feed])}</span></div>`;
+               <b>${fmt(r.legs[1].dep)}</b> 発 <span class="route-name">${esc(D.routeNames[r.legs[1].trip.feed])}</span><br>
+               ⏳ まちじかん ${waitStr}</div>`;
       html += `<div class="leg">🚏 → ${esc(alightStop.name)} <b>(${fmt(r.arr)}着)</b></div>`;
     } else {
       html += `${esc(alightStop.name)} <b>(${fmt(r.arr)}着)</b></div>`;
