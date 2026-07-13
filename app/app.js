@@ -141,6 +141,7 @@
       state.cat = btn.dataset.cat;
       renderFacList("");
       $("#fac-picker").classList.remove("hidden");
+      $("#about-banner").classList.add("hidden");
       $("#fac-filter").value = "";
       $("#fac-picker").scrollIntoView({ behavior: "smooth" });
     });
