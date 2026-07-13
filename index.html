@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>いいづか のりものナビ — 飯塚市コミュニティバス案内</title>
 <meta name="description" content="飯塚市のコミュニティバス・乗合タクシーで病院や市役所へ行くための、高齢者にやさしい乗り物案内">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#1a5c2e">
+<link rel="icon" href="favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:title" content="いいづか のりものナビ">
+<meta property="og:description" content="飯塚市のコミュニティバス・エリアワゴンで病院や市役所へ。高齢者にやさしい乗り物案内。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="icon-512.png">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -77,5 +85,6 @@
 
 <script src="data.js"></script>
 <script src="app.js"></script>
+<script>if("serviceWorker" in navigator){addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});}</script>
 </body>
 </html>
