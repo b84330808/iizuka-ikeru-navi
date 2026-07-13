@@ -20,7 +20,7 @@
 
   <!-- STEP 1: 行き先 -->
   <section id="screen-dest" class="screen">
-    <h2 class="step-label">① どこへ 行きますか?</h2>
+    <h2 class="step-label">① どこへ行きますか?</h2>
     <div class="cat-grid">
       <button class="cat-btn cat-wide" data-cat="hospital">🏥<br>病院・医院</button>
       <button class="cat-btn" data-cat="city">🏛️<br>市役所・支所</button>
@@ -29,33 +29,33 @@
     <a id="about-banner" class="about-banner" href="analysis.html">
       <span class="ab-icon">🗺️</span>
       <span class="ab-text">
-        <b>なぜ このアプリを つくったの?</b>
+        <b>なぜこのアプリを作ったのか</b>
         <small>2022年の路線見直しで、バス停が116→76に。データで見る飯塚の交通課題 →</small>
       </span>
     </a>
     <div id="fac-picker" class="hidden">
-      <input id="fac-filter" type="search" placeholder="なまえで さがす(例: いいづか)">
+      <input id="fac-filter" type="search" placeholder="名前で探す(例:いいづか)">
       <ul id="fac-list" class="big-list"></ul>
     </div>
   </section>
 
   <!-- STEP 2: 乗る場所 -->
   <section id="screen-origin" class="screen hidden">
-    <button class="back-btn" data-back="dest">← もどる</button>
-    <h2 class="step-label">② どこから 乗りますか?</h2>
+    <button class="back-btn" data-back="dest">← 戻る</button>
+    <h2 class="step-label">② どこから乗りますか?</h2>
     <p class="selected-note">行き先: <b id="dest-name"></b></p>
-    <button id="geo-btn" class="wide-btn">📍 いまいる場所から バス停をさがす</button>
+    <button id="geo-btn" class="wide-btn">📍 今いる場所からバス停を探す</button>
     <div id="geo-result"></div>
     <details id="stop-lists" open>
-      <summary>バス停を えらぶ</summary>
+      <summary>バス停を選ぶ</summary>
       <div id="stop-groups"></div>
     </details>
   </section>
 
   <!-- STEP 3: 結果 -->
   <section id="screen-result" class="screen hidden">
-    <button class="back-btn" data-back="origin">← もどる</button>
-    <h2 class="step-label">③ バスの じかん</h2>
+    <button class="back-btn" data-back="origin">← 戻る</button>
+    <h2 class="step-label">③ バスの時間</h2>
     <p class="selected-note">
       <b id="res-origin"></b> から <b id="res-dest"></b> へ
     </p>
