@@ -322,7 +322,8 @@
       best.rides = best.rides.concat(r.rides);
     }
     best.rides = pruneRides(best.rides).slice(0, 3);
-    renderResults(best, date);
+    const nowMin = state.day === "tomorrow" ? null : afterMin;
+    renderResults(best, date, nowMin);
   }
 
   function fmt(min) {
@@ -330,9 +331,15 @@
     return `${h}:${String(m).padStart(2, "0")}`;
   }
 
-  function renderResults(res, date) {
+  function renderResults(res, date, nowMin) {
     const box = $("#results");
     box.innerHTML = "";
+    if (nowMin != null) {
+      const clock = document.createElement("p");
+      clock.className = "now-clock";
+      clock.textContent = `🕐 いま ${fmt(nowMin)}`;
+      box.appendChild(clock);
+    }
     // 乗車バス停が目的地のすぐそば → バス不要
     const od = distM(D.stops[state.originIdx].lat, D.stops[state.originIdx].lon,
                      state.facility.lat, state.facility.lon);
@@ -355,17 +362,23 @@
         : "下の「乗合タクシー・エリアワゴン」をご利用ください。";
       box.innerHTML = `<div class="no-result"><b>${dl}は、この行き先へのバスがありません。</b><br>${alt}</div>`;
     } else {
-      for (const r of res.rides) box.appendChild(rideCard(r));
+      for (const r of res.rides) box.appendChild(rideCard(r, nowMin));
     }
     renderWagon();
   }
 
-  function rideCard(r) {
+  function rideCard(r, nowMin) {
     const div = document.createElement("div");
     div.className = "ride-card";
     const alightStop = D.stops[r.alight];
     const wmin = walkMin(r.walkM);
-    let html = `<div><span class="dep-time">${fmt(r.dep)}</span> 発`;
+    const inMin = nowMin != null ? r.dep - nowMin : null;
+    const soonTxt = inMin === 0 ? "まもなく"
+      : inMin >= 60 ? `あと${Math.floor(inMin / 60)}時間${inMin % 60}分`
+      : `あと${inMin}分`;
+    const soon = inMin != null && inMin >= 0 ? `<span class="soon">${soonTxt}</span>` : "";
+    const rideMin = r.arr - r.dep;
+    let html = `<div><span class="dep-time">${fmt(r.dep)}</span> 発 ${soon}`;
     html += routeBadge(r.legs[0].trip.feed) + `</div>`;
     html += `<div class="leg">🚏 ${esc(D.stops[r.legs[0].from].name)} → `;
     if (r.legs.length === 2) {
@@ -382,7 +395,8 @@
       html += `${esc(alightStop.name)} <b>(${fmt(r.arr)}着)</b></div>`;
     }
     html += `<div class="leg">🚶 バス停から歩いて 約${wmin}分 ${walkMapLink(state.facility)}</div>`;
-    html += `<div class="fare">💰 運賃: ${r.fare == null ? "車内でご確認ください" : r.fare + "円"}</div>`;
+    html += `<div class="fare-row"><span class="fare">💰 運賃: ${r.fare == null ? "車内でご確認ください" : r.fare + "円"}</span>`;
+    html += `<span class="ride-dur">所要 約${rideMin}分(${fmt(r.dep)}〜${fmt(r.arr)})</span></div>`;
     div.innerHTML = html;
     return div;
   }

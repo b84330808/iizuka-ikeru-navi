@@ -220,7 +220,35 @@ details summary {
 }
 .ride-card .route-name.wagon { background: #e06c00; }
 .ride-card .leg { margin: 6px 0; }
+.ride-card .soon {
+  display: inline-block;
+  background: var(--c-accent);
+  color: #fff;
+  font-size: 0.5em;
+  font-weight: bold;
+  border-radius: 999px;
+  padding: 3px 12px;
+  vertical-align: middle;
+  margin-left: 4px;
+}
+.ride-card .fare-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: 6px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--c-line);
+}
+.ride-card .ride-dur { font-size: 0.82em; color: #555; }
 .ride-card .fare { font-weight: bold; }
+.now-clock {
+  margin: 0 0 4px;
+  font-size: 0.9em;
+  color: #555;
+  font-weight: bold;
+}
 .ride-card .map-link {
   display: inline-block;
   font-size: 0.85em;
