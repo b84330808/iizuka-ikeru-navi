@@ -40,24 +40,27 @@
 
   // ---------- search ----------
   // 直行便: origin と destStops のどれかを順に通る便
-  function directRides(originIdx, destIdxs, date, afterMin, ignoreSvc) {
+  function directRides(originIdx, destIdxs, date, afterMin, ignoreSvc, walkOf) {
     const destSet = new Set(destIdxs);
     const rides = [];
     for (const trip of D.trips) {
       if (!ignoreSvc && !serviceActive(trip.feed, trip.service, date)) continue;
-      let boardAt = -1, boardDep = 0;
+      let boardAt = -1, boardDep = 0, best = null;
       for (const [si, arr, dep, pu, doff] of trip.st) {
         if (boardAt < 0) {
           if (si === originIdx && pu !== 1 && dep >= afterMin) { boardAt = si; boardDep = dep; }
         } else if (destSet.has(si) && doff !== 1) {
-          rides.push({
-            legs: [{ trip, from: originIdx, to: si, dep: boardDep, arr }],
-            dep: boardDep, arr, alight: si,
-            fare: fareFor(trip, originIdx, si),
-          });
-          break;
+          // walkOf があれば同じ便の中で「目的地に最も近い停留所」で降車(高齢者の徒歩を最小化)。
+          // なければ最初の候補で確定(乗換の中間段など)。
+          if (!walkOf) { best = { si, arr }; break; }
+          if (!best || (walkOf[si] ?? Infinity) < (walkOf[best.si] ?? Infinity)) best = { si, arr };
         }
       }
+      if (best) rides.push({
+        legs: [{ trip, from: originIdx, to: best.si, dep: boardDep, arr: best.arr }],
+        dep: boardDep, arr: best.arr, alight: best.si,
+        fare: fareFor(trip, originIdx, best.si),
+      });
     }
     return rides;
   }

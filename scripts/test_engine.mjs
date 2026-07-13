@@ -117,5 +117,18 @@ for (const t of D.trips.filter(t => t.feed === "miyawaka")) {
 }
 check("宮若線 全乗車区間の運賃網羅", missing === 0, `missing=${missing}/${checked}`);
 
+// 7) エリアワゴン(穂波・菰田)統合
+check("wagon feed が存在する", (D.wagonFeeds || []).includes("wagon_honami"));
+check("wagon の便がある", D.trips.some(t => t.feed === "wagon_honami"));
+const kinen = D.facilities.find(f => f.name.includes("飯塚記念病院"));
+const chu = stopIdx("忠隈住民センター", "wagon_honami");
+const wr = E.search(chu, kinen, MON, 0);
+check("菰田→飯塚記念病院: ワゴンで到達可(月)", wr.rides.length > 0, `rides=${wr.rides.length}`);
+check("最寄り停留所で降車(飯塚記念病院入口)",
+      wr.rides.some(r => D.stops[r.alight].name === "飯塚記念病院入口"),
+      wr.rides.map(r => D.stops[r.alight].name).join(","));
+check("ワゴン運賃=100円", wr.rides.every(r => r.fare === 100));
+check("日曜はワゴン全便運休", E.search(chu, kinen, SUN, 0).rides.length === 0);
+
 console.log(fails ? `\n${fails} FAILED` : "\nALL PASS");
 process.exit(fails ? 1 : 0);
