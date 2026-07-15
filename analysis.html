@@ -20,6 +20,18 @@
   iframe { width: 100%; height: 70vh; border: 2px solid var(--c-line); border-radius: 12px; }
   .src { font-size: 0.75em; color: #555; }
   article { background: #fff; border-radius: 12px; padding: 4px 18px; margin: 16px 0; border: 1px solid var(--c-line); }
+  .story-hero { padding: 28px; color: #fff; background: linear-gradient(135deg,#123d25,#247447); border: 0; border-radius: 22px; }
+  .story-hero h2 { font-size: clamp(1.4em,5vw,2em); line-height: 1.35; margin: 0 0 10px; }
+  .story-hero strong { color: #ffd36a; }
+  .compare { width: 100%; border-collapse: separate; border-spacing: 0; overflow: hidden; background: #fff; border: 1px solid var(--c-line); border-radius: 14px; font-size: .82em; }
+  .compare th,.compare td { padding: 12px; border-bottom: 1px solid #e2e6df; text-align: left; }
+  .compare th:last-child,.compare td:last-child { background: #edf7ef; color: #174a2b; font-weight: bold; }
+  .case { border: 3px solid #f59e0b; background: #fff9e9; border-radius: 18px; padding: 20px; margin: 22px 0; }
+  .case .route { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-weight: bold; }
+  .case .route span { padding: 7px 10px; background: #fff; border: 1px solid #dfc47c; border-radius: 9px; }
+  .cta { display: block; margin: 22px auto; padding: 14px; text-align: center; color: #fff; background: var(--c-main); border-radius: 12px; text-decoration: none; font-weight: bold; }
+  .method { padding-left: 1.2em; }
+  .method li { margin: 8px 0; }
 </style>
 </head>
 <body>
@@ -28,6 +40,10 @@
   <div class="header-btns"><a class="chip" href="index.html">← のりものナビへ</a></div>
 </header>
 <main>
+  <article class="story-hero">
+    <h2>検索できても、予約できなければ乗れない。<br><strong>「次にすること」まで案内</strong>へ。</h2>
+    <p>飯塚市の地域交通は、定時バスだけではありません。地区ごとの対象条件、利用登録、電話とネットで異なる予約期限を一つの流れにまとめました。</p>
+  </article>
   <article>
     <h2>データで見る、飯塚市の「移動の困りごと」</h2>
     <p>飯塚市の市民意識調査(令和5年度)で、40項目中<b>満足度が最も低かった</b>のは
@@ -39,6 +55,24 @@
 
   <div class="stat-grid" id="stats"></div>
 
+  <div class="case">
+    <h2>60秒でわかる、代表的な利用場面</h2>
+    <p><b>穂波地区で、2日後に病院へ行きたい。</b>経路検索の前に「予約乗合タクシーを使えるか」「登録は必要か」「いつまでに予約するか」という壁があります。</p>
+    <div class="route"><span>地区・日時を選ぶ</span>→<span>利用可否を判定</span>→<span>利用登録／予約</span></div>
+    <p>本アプリは、電話は7日前、ネットは5日前という違いも判定し、その時点で押せる手続きだけを示します。</p>
+  </div>
+
+  <h2>一般的な地図との違い</h2>
+  <table class="compare">
+    <thead><tr><th>困りごと</th><th>一般的な経路検索</th><th>このアプリ</th></tr></thead>
+    <tbody>
+      <tr><td>予約交通の対象判定</td><td>経路とは別に確認</td><td>地区からその場で判定</td></tr>
+      <tr><td>利用登録・予約期限</td><td>公式説明を読み分ける</td><td>日時に合わせ次の行動を表示</td></tr>
+      <tr><td>固定路線・地域交通</td><td>サービスごとに情報が分散</td><td>予約交通と定時便を入口で整理</td></tr>
+      <tr><td>高齢者への配慮</td><td>汎用的</td><td>大きな文字・電話・家族共有</td></tr>
+    </tbody>
+  </table>
+
   <iframe src="killer_map.html" title="廃線前後のバス徒歩圏と高齢者人口の地図"></iframe>
   <p class="src">赤=300m徒歩圏が消滅した町丁 / 橙=大幅縮小 / 緑=現在も徒歩圏あり。
   レイヤーで「廃止バス停」「現行バス停」を切替できます。<br>
@@ -48,19 +82,27 @@
 
   <article>
     <h2>だから、このアプリをつくりました</h2>
-    <p>残った2路線と乗合タクシー・エリアワゴンを、<b>高齢の方が自分で使えること</b>が
-    いま一番大切だと考えました。「病院へ行きたい」から3回押すだけで、
-    乗るバス停・時刻・運賃・歩く時間まで、大きな文字でご案内します。</p>
-    <p><b>バスが届かない場所こそ、エリアワゴン。</b>
-    たとえば飯塚記念病院はコミュニティバスの徒歩圏外ですが、
-    エリアワゴン(100円)なら「飯塚記念病院入口」まで行けます。
-    この情報は時刻表がPDFにしかなく、地図アプリでは検索できません。
-    そこで穂波・菰田地区のエリアワゴンを<b>自力で機械可読化し、検索に載せました</b>
-    (他地区も順次対応予定)。</p>
+    <p>乗合タクシー・エリアワゴンを、<b>高齢の方が自分で手続きできること</b>が
+    いま一番大切だと考えました。地区と日時を選ぶだけで、使える交通と次の手続きを大きな文字で案内します。</p>
+    <p><b>地図アプリとは競争せず、役割分担します。</b>固定路線の経路は地図アプリも活用し、
+    本作は予約交通の資格・登録・締切という「検索の後に残る壁」を解決します。
+    さらに穂波・菰田地区のエリアワゴンはPDF時刻表を機械可読化し、時刻検索にも統合しました
+    （他地区は公式時刻表へ案内し、順次データ化予定）。</p>
   </article>
+
+  <article>
+    <h2>数字のつくり方も、公開します</h2>
+    <ol class="method">
+      <li>飯塚市が公開する再編前後のGTFS-JPからバス停位置を取得</li>
+      <li>各バス停の周囲300mを「歩いて利用できる範囲」として計算</li>
+      <li>国勢調査の町丁別65歳以上人口と重ね、失われた範囲を面積按分で推計</li>
+    </ol>
+    <p class="src">「約3,500人」は実人数の断定ではなく、公開データから地域への影響規模を把握するための概算です。前提と限界を明示し、再現可能な分析コードを作品に同梱しています。</p>
+  </article>
+  <a class="cta" href="index.html">実際に、行き方を探してみる →</a>
 </main>
 <footer>
-  <p>データはすべて飯塚市・国のオープンデータを使用しています。</p>
+  <p><b>データ更新: 2026年7月14日</b><br>データはすべて飯塚市・国のオープンデータを使用しています。</p>
 </footer>
 <script src="data.js"></script>
 <script>

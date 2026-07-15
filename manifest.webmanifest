@@ -1,7 +1,7 @@
 {
   "name": "いいづか のりものナビ",
   "short_name": "のりものナビ",
-  "description": "飯塚市のコミュニティバス・エリアワゴンで病院や市役所へ行くための、高齢者にやさしい乗り物案内",
+  "description": "飯塚市の予約乗合タクシー・エリアワゴンの利用可否と予約期限を案内する交通コンシェルジュ",
   "lang": "ja",
   "start_url": "./index.html",
   "scope": "./",
@@ -9,6 +9,19 @@
   "orientation": "portrait",
   "background_color": "#fffdf5",
   "theme_color": "#1a5c2e",
+  "categories": ["navigation", "travel", "accessibility"],
+  "shortcuts": [
+    {
+      "name": "予約交通を調べる",
+      "short_name": "予約判定",
+      "url": "./index.html"
+    },
+    {
+      "name": "交通課題を見る",
+      "short_name": "交通課題",
+      "url": "./analysis.html"
+    }
+  ],
   "icons": [
     { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
     { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },

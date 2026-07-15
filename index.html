@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>いいづか のりものナビ — 飯塚市コミュニティバス案内</title>
-<meta name="description" content="飯塚市のコミュニティバス・乗合タクシーで病院や市役所へ行くための、高齢者にやさしい乗り物案内">
+<title>いいづか のりものナビ — 予約交通コンシェルジュ</title>
+<meta name="description" content="飯塚市の予約乗合タクシー・エリアワゴンの利用可否と予約期限を、地区と日時から案内する交通コンシェルジュ">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#1a5c2e">
 <link rel="icon" href="favicon-32.png" sizes="32x32">
@@ -16,8 +16,12 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<a class="skip-link" href="#main">本文へ移動</a>
 <header>
-  <h1 id="app-title">🚌 いいづか のりものナビ</h1>
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true">🚌</span>
+    <div><h1 id="app-title">いいづか のりものナビ</h1><p>迷わず、乗れる。飯塚のやさしい交通案内</p></div>
+  </div>
   <div class="header-btns">
     <button id="font-toggle" class="chip" aria-label="文字の大きさを変える">文字を大きく</button>
     <a class="chip" href="analysis.html">なぜこのアプリ?</a>
@@ -28,11 +32,25 @@
 
   <!-- STEP 1: 行き先 -->
   <section id="screen-dest" class="screen">
-    <h2 class="step-label">① どこへ行きますか?</h2>
+    <div class="hero">
+      <p class="eyebrow">飯塚市の予約交通・地域交通に対応</p>
+      <h2>検索だけでは乗れない交通を、<br><em>予約まで迷わない</em>案内へ。</h2>
+      <p>地区と利用日時を選ぶだけ。使える乗り物、予約期限、次にすることを一つずつ案内します。</p>
+      <div class="trust-row" aria-label="このサービスの特徴">
+        <span>✓ 30秒で判定</span><span>✓ 入力は保存しません</span><span>✓ 公式予約へ直結</span>
+      </div>
+    </div>
+    <button id="concierge-start" class="concierge-hero">
+      <span class="concierge-icon" aria-hidden="true">🚕</span>
+      <span><small>おすすめ・新しい主役</small><strong>予約が必要な乗り物を調べる</strong><em>あなたの地区・日時から、利用可否と予約期限を判定</em></span>
+      <b aria-hidden="true">›</b>
+    </button>
+    <div class="section-divider"><span>定時のバス・ワゴンを時刻から探す</span></div>
+    <div class="step-head"><span>1</span><div><p>まずは</p><h2 class="step-label">どこへ行きますか?</h2></div></div>
     <div class="cat-grid">
-      <button class="cat-btn cat-wide" data-cat="hospital">🏥<br>病院・医院</button>
-      <button class="cat-btn" data-cat="city">🏛️<br>市役所・支所</button>
-      <button class="cat-btn" data-cat="community">🏢<br>交流センター<br>・図書館など</button>
+      <button class="cat-btn cat-wide" data-cat="hospital"><span aria-hidden="true">🏥</span><strong>病院・医院</strong><small>通院する</small></button>
+      <button class="cat-btn" data-cat="city"><span aria-hidden="true">🏛️</span><strong>市役所・支所</strong><small>手続きに行く</small></button>
+      <button class="cat-btn" data-cat="community"><span aria-hidden="true">🏢</span><strong>公共施設</strong><small>交流センター・図書館など</small></button>
     </div>
     <a id="about-banner" class="about-banner" href="analysis.html">
       <span class="ab-icon">🗺️</span>
@@ -42,20 +60,64 @@
       </span>
     </a>
     <div id="fac-picker" class="hidden">
-      <input id="fac-filter" type="search" placeholder="名前で探す(例:いいづか)">
+      <label class="field-label" for="fac-filter">行き先の名前で絞り込む</label>
+      <input id="fac-filter" type="search" inputmode="search" autocomplete="off" placeholder="例：飯塚病院">
       <ul id="fac-list" class="big-list"></ul>
     </div>
+  </section>
+
+  <!-- 予約交通コンシェルジュ -->
+  <section id="screen-concierge" class="screen hidden">
+    <button class="back-btn" data-back="dest">← 戻る</button>
+    <div class="step-head concierge-head"><span>✓</span><div><p>予約交通コンシェルジュ</p><h2 class="step-label" tabindex="-1">あなたに合う乗り物を判定</h2></div></div>
+    <p class="lead-note">4つ選ぶだけで、予約乗合タクシー・エリアワゴン・定時バスのどれを確認すべきか案内します。</p>
+    <div class="concierge-form">
+      <label><b>1. お住まいの地区</b>
+        <select id="home-district">
+          <option value="">地区を選んでください</option>
+          <option>頴田</option><option>鯰田</option><option>幸袋</option><option>鎮西</option>
+          <option>二瀬</option><option>穂波</option><option>筑穂</option><option>飯塚東</option>
+          <option>庄内</option><option>菰田</option><option>立岩</option><option>飯塚・片島</option>
+        </select>
+      </label>
+      <label><b>2. 行き先はどの範囲ですか</b>
+        <select id="trip-kind">
+          <option value="inside">同じ地区の中へ行く</option>
+          <option value="facility">地区外の病院・駅などへ行く</option>
+          <option value="other">別の地区へ行く</option>
+          <option value="center">市中心部へ行く（バスに乗り継ぐ）</option>
+        </select>
+      </label>
+      <label><b>3. 予約乗合タクシーを利用したことがありますか</b>
+        <select id="taxi-registered">
+          <option value="unknown">登録したかわからない</option>
+          <option value="yes">はい、登録済み</option>
+          <option value="no">いいえ、初めて利用する</option>
+        </select>
+      </label>
+      <div class="datetime-row">
+        <label><b>4. 利用日</b><input id="concierge-date" type="date"></label>
+        <label><b>希望時刻</b><input id="concierge-time" type="time" value="10:00" min="08:00" max="17:00"></label>
+      </div>
+      <button id="check-transport" class="primary-cta">使える乗り物を判定する</button>
+      <p class="privacy-note">🔒 入力内容は送信・保存されません。</p>
+    </div>
+    <div id="concierge-result" role="status" aria-live="polite"></div>
   </section>
 
   <!-- STEP 2: 乗る場所 -->
   <section id="screen-origin" class="screen hidden">
     <button class="back-btn" data-back="dest">← 戻る</button>
-    <h2 class="step-label">② どこから乗りますか?</h2>
+    <div class="step-head"><span>2</span><div><p>つぎに</p><h2 class="step-label">どこから乗りますか?</h2></div></div>
     <p class="selected-note">行き先: <b id="dest-name"></b></p>
-    <button id="geo-btn" class="wide-btn">📍 今いる場所からバス停を探す</button>
-    <div id="geo-result"></div>
-    <details id="stop-lists" open>
-      <summary>バス停を選ぶ</summary>
+    <div class="location-card">
+      <span class="location-icon" aria-hidden="true">📍</span>
+      <div><h3>いまいる場所を使う</h3><p>近くて、目的地まで行けるバス停だけを表示します。</p></div>
+      <button id="geo-btn" class="wide-btn">現在地から探す</button>
+    </div>
+    <div id="geo-result" role="status" aria-live="polite"></div>
+    <details id="stop-lists">
+      <summary>現在地を使わず、バス停を選ぶ</summary>
       <div id="stop-groups"></div>
     </details>
   </section>
@@ -63,25 +125,40 @@
   <!-- STEP 3: 結果 -->
   <section id="screen-result" class="screen hidden">
     <button class="back-btn" data-back="origin">← 戻る</button>
-    <h2 class="step-label">③ バスの時間</h2>
+    <div class="step-head"><span>3</span><div><p>案内</p><h2 class="step-label">この便に乗れます</h2></div></div>
     <p class="selected-note">
       <b id="res-origin"></b> から <b id="res-dest"></b> へ
     </p>
     <div class="day-toggle">
       <button id="day-today" class="day-btn active">きょう</button>
       <button id="day-tomorrow" class="day-btn">あした</button>
+      <label class="date-pick">別の日<input id="travel-date" type="date" aria-label="乗る日を選ぶ"></label>
     </div>
-    <div id="results"></div>
+    <div class="result-tools">
+      <label for="walk-limit">歩ける距離</label>
+      <select id="walk-limit">
+        <option value="300">300mまで</option>
+        <option value="500" selected>500mまで</option>
+        <option value="800">800mまで</option>
+      </select>
+    </div>
+    <div id="results" role="status" aria-live="polite"></div>
+    <div class="result-actions">
+      <button id="share-btn" class="action-btn">家族に送る</button>
+      <button id="restart-btn" class="action-btn secondary">最初から探す</button>
+    </div>
     <div id="wagon-card"></div>
   </section>
 
 </main>
 
 <footer>
-  <p>データ: 飯塚市オープンデータ(GTFS-JP / BODIK)・令和2年国勢調査。
+  <p><b>データ更新: 2026年7月14日</b><br>飯塚市オープンデータ(GTFS-JP / BODIK)・令和2年国勢調査。
      時刻・運賃は変更される場合があります。最新情報は
-     <a href="https://www.city.iizuka.lg.jp/shokotaisaku/machi/kotsu/bus/" target="_blank" rel="noopener">飯塚市の案内ページ</a>でご確認ください。</p>
+     <a href="https://www.city.iizuka.lg.jp/soshiki/16/2030.html" target="_blank" rel="noopener">飯塚市の案内ページ</a>でご確認ください。</p>
 </footer>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
 
 <script src="data.js"></script>
 <script src="app.js"></script>
