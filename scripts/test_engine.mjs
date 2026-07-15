@@ -130,5 +130,24 @@ check("最寄り停留所で降車(飯塚記念病院入口)",
 check("ワゴン運賃=100円", wr.rides.every(r => r.fare === 100));
 check("日曜はワゴン全便運休", E.search(chu, kinen, SUN, 0).rides.length === 0);
 
+// 8) 予約交通コンシェルジュ
+const judgeNow = new Date(2026, 6, 14, 9, 0);
+const ready = E.evaluateConcierge({ district: "穂波", tripKind: "inside", registered: "yes", date: "2026-07-16", time: "10:00" }, judgeNow);
+check("穂波・平日・登録済みは予約可能", ready.status === "ready" && ready.onlineBookable, ready.status);
+const needsRegistration = E.evaluateConcierge({ district: "庄内", tripKind: "inside", registered: "no", date: "2026-07-16", time: "10:00" }, judgeNow);
+check("未登録は登録案内", needsRegistration.status === "register", needsRegistration.status);
+const unknownRegistration = E.evaluateConcierge({ district: "庄内", tripKind: "inside", registered: "unknown", date: "2026-07-16", time: "10:00" }, judgeNow);
+check("登録状況不明は確認案内", unknownRegistration.status === "verify", unknownRegistration.status);
+const tripActions = ["inside", "facility", "other", "center"].map(kind => E.tripPlan(kind).action);
+check("行き先4区分は別々の次行動", new Set(tripActions).size === 4, tripActions.join(","));
+const komoda = E.evaluateConcierge({ district: "菰田", tripKind: "inside", registered: "yes", date: "2026-07-16", time: "10:00" }, judgeNow);
+check("菰田は予約タクシー対象外・ワゴン案内", komoda.status === "wagon" && komoda.wagon, komoda.status);
+const weekendTaxi = E.evaluateConcierge({ district: "穂波", tripKind: "inside", registered: "yes", date: "2026-07-18", time: "10:00" }, judgeNow);
+check("土曜は予約乗合タクシー運休", weekendTaxi.status === "closed", weekendTaxi.status);
+const lunchBreak = E.evaluateConcierge({ district: "鎮西", tripKind: "inside", registered: "yes", date: "2026-07-16", time: "12:00" }, judgeNow);
+check("鎮西12時は地区休憩時間", lunchBreak.status === "closed", lunchBreak.status);
+const expiredTaxi = E.evaluateConcierge({ district: "穂波", tripKind: "inside", registered: "yes", date: "2026-07-14", time: "09:30" }, new Date(2026, 6, 14, 9, 1));
+check("1時間前を過ぎた便は期限切れ", expiredTaxi.status === "expired", expiredTaxi.status);
+
 console.log(fails ? `\n${fails} FAILED` : "\nALL PASS");
 process.exit(fails ? 1 : 0);

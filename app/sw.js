@@ -1,5 +1,5 @@
 /* いいづか のりものナビ — Service Worker(オフライン対応) */
-const CACHE = "norimono-v1";
+const CACHE = "norimono-2026-07-14-v5";
 const ASSETS = [
   "./", "./index.html", "./analysis.html", "./style.css",
   "./data.js", "./app.js", "./killer_map.html",
