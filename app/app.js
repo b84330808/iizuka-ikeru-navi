@@ -200,7 +200,8 @@
   const state = {
     cat: null, facility: null, originIdx: null, day: "today",
     travelDate: null, originWalkM: 0, maxWalkM: DEFAULT_MAX_WALK,
-    assistantPosition: null, assistantFacility: null, assistantOriginIdx: null,
+    assistantPosition: null, assistantCategory: null,
+    assistantFacility: null, assistantOriginIdx: null,
   };
 
   const SCREENS = {
@@ -419,68 +420,48 @@
     return all;
   })();
 
-  function normalizeSearch(value) {
-    return String(value || "").toLowerCase()
-      .replace(/[「」『』、。,.!?！？\s]/g, "")
-      .replace(/へ行きたい|に行きたい|までに|行きたい|行く/g, "");
+  const ASSISTANT_CATEGORIES = {
+    hospital: { label: "通院", description: "病院・医院" },
+    life: { label: "買い物", description: "スーパー・商業施設" },
+    city: { label: "手続き", description: "市役所・支所" },
+    community: { label: "交流・活動", description: "交流センター・図書館" }
+  };
+
+  function assistantFacilitiesFor(category) {
+    return destinationCatalog
+      .map((facility, index) => ({ facility, index }))
+      .filter(item => item.facility.cat === category)
+      .sort((a, b) => (b.facility.pri || 0) - (a.facility.pri || 0) ||
+        (a.facility.kana || a.facility.name).localeCompare(
+          b.facility.kana || b.facility.name, "ja"
+        ));
   }
 
-  function destinationMatches(query) {
-    const normalized = normalizeSearch(query);
-    if (!normalized) return [];
-    const aliases = [
-      ["市役所", "飯塚市役所"],
-      ["買い物", "イオン穂波店"],
-      ["スーパー", "イオン穂波店"],
-      ["駅", "新飯塚駅"]
-    ];
-    const alias = aliases.find(([needle]) => normalized.includes(needle));
-    const scored = destinationCatalog.map(f => {
-      const name = normalizeSearch(f.name);
-      const kana = normalizeSearch(f.kana);
-      let score = 0;
-      if (normalized.includes(name) || name.includes(normalized)) score += 100;
-      if (kana && (normalized.includes(kana) || kana.includes(normalized))) score += 60;
-      if (alias && f.name === alias[1]) score += 90;
-      if (/病院|医院|クリニック/.test(normalized) && f.cat === "hospital") score += 10 + (f.pri || 0);
-      return { f, score };
-    }).filter(item => item.score > 0);
-    return scored.sort((a, b) => b.score - a.score ||
-      (b.f.pri || 0) - (a.f.pri || 0)).map(item => item.f).slice(0, 6);
-  }
+  function renderAssistantFacilityOptions(category) {
+    const select = $("#assist-dest");
+    const status = $("#assist-destination-status");
+    const meta = ASSISTANT_CATEGORIES[category];
+    const facilities = assistantFacilitiesFor(category);
+    select.innerHTML = "";
 
-  function renderAssistantSuggestions(query) {
-    const box = $("#assist-suggestions");
-    const matches = destinationMatches(query);
-    box.innerHTML = "";
-    for (const facility of matches) {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.setAttribute("role", "option");
-      button.innerHTML = `<b>${esc(facility.name)}</b><small>${esc(facility.note || "目的地")}</small>`;
-      button.addEventListener("click", () => {
-        state.assistantFacility = facility;
-        $("#assist-dest").value = facility.name;
-        box.innerHTML = "";
-      });
-      box.appendChild(button);
-    }
-    return matches;
-  }
+    const placeholder = document.createElement("option");
+    placeholder.value = "";
+    placeholder.textContent = facilities.length
+      ? `施設を選んでください（${facilities.length}件）`
+      : "利用できる施設がありません";
+    select.appendChild(placeholder);
 
-  function parseIntentDate(text) {
-    const now = new Date();
-    if (text.includes("明日")) now.setDate(now.getDate() + 1);
-    const dateMatch = text.match(/(\d{1,2})月(\d{1,2})日/);
-    if (dateMatch) now.setMonth(Number(dateMatch[1]) - 1, Number(dateMatch[2]));
-    const timeMatch = text.match(/(\d{1,2})時(?:(\d{1,2})分|半)?/);
-    if (timeMatch) {
-      const minutes = text.includes("半", timeMatch.index) ? 30 : Number(timeMatch[2] || 0);
-      $("#assist-time").value = `${String(Number(timeMatch[1])).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+    for (const item of facilities) {
+      const option = document.createElement("option");
+      option.value = String(item.index);
+      option.textContent = item.facility.name;
+      select.appendChild(option);
     }
-    if (text.includes("今日") || text.includes("明日") || dateMatch) {
-      $("#assist-date").value = localDateValue(now);
-    }
+
+    select.disabled = facilities.length === 0;
+    select.value = "";
+    status.classList.remove("ready");
+    status.innerHTML = `<span aria-hidden="true">1</span><p><b>${esc(meta.label)}の施設を選んでください</b><small>${esc(meta.description)}から選択できます。</small></p>`;
   }
 
   function nextOpenDay(from = new Date()) {
@@ -593,18 +574,30 @@
     $("#assistant-result").scrollIntoView({ behavior: "smooth", block: "center" });
   }
 
-  $("#assist-dest").addEventListener("input", event => {
-    state.assistantFacility = null;
-    parseIntentDate(event.target.value);
-    renderAssistantSuggestions(event.target.value);
-  });
-  document.querySelectorAll("[data-assist-dest]").forEach(button => {
+  document.querySelectorAll("[data-assist-cat]").forEach(button => {
     button.addEventListener("click", () => {
-      $("#assist-dest").value = button.dataset.assistDest;
-      const matches = renderAssistantSuggestions(button.dataset.assistDest);
-      state.assistantFacility = matches[0] || null;
-      $("#assist-suggestions").innerHTML = "";
+      document.querySelectorAll("[data-assist-cat]").forEach(item => {
+        const selected = item === button;
+        item.classList.toggle("selected", selected);
+        item.setAttribute("aria-pressed", selected ? "true" : "false");
+      });
+      state.assistantCategory = button.dataset.assistCat;
+      state.assistantFacility = null;
+      renderAssistantFacilityOptions(state.assistantCategory);
+      $("#assist-dest").focus();
     });
+  });
+
+  $("#assist-dest").addEventListener("change", event => {
+    const value = event.target.value;
+    const facility = value === "" ? null : destinationCatalog[Number(value)];
+    state.assistantFacility = facility || null;
+    const status = $("#assist-destination-status");
+    const meta = ASSISTANT_CATEGORIES[state.assistantCategory];
+    status.classList.toggle("ready", Boolean(facility));
+    status.innerHTML = facility
+      ? `<span aria-hidden="true">✓</span><p><b>${esc(facility.name)}</b><small>${esc(meta.label)}の行き先として選択しました。</small></p>`
+      : `<span aria-hidden="true">1</span><p><b>${esc(meta.label)}の施設を選んでください</b><small>${esc(meta.description)}から選択できます。</small></p>`;
   });
 
   $("#assist-location").addEventListener("click", () => {
@@ -642,38 +635,11 @@
     $("#home-district").value = event.target.value;
   });
 
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  $("#assist-voice").addEventListener("click", () => {
-    if (!SpeechRecognition) {
-      toast("この端末では音声入力を利用できません");
-      return;
-    }
-    const recognition = new SpeechRecognition();
-    recognition.lang = "ja-JP";
-    recognition.interimResults = false;
-    $("#assist-voice").classList.add("listening");
-    $("#assist-voice").innerHTML = '<span aria-hidden="true">●</span> 聞いています';
-    recognition.addEventListener("result", event => {
-      const text = event.results[0][0].transcript;
-      $("#assist-dest").value = text;
-      parseIntentDate(text);
-      renderAssistantSuggestions(text);
-    });
-    recognition.addEventListener("end", () => {
-      $("#assist-voice").classList.remove("listening");
-      $("#assist-voice").innerHTML = '<span aria-hidden="true">●</span> 話す';
-    });
-    recognition.start();
-  });
-
   $("#assistant-form").addEventListener("submit", event => {
     event.preventDefault();
-    const query = $("#assist-dest").value.trim();
-    parseIntentDate(query);
-    const matches = state.assistantFacility ? [state.assistantFacility] : destinationMatches(query);
-    const exact = matches.find(f => normalizeSearch(query).includes(normalizeSearch(f.name))) || matches[0];
+    const exact = state.assistantFacility;
     if (!exact) {
-      renderAssistantError("行き先が見つかりません。施設名を入力するか、候補から選んでください。");
+      renderAssistantError("目的と行き先の施設を選んでください。");
       return;
     }
     const timing = parseAssistantDate();
@@ -706,7 +672,8 @@
   $("#assistant-result").addEventListener("click", event => {
     if (event.target.closest(".answer-retry")) {
       $("#assistant-result").innerHTML = "";
-      $("#assist-dest").focus();
+      const selectedPurpose = document.querySelector("[data-assist-cat].selected");
+      (selectedPurpose || document.querySelector("[data-assist-cat]"))?.focus();
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   });

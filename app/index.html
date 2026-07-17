@@ -42,18 +42,23 @@
     <form id="assistant-form" class="assistant-card">
       <div class="assistant-progress" aria-label="入力は3項目です"><span class="active">1 行き先</span><i></i><span>2 出発地</span><i></i><span>3 到着時刻</span></div>
 
-      <label class="assistant-label" for="assist-dest"><span>1</span><b>どこへ、何をしに行きたいですか？</b></label>
-      <div class="intent-input-wrap">
-        <input id="assist-dest" type="search" inputmode="search" autocomplete="off"
-          placeholder="例：明日10時までに飯塚記念病院へ行きたい" aria-describedby="assist-dest-help">
-        <button id="assist-voice" type="button" aria-label="声で行き先を入力"><span aria-hidden="true">●</span> 話す</button>
-      </div>
-      <p id="assist-dest-help" class="input-help">場所の名前だけでも大丈夫です。</p>
-      <div id="assist-suggestions" class="assist-suggestions" role="listbox" aria-label="行き先候補"></div>
-      <div class="quick-intents" aria-label="よくある行き先">
-        <button type="button" data-assist-dest="飯塚記念病院">病院へ</button>
-        <button type="button" data-assist-dest="飯塚市役所">市役所へ</button>
-        <button type="button" data-assist-dest="イオン穂波店">買い物へ</button>
+      <fieldset class="destination-fieldset">
+        <legend class="assistant-label"><span>1</span><b>何をしに行きますか？</b></legend>
+        <div id="assist-purpose" class="purpose-grid" aria-label="行き先の種類">
+          <button type="button" data-assist-cat="hospital" aria-pressed="false"><span aria-hidden="true">＋</span><b>通院する</b><small>病院・医院</small></button>
+          <button type="button" data-assist-cat="life" aria-pressed="false"><span aria-hidden="true">買</span><b>買い物する</b><small>スーパー・商業施設</small></button>
+          <button type="button" data-assist-cat="city" aria-pressed="false"><span aria-hidden="true">庁</span><b>手続きする</b><small>市役所・支所</small></button>
+          <button type="button" data-assist-cat="community" aria-pressed="false"><span aria-hidden="true">公</span><b>交流・活動</b><small>交流センター・図書館</small></button>
+        </div>
+      </fieldset>
+      <label class="facility-select-label" for="assist-dest">
+        <span>行き先の施設</span>
+        <select id="assist-dest" disabled>
+          <option value="">先に目的を選んでください</option>
+        </select>
+      </label>
+      <div id="assist-destination-status" class="selected-destination" role="status">
+        <span aria-hidden="true">1</span><p><b>目的と施設を選んでください</b><small>表示された施設だけから選びます。</small></p>
       </div>
 
       <fieldset class="assistant-fieldset">
