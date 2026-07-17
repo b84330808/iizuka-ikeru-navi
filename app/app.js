@@ -564,6 +564,12 @@
       ${routeHtml}
       ${assistantReservationHtml(reservation)}
       <div class="answer-proof"><b>なぜこの答え？</b><span>GTFS-JP、施設一覧、地域交通の利用条件を端末内で照合しました。</span></div>
+      ${document.documentElement.classList.contains("judge-demo-active") ? `<section class="judge-result-bridge">
+        <span>審査デモ 3 / 3・ONE DATA, TWO DECISIONS</span>
+        <h4>一人の「行ける」を、まち全体の「住み続けられる」へ。</h4>
+        <p>市民には今日の便と予約を返し、行政には同じデータから追加ワゴン一台の配置効果を返します。</p>
+        <a href="future.html?demo=judge#simulator">一台をどこへ置くか計算する <b aria-hidden="true">→</b></a>
+      </section>` : ""}
       <button class="answer-retry" type="button">条件を変えてもう一度</button>
     </article>`;
     box.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -681,6 +687,92 @@
   const assistantDefaultDate = nextOpenDay(new Date());
   $("#assist-date").min = localDateValue(new Date());
   $("#assist-date").value = localDateValue(assistantDefaultDate);
+
+  // ---------- 3分 審査デモ ----------
+  const judgeDemo = {
+    step: 1,
+    guide: $("#judge-demo-guide"),
+    index: $("#judge-demo-index"),
+    progress: $("#judge-demo-progress"),
+    kicker: $("#judge-demo-kicker"),
+    title: $("#judge-demo-title"),
+    copy: $("#judge-demo-copy"),
+    facts: $("#judge-demo-facts"),
+    next: $("#judge-demo-next"),
+    policy: $("#judge-demo-policy")
+  };
+
+  function renderJudgeDemoStep(step) {
+    judgeDemo.step = step;
+    judgeDemo.index.textContent = `審査デモ ${step} / 3`;
+    judgeDemo.progress.style.width = `${step / 3 * 100}%`;
+    judgeDemo.policy.hidden = true;
+    judgeDemo.next.hidden = false;
+    if (step === 1) {
+      judgeDemo.kicker.textContent = "OPEN DATA → ONE LIFE";
+      judgeDemo.title.textContent = "まず、数字を一人の明日に戻します。";
+      judgeDemo.copy.textContent = "40停留所が減り、65歳以上3,484人分の固定路線徒歩圏が失われた推計。ここから、菰田で暮らす一人の通院を解きます。";
+      judgeDemo.facts.innerHTML = "<span><b>116 → 76</b>停留所</span><span><b>3,484人</b>影響推計</span>";
+      judgeDemo.next.innerHTML = '市民のケースを見る <b aria-hidden="true">→</b>';
+    } else if (step === 2) {
+      judgeDemo.kicker.textContent = "REAL APP / PRESET CASE";
+      judgeDemo.title.textContent = "菰田から、明日10時までに病院へ。";
+      judgeDemo.copy.textContent = "目的・施設・出発地・到着時刻をセットしました。ここからは展示用の動画ではなく、実際の検索エンジンが判定します。";
+      judgeDemo.facts.innerHTML = "<span><b>菰田</b>忠隈付近</span><span><b>10:00</b>飯塚記念病院</span>";
+      judgeDemo.next.innerHTML = 'この条件で判定する <b aria-hidden="true">→</b>';
+    } else {
+      judgeDemo.kicker.textContent = "ACTION → POLICY";
+      judgeDemo.title.textContent = "今日の答えを、明日の交通政策へ。";
+      judgeDemo.copy.textContent = "下の結果は便・徒歩・運賃・地域交通の条件を一枚に統合。同じOpen Dataは、追加ワゴン一台の配置判断にも使えます。";
+      judgeDemo.facts.innerHTML = "<span><b>市民</b>今すること</span><span><b>行政</b>一台の配置根拠</span>";
+      judgeDemo.next.hidden = true;
+      judgeDemo.policy.hidden = false;
+    }
+  }
+
+  function prepareJudgeDemoCase() {
+    document.querySelector('[data-assist-cat="hospital"]')?.click();
+    const facilityIndex = destinationCatalog.findIndex(facility => facility.name === "飯塚記念病院");
+    if (facilityIndex >= 0) {
+      $("#assist-dest").value = String(facilityIndex);
+      $("#assist-dest").dispatchEvent(new Event("change", { bubbles: true }));
+    }
+    $("#assist-demo-origin").click();
+    $("#assist-date").value = localDateValue(nextOpenDay(new Date()));
+    $("#assist-time").value = "10:00";
+    const registered = document.querySelector('input[name="assist-registered"][value="yes"]');
+    if (registered) registered.checked = true;
+    $("#assistant-form").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function openJudgeDemo() {
+    document.documentElement.classList.add("judge-demo-active");
+    judgeDemo.guide.hidden = false;
+    renderJudgeDemoStep(1);
+  }
+
+  document.querySelectorAll("[data-judge-demo]").forEach(button => {
+    button.addEventListener("click", openJudgeDemo);
+  });
+  $("#judge-demo-close").addEventListener("click", () => {
+    judgeDemo.guide.hidden = true;
+    document.documentElement.classList.remove("judge-demo-active");
+  });
+  judgeDemo.next.addEventListener("click", () => {
+    if (judgeDemo.step === 1) {
+      prepareJudgeDemoCase();
+      renderJudgeDemoStep(2);
+      return;
+    }
+    if (judgeDemo.step === 2) {
+      $("#assistant-form").requestSubmit();
+      renderJudgeDemoStep(3);
+      setTimeout(() => $("#assistant-result").scrollIntoView({ behavior: "smooth", block: "start" }), 120);
+    }
+  });
+  if (new URLSearchParams(window.location?.search || "").get("demo") === "judge") {
+    openJudgeDemo();
+  }
 
   // STEP1: カテゴリ → 施設リスト
   document.querySelectorAll(".cat-btn").forEach(btn => {

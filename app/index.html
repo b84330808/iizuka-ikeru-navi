@@ -24,6 +24,7 @@
   </div>
   <div class="header-btns">
     <button id="font-toggle" class="chip" aria-label="文字の大きさを変える">文字を大きく</button>
+    <button class="chip judge-chip" type="button" data-judge-demo>3分 審査デモ</button>
     <a class="chip" href="analysis.html">なぜこのアプリ?</a>
   </div>
 </header>
@@ -37,6 +38,10 @@
       <h2>「行きたい」を、<br><em>「行ける」に。</em></h2>
       <p>バス、エリアワゴン、予約乗合タクシーをまとめて確認。交通の名前を知らなくても、今することが一つわかります。</p>
       <div class="open-data-proof"><span>OPEN DATA LIVE</span><b>116 → 76</b><small>定時バス停留所の変化を分析済み</small></div>
+      <div class="mission-entry-actions">
+        <a href="#assistant-form">自分の移動を調べる</a>
+        <button type="button" data-judge-demo><span aria-hidden="true"></span>3分の審査デモを見る</button>
+      </div>
     </div>
 
     <form id="assistant-form" class="assistant-card">
@@ -99,10 +104,10 @@
 
     <div id="assistant-result" class="assistant-result" role="status" aria-live="polite"></div>
 
-    <a class="future-call-banner" href="future.html">
+    <a class="future-call-banner" href="future.html?demo=judge">
       <span class="future-call-pulse" aria-hidden="true"></span>
-      <span><small>行政向け未来シミュレーター / LIFE TWIN</small><strong>この市民向けアプリが、なぜ必要なのか。</strong><em>同じOpen Dataで、失われる生活圏と政策効果を体験する</em></span>
-      <b aria-hidden="true">未来を見る</b>
+      <span><small>審査デモ 2 / 2・行政向け LIFE TWIN</small><strong>一人の移動から、一台の政策判断へ。</strong><em>同じOpen Dataで、失われる生活圏と配置効果を体験する</em></span>
+      <b aria-hidden="true">続きを見る</b>
     </a>
 
     <details class="advanced-search">
@@ -218,6 +223,20 @@
   </section>
 
 </main>
+
+<aside id="judge-demo-guide" class="judge-demo-guide" hidden aria-live="polite" aria-labelledby="judge-demo-title">
+  <div class="judge-demo-top">
+    <span id="judge-demo-index">審査デモ 1 / 3</span>
+    <button id="judge-demo-close" type="button" aria-label="審査デモを閉じる">×</button>
+  </div>
+  <div class="judge-demo-track" aria-hidden="true"><span id="judge-demo-progress"></span></div>
+  <p id="judge-demo-kicker">OPEN DATA → ONE LIFE</p>
+  <h2 id="judge-demo-title">まず、数字を一人の明日に戻します。</h2>
+  <p id="judge-demo-copy">40停留所が減り、65歳以上3,484人分の固定路線徒歩圏が失われた推計。ここから、菰田で暮らす一人の通院を解きます。</p>
+  <div id="judge-demo-facts" class="judge-demo-facts"><span><b>116 → 76</b>停留所</span><span><b>3,484人</b>影響推計</span></div>
+  <button id="judge-demo-next" class="judge-demo-next" type="button">市民のケースを見る <b aria-hidden="true">→</b></button>
+  <a id="judge-demo-policy" class="judge-demo-policy" href="future.html?demo=judge#simulator" hidden>同じデータで一台の配置を決める <b aria-hidden="true">→</b></a>
+</aside>
 
 <footer>
   <p><b>データ更新: 2026年7月14日</b><br>飯塚市オープンデータ(GTFS-JP / BODIK)・令和2年国勢調査。
