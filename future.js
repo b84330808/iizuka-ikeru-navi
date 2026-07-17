@@ -209,7 +209,8 @@
     $$(".town").forEach((path) => {
       path.classList.remove("town-recovering", "town-partial");
       const affected = Number(path.dataset.affected);
-      if (!affected || !state.policies.size) return;
+      const isTarget = path.classList.contains("town-lost") || path.classList.contains("town-reduced");
+      if (!isTarget || !affected || !state.policies.size) return;
       const rate = townRecoveryRate(path);
       recoveredPeople += affected * rate;
       if (rate >= .48) { path.classList.add("town-recovering"); recoveredTowns += 1; }
