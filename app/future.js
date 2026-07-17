@@ -76,10 +76,22 @@
   });
   $("#change-future").addEventListener("click", () => {
     clearInterval(state.timer);
-    $("#simulator").scrollIntoView({ behavior: "smooth" });
+    $("#impact").scrollIntoView({ behavior: "smooth" });
   });
   setClock();
   setInterval(setClock, 30000);
+
+  function buildStopLossGrid() {
+    const grid = $("#stop-loss-grid");
+    const fragment = document.createDocumentFragment();
+    for (let index = 0; index < 116; index += 1) {
+      const dot = document.createElement("span");
+      if (index >= 76) dot.className = "is-lost";
+      fragment.appendChild(dot);
+    }
+    grid.appendChild(fragment);
+  }
+  buildStopLossGrid();
 
   function geometryPoints(geometry) {
     if (geometry.type === "Polygon") return geometry.coordinates.flat();
@@ -108,12 +120,14 @@
       const offsetY = (760 - (maxLat - minLat) * scale) / 2;
       const project = (lon, lat) => [offsetX + (lon - minLon) * scale, offsetY + (maxLat - lat) * scale];
       const fragment = document.createDocumentFragment();
+      const impactFragment = document.createDocumentFragment();
       geo.features
         .sort((a, b) => (a.properties.elderly_affected || 0) - (b.properties.elderly_affected || 0))
         .forEach((feature) => {
           const p = feature.properties;
+          const pathData = polygonPath(feature.geometry, project);
           const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-          path.setAttribute("d", polygonPath(feature.geometry, project));
+          path.setAttribute("d", pathData);
           path.setAttribute("tabindex", "0");
           path.setAttribute("role", "button");
           path.setAttribute("aria-label", `${p.name}、65歳以上${p.pop_elderly}人`);
@@ -128,8 +142,14 @@
           path.addEventListener("focus", showTownTooltip);
           path.addEventListener("blur", hideTownTooltip);
           fragment.appendChild(path);
+
+          const impactPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+          impactPath.setAttribute("d", pathData);
+          impactPath.classList.add("impact-town", `impact-town-${p.class}`);
+          impactFragment.appendChild(impactPath);
         });
       $("#iizuka-map").appendChild(fragment);
+      $("#impact-map").appendChild(impactFragment);
       $("#map-loading").hidden = true;
       updateSimulator();
     } catch (err) {
@@ -268,6 +288,21 @@
   $("#restart-future").addEventListener("click", () => {
     $("#report").hidden = true; resetPolicies(); $("#simulator").scrollIntoView({ behavior: "smooth" });
   });
+
+  document.documentElement.classList.add("motion-ready");
+  if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.18 });
+    $$(".reveal").forEach((element) => revealObserver.observe(element));
+  } else {
+    $$(".reveal").forEach((element) => element.classList.add("is-visible"));
+  }
   loadMap();
   updateSimulator();
 })();
