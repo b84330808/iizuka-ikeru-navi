@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>未来からの着信 — IIZUKA LIFE TWIN</title>
+<meta name="description" content="飯塚市のオープンデータで、未来の生活圏と政策効果を体験するシミュレーター。">
+<meta name="theme-color" content="#090b0a">
+<link rel="icon" href="favicon-32.png" sizes="32x32">
+<link rel="stylesheet" href="future.css">
+</head>
+<body>
+<a class="skip-link" href="#call-stage">未来からの着信へ移動</a>
+<header class="future-header">
+  <a class="future-brand" href="future.html"><span class="brand-signal" aria-hidden="true"></span><span><b>IIZUKA</b> LIFE TWIN</span></a>
+  <div class="header-status"><span></span> OPEN DATA CONNECTED</div>
+  <a class="quiet-link" href="index.html">今日の乗り物を探す</a>
+</header>
+
+<main>
+  <section id="call-stage" class="call-stage" aria-labelledby="call-title">
+    <div class="city-grid" aria-hidden="true"></div>
+    <div class="signal-orbit orbit-a" aria-hidden="true"></div>
+    <div class="signal-orbit orbit-b" aria-hidden="true"></div>
+    <div class="stage-copy">
+      <p class="kicker">OPEN DATA / 2040 / LIVE SCENARIO</p>
+      <h1 id="call-title">未来から、<br><em>着信中。</em></h1>
+      <p class="stage-lead">これは物語ではありません。飯塚市の人口・交通・施設データから生成された、ひとりの暮らしのシミュレーションです。</p>
+      <div class="truth-strip">
+        <span><strong>34</strong> 定時バス徒歩圏を失った町丁</span>
+        <span><strong>3,484</strong> 影響を受けた65歳以上の推計</span>
+        <span><strong>32.3%</strong> 2026年の高齢化率</span>
+      </div>
+    </div>
+
+    <article class="phone" aria-live="polite">
+      <div class="phone-top"><span>2040</span><span id="call-clock">09:41</span><span>●●●</span></div>
+      <div id="incoming-view" class="phone-view incoming-view">
+        <p class="incoming-label"><span></span> 未来からの着信</p>
+        <div class="resident-avatar" aria-hidden="true"><div class="avatar-scan"></div><div class="avatar-head"></div><div class="avatar-body"></div></div>
+        <h2>澤田 房子</h2>
+        <p>82歳・菰田地区・ひとり暮らし</p>
+        <div class="call-actions">
+          <button id="decline-call" class="call-button decline" type="button"><span>×</span>あとで</button>
+          <button id="answer-call" class="call-button answer" type="button"><span>●</span>応答</button>
+        </div>
+        <button id="sound-toggle" class="sound-toggle" type="button" aria-pressed="true">音声 ON</button>
+      </div>
+      <div id="active-view" class="phone-view active-view" hidden>
+        <div class="call-live"><span></span> LIVE · 00:<b id="call-seconds">00</b></div>
+        <div class="resident-avatar active" aria-hidden="true"><div class="avatar-scan"></div><div class="avatar-head"></div><div class="avatar-body"></div></div>
+        <p class="speaker">澤田 房子・2040年の菰田から</p>
+        <blockquote id="resident-line">「聞こえますか？」</blockquote>
+        <div id="evidence-card" class="evidence-card" hidden><span>DATA TRACE / 菰田</span><b>定時バス徒歩圏 92.3% → 0%</b><small>2022年路線再編前後・300m圏</small></div>
+        <button id="change-future" class="change-future" type="button" hidden>この未来を変える</button>
+      </div>
+    </article>
+    <a class="scroll-cue" href="#simulator"><span></span> POLICY SIMULATOR</a>
+  </section>
+
+  <section id="simulator" class="simulator" aria-labelledby="sim-title">
+    <div class="section-heading">
+      <p class="kicker">POLICY SIMULATOR / REAL GEOGRAPHY</p>
+      <h2 id="sim-title">予算100で、<br>誰の暮らしをつなぎ直す？</h2>
+      <p>施策を最大3つ選ぶと、149町丁の生活圏を再計算します。赤は定時バス徒歩圏を失った地域、光は選んだ施策で改善する可能性です。</p>
+    </div>
+    <div class="sim-grid">
+      <div class="map-panel">
+        <div class="map-toolbar">
+          <div><span class="live-dot"></span><b>飯塚市 生活圏マップ</b></div>
+          <div class="map-legend"><span><i class="lost"></i>徒歩圏喪失</span><span><i class="recovered"></i>改善可能性</span><span><i class="covered"></i>徒歩圏あり</span></div>
+        </div>
+        <div id="map-wrap" class="map-wrap">
+          <div id="map-loading" class="map-loading"><span></span>149町丁を接続中…</div>
+          <svg id="iizuka-map" viewBox="0 0 720 760" role="img" aria-label="飯塚市149町丁の生活圏シミュレーション地図"></svg>
+          <div id="map-tooltip" class="map-tooltip" hidden></div>
+          <div class="map-scan" aria-hidden="true"></div>
+        </div>
+        <div class="map-foot"><span>2020国勢調査 × 新旧GTFS-JP</span><button id="reset-policies" type="button">選択をリセット</button></div>
+      </div>
+
+      <aside class="policy-panel" aria-label="政策を選ぶ">
+        <div class="budget-head">
+          <div><small>残り予算</small><strong id="budget-value">100</strong></div>
+          <div class="budget-track"><span id="budget-bar"></span></div>
+          <small>最大3施策・シナリオ予算</small>
+        </div>
+        <div id="policy-list" class="policy-list">
+          <button class="policy-card" type="button" data-policy="ondemand" data-cost="45" data-impact="0.55"><span class="policy-number">01</span><span><b>AIオンデマンド交通</b><small>需要に合わせてワゴンを動かす</small></span><strong>45</strong></button>
+          <button class="policy-card" type="button" data-policy="mobilecare" data-cost="40" data-impact="0.38"><span class="policy-number">02</span><span><b>移動診療・介護巡回</b><small>人ではなくサービスが移動する</small></span><strong>40</strong></button>
+          <button class="policy-card" type="button" data-policy="hub" data-cost="25" data-impact="0.28"><span class="policy-number">03</span><span><b>交流センター生活ハブ</b><small>交通・診療・買い物を一か所へ</small></span><strong>25</strong></button>
+          <button class="policy-card" type="button" data-policy="restore" data-cost="60" data-impact="0.48"><span class="policy-number">04</span><span><b>定時路線の重点復活</b><small>影響人口の多い区間を再接続</small></span><strong>60</strong></button>
+          <button class="policy-card" type="button" data-policy="concierge" data-cost="12" data-impact="0.18"><span class="policy-number">05</span><span><b>予約・移動コンシェルジュ</b><small>使える交通を予約までつなぐ</small></span><strong>12</strong></button>
+        </div>
+        <p id="policy-hint" class="policy-hint">施策を選んでください。</p>
+      </aside>
+    </div>
+
+    <div class="outcome-panel" aria-live="polite">
+      <div class="outcome-title"><span>SCENARIO RESULT</span><h3 id="outcome-label">まだ未来は変わっていません。</h3></div>
+      <div class="outcome-metrics">
+        <div><small>移動機会が改善する可能性</small><strong><span id="recovered-count">0</span><em>人</em></strong></div>
+        <div><small>影響推計対象町丁の改善</small><strong><span id="recovered-towns">0</span><em>/ 47</em></strong></div>
+        <div><small>生活圏レジリエンス</small><strong><span id="resilience-score">28</span><em>/ 100</em></strong></div>
+      </div>
+      <div class="future-reply"><span class="reply-avatar" aria-hidden="true">F</span><p id="future-reply">「まだ、私の未来は変わっていません。」</p></div>
+      <button id="make-report" class="report-button" type="button" disabled>この未来の政策レポートを見る</button>
+    </div>
+  </section>
+
+  <section id="report" class="report" hidden aria-labelledby="report-title">
+    <div class="report-paper">
+      <div class="report-code">IIZUKA / 2040 / <span id="report-id">000000</span></div>
+      <p class="kicker">YOUR POLICY RECEIPT</p>
+      <h2 id="report-title">あなたが選んだ、<br>飯塚市の未来。</h2>
+      <div id="report-policies" class="report-policies"></div>
+      <dl><div><dt>改善可能性</dt><dd><span id="report-people">0</span>人</dd></div><div><dt>使用予算</dt><dd><span id="report-cost">0</span>/100</dd></div><div><dt>生活圏スコア</dt><dd><span id="report-score">28</span>/100</dd></div></dl>
+      <blockquote id="report-message">未来は、まだ選び直せる。</blockquote>
+      <div class="report-actions"><a href="index.html">今日の移動を本当に調べる</a><button id="restart-future" type="button">別の未来を選ぶ</button></div>
+      <p class="report-note">この結果は政策比較のためのシナリオ推計です。公式な将来予測・事業評価ではありません。</p>
+    </div>
+  </section>
+
+  <section class="method" aria-labelledby="method-title">
+    <div><p class="kicker">NOT A BLACK BOX</p><h2 id="method-title">声の後ろに、<br>計算根拠がある。</h2></div>
+    <div class="method-copy">
+      <p>住民の台詞と地図は、飯塚市GTFS-JP、令和2年国勢調査小地域集計、2026年6月地域・年齢別人口、医療・介護・公共施設データを基に構成しています。</p>
+      <p>政策効果は、徒歩圏喪失推計3,484人を母数に、各施策の仮定係数を重複補正して比較するプロトタイプです。係数は公開し、将来は実証結果で更新します。</p>
+      <div class="method-links"><a href="analysis.html">元データと分析を見る</a><a href="index.html">実際の交通検索を使う</a></div>
+    </div>
+  </section>
+</main>
+<footer class="future-footer"><span>IIZUKA LIFE TWIN / PROTOTYPE 01</span><span>DATA UPDATED 2026.07</span></footer>
+<script src="future.js"></script>
+</body>
+</html>
