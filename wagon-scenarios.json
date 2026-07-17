@@ -1,0 +1,581 @@
+{
+  "meta": {
+    "generated": "2026-07-18",
+    "scenario": "追加ワゴン1台・平日3往復・旧停留所6地点＋医療拠点",
+    "walkRadiusM": 300,
+    "boardingPoints": 6,
+    "baselineAffectedElderly": 3484,
+    "remainingGapElderly": 2227,
+    "method": "現行固定路線と穂波・菰田エリアワゴンで未被覆の300m徒歩圏を、旧停留所から再接続。2020年国勢調査65歳以上人口を町丁面積で按分。",
+    "warning": "アクセシビリティ改善の比較試算。利用者数・収支・公式運行計画ではありません。",
+    "sources": [
+      "飯塚市GTFS-JP（再編前4路線・現行2路線）",
+      "飯塚市 穂波・菰田地区エリアワゴン時刻表",
+      "令和2年国勢調査 小地域集計"
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "KI",
+      "name": "頴田・飯塚コリドー",
+      "shortName": "頴田・飯塚",
+      "color": "#7de8ff",
+      "hospital": {
+        "name": "頴田病院",
+        "stopName": "頴田病院",
+        "lat": 33.685224,
+        "lon": 130.720253
+      },
+      "recoveredElderly": 833,
+      "recoveredShare": 37.4,
+      "recoveredTowns": 12,
+      "selectedStops": [
+        {
+          "name": "頴田中央団地",
+          "lat": 33.67897093,
+          "lon": 130.7248555,
+          "individualRecovery": 230
+        },
+        {
+          "name": "石丸団地",
+          "lat": 33.67632401,
+          "lon": 130.7177924,
+          "individualRecovery": 159
+        },
+        {
+          "name": "横田",
+          "lat": 33.6418891,
+          "lon": 130.6714652,
+          "individualRecovery": 154
+        },
+        {
+          "name": "川津郵便局口",
+          "lat": 33.649156,
+          "lon": 130.677196,
+          "individualRecovery": 119
+        },
+        {
+          "name": "東川津",
+          "lat": 33.65348948,
+          "lon": 130.6805736,
+          "individualRecovery": 99
+        },
+        {
+          "name": "頴田交流センター",
+          "lat": 33.68415581,
+          "lon": 130.7290976,
+          "individualRecovery": 74
+        }
+      ],
+      "townRecovery": {
+        "40205009003": 28,
+        "402050220": 188,
+        "402050230": 154,
+        "40205085005": 50,
+        "40205085006": 14,
+        "40205086001": 33,
+        "40205087001": 92,
+        "40205087003": 3,
+        "40205088001": 84,
+        "40205088002": 77,
+        "40205088003": 56,
+        "40205088004": 41,
+        "40205088005": 13
+      },
+      "topTowns": [
+        {
+          "key": "402050220",
+          "name": "川津",
+          "recovered": 188
+        },
+        {
+          "key": "402050230",
+          "name": "横田",
+          "recovered": 154
+        },
+        {
+          "key": "40205087001",
+          "name": "佐與",
+          "recovered": 92
+        },
+        {
+          "key": "40205088001",
+          "name": "鹿毛馬",
+          "recovered": 84
+        },
+        {
+          "key": "40205088002",
+          "name": "鹿毛馬",
+          "recovered": 77
+        },
+        {
+          "key": "40205088003",
+          "name": "鹿毛馬",
+          "recovered": 56
+        }
+      ],
+      "routeCoordinates": [
+        [
+          130.720253,
+          33.685224
+        ],
+        [
+          130.7290976,
+          33.6841558
+        ],
+        [
+          130.7248555,
+          33.6789709
+        ],
+        [
+          130.7177924,
+          33.676324
+        ],
+        [
+          130.6805736,
+          33.6534895
+        ],
+        [
+          130.677196,
+          33.649156
+        ],
+        [
+          130.6714652,
+          33.6418891
+        ]
+      ],
+      "corridorKm": 8.0,
+      "oldGtfsDurationRange": [
+        55,
+        65
+      ],
+      "referenceTripId": "KI1.5_WD_1",
+      "residentExample": {
+        "townKey": "40205088001",
+        "town": "鹿毛馬",
+        "stop": "頴田中央団地",
+        "hospital": "頴田病院",
+        "departure": "10:34",
+        "arrival": "10:40",
+        "durationMinutes": 6,
+        "beforeCoveragePercent": 0.0,
+        "afterRecoveredElderly": 84,
+        "sourceTripId": "KI2.6_WD_2"
+      },
+      "rank": 1,
+      "recommended": true
+    },
+    {
+      "id": "TC",
+      "name": "鎮西・飯塚コリドー",
+      "shortName": "鎮西・飯塚",
+      "color": "#f1c75b",
+      "hospital": {
+        "name": "二瀬病院",
+        "stopName": "二瀬病院",
+        "lat": 33.657497,
+        "lon": 130.655389
+      },
+      "recoveredElderly": 539,
+      "recoveredShare": 24.2,
+      "recoveredTowns": 6,
+      "selectedStops": [
+        {
+          "name": "潤野上区",
+          "lat": 33.629248,
+          "lon": 130.65328,
+          "individualRecovery": 162
+        },
+        {
+          "name": "二瀬交流センター",
+          "lat": 33.649426,
+          "lon": 130.671817,
+          "individualRecovery": 125
+        },
+        {
+          "name": "二瀬病院",
+          "lat": 33.657571,
+          "lon": 130.655892,
+          "individualRecovery": 89
+        },
+        {
+          "name": "大日寺上",
+          "lat": 33.638459,
+          "lon": 130.641547,
+          "individualRecovery": 58
+        },
+        {
+          "name": "旧鎮西公民館",
+          "lat": 33.644228,
+          "lon": 130.641259,
+          "individualRecovery": 53
+        },
+        {
+          "name": "鎮西交流センター",
+          "lat": 33.637784,
+          "lon": 130.64656,
+          "individualRecovery": 58
+        }
+      ],
+      "townRecovery": {
+        "402050220": 59,
+        "402050230": 66,
+        "40205024001": 32,
+        "402050250": 57,
+        "402050340": 163,
+        "402050360": 162
+      },
+      "topTowns": [
+        {
+          "key": "402050340",
+          "name": "大日寺",
+          "recovered": 163
+        },
+        {
+          "key": "402050360",
+          "name": "潤野",
+          "recovered": 162
+        },
+        {
+          "key": "402050230",
+          "name": "横田",
+          "recovered": 66
+        },
+        {
+          "key": "402050220",
+          "name": "川津",
+          "recovered": 59
+        },
+        {
+          "key": "402050250",
+          "name": "伊川",
+          "recovered": 57
+        },
+        {
+          "key": "40205024001",
+          "name": "伊岐須",
+          "recovered": 32
+        }
+      ],
+      "routeCoordinates": [
+        [
+          130.671817,
+          33.649426
+        ],
+        [
+          130.655389,
+          33.657497
+        ],
+        [
+          130.641259,
+          33.644228
+        ],
+        [
+          130.641547,
+          33.638459
+        ],
+        [
+          130.64656,
+          33.637784
+        ],
+        [
+          130.65328,
+          33.629248
+        ],
+        [
+          130.655892,
+          33.657571
+        ]
+      ],
+      "corridorKm": 9.1,
+      "oldGtfsDurationRange": [
+        38,
+        60
+      ],
+      "referenceTripId": "TC2_WD",
+      "residentExample": {
+        "townKey": "402050230",
+        "town": "横田",
+        "stop": "二瀬交流センター",
+        "hospital": "二瀬病院",
+        "departure": "10:28",
+        "arrival": "10:34",
+        "durationMinutes": 6,
+        "beforeCoveragePercent": 1.5,
+        "afterRecoveredElderly": 66,
+        "sourceTripId": "TC2_WD"
+      },
+      "rank": 2,
+      "recommended": false
+    },
+    {
+      "id": "SI",
+      "name": "庄内・飯塚コリドー",
+      "shortName": "庄内・飯塚",
+      "color": "#b9ff66",
+      "hospital": {
+        "name": "飯塚記念病院",
+        "stopName": "飯塚記念病院入口",
+        "lat": 33.625416,
+        "lon": 130.697914
+      },
+      "recoveredElderly": 479,
+      "recoveredShare": 21.5,
+      "recoveredTowns": 4,
+      "selectedStops": [
+        {
+          "name": "下三緒団地",
+          "lat": 33.633869,
+          "lon": 130.712752,
+          "individualRecovery": 203
+        },
+        {
+          "name": "上三緒団地中央",
+          "lat": 33.630287,
+          "lon": 130.713361,
+          "individualRecovery": 178
+        },
+        {
+          "name": "庄内交流センター",
+          "lat": 33.640661,
+          "lon": 130.724526,
+          "individualRecovery": 75
+        },
+        {
+          "name": "庄内保健福祉総合センター",
+          "lat": 33.63798,
+          "lon": 130.729289,
+          "individualRecovery": 63
+        },
+        {
+          "name": "穂波庁舎",
+          "lat": 33.619554,
+          "lon": 130.68149,
+          "individualRecovery": 2
+        },
+        {
+          "name": "イオン穂波店",
+          "lat": 33.63662038,
+          "lon": 130.6736164,
+          "individualRecovery": 1
+        }
+      ],
+      "townRecovery": {
+        "402050190": 140,
+        "402050200": 201,
+        "402050230": 1,
+        "402050430": 1,
+        "402050440": 1,
+        "402050730": 70,
+        "402050820": 65
+      },
+      "topTowns": [
+        {
+          "key": "402050200",
+          "name": "上三緒",
+          "recovered": 201
+        },
+        {
+          "key": "402050190",
+          "name": "下三緒",
+          "recovered": 140
+        },
+        {
+          "key": "402050730",
+          "name": "綱分",
+          "recovered": 70
+        },
+        {
+          "key": "402050820",
+          "name": "有安",
+          "recovered": 65
+        },
+        {
+          "key": "402050230",
+          "name": "横田",
+          "recovered": 1
+        },
+        {
+          "key": "402050430",
+          "name": "秋松",
+          "recovered": 1
+        }
+      ],
+      "routeCoordinates": [
+        [
+          130.729289,
+          33.63798
+        ],
+        [
+          130.724526,
+          33.640661
+        ],
+        [
+          130.712752,
+          33.633869
+        ],
+        [
+          130.713361,
+          33.630287
+        ],
+        [
+          130.697914,
+          33.625416
+        ],
+        [
+          130.68149,
+          33.619554
+        ],
+        [
+          130.6736164,
+          33.6366204
+        ]
+      ],
+      "corridorKm": 7.5,
+      "oldGtfsDurationRange": [
+        47,
+        65
+      ],
+      "referenceTripId": "SI1_WD",
+      "residentExample": {
+        "townKey": "402050190",
+        "town": "下三緒",
+        "stop": "下三緒団地",
+        "hospital": "飯塚記念病院",
+        "departure": "08:38",
+        "arrival": "08:44",
+        "durationMinutes": 6,
+        "beforeCoveragePercent": 15.8,
+        "afterRecoveredElderly": 140,
+        "sourceTripId": "SI1_WD"
+      },
+      "rank": 3,
+      "recommended": false
+    },
+    {
+      "id": "CI",
+      "name": "筑穂・飯塚コリドー",
+      "shortName": "筑穂・飯塚",
+      "color": "#ff8ab4",
+      "hospital": {
+        "name": "済生会病院",
+        "stopName": "済生会病院",
+        "lat": 33.601729,
+        "lon": 130.66676
+      },
+      "recoveredElderly": 134,
+      "recoveredShare": 6.0,
+      "recoveredTowns": 2,
+      "selectedStops": [
+        {
+          "name": "川食筑穂店",
+          "lat": 33.576328,
+          "lon": 130.661318,
+          "individualRecovery": 114
+        },
+        {
+          "name": "平塚",
+          "lat": 33.570349,
+          "lon": 130.655088,
+          "individualRecovery": 19
+        },
+        {
+          "name": "イオン穂波店",
+          "lat": 33.63662038,
+          "lon": 130.6736164,
+          "individualRecovery": 1
+        },
+        {
+          "name": "飯塚市役所",
+          "lat": 33.64628073,
+          "lon": 130.6913542,
+          "individualRecovery": 0
+        },
+        {
+          "name": "筑穂支所",
+          "lat": 33.570151,
+          "lon": 130.647006,
+          "individualRecovery": 0
+        },
+        {
+          "name": "筑穂保健福祉総合センター",
+          "lat": 33.57411,
+          "lon": 130.643639,
+          "individualRecovery": 0
+        }
+      ],
+      "townRecovery": {
+        "402050230": 1,
+        "40205068001": 28,
+        "40205068002": 104
+      },
+      "topTowns": [
+        {
+          "key": "40205068002",
+          "name": "平塚",
+          "recovered": 104
+        },
+        {
+          "key": "40205068001",
+          "name": "平塚",
+          "recovered": 28
+        },
+        {
+          "key": "402050230",
+          "name": "横田",
+          "recovered": 1
+        }
+      ],
+      "routeCoordinates": [
+        [
+          130.647006,
+          33.570151
+        ],
+        [
+          130.655088,
+          33.570349
+        ],
+        [
+          130.661318,
+          33.576328
+        ],
+        [
+          130.66676,
+          33.601729
+        ],
+        [
+          130.6736164,
+          33.6366204
+        ],
+        [
+          130.6913542,
+          33.6462807
+        ],
+        [
+          130.643639,
+          33.57411
+        ]
+      ],
+      "corridorKm": 19.5,
+      "oldGtfsDurationRange": [
+        43,
+        57
+      ],
+      "referenceTripId": "CI2_WD",
+      "residentExample": {
+        "townKey": "40205068002",
+        "town": "平塚",
+        "stop": "川食筑穂店",
+        "hospital": "済生会病院",
+        "departure": "10:04",
+        "arrival": "10:16",
+        "durationMinutes": 12,
+        "beforeCoveragePercent": 0.0,
+        "afterRecoveredElderly": 104,
+        "sourceTripId": "CI2_WD"
+      },
+      "rank": 4,
+      "recommended": false
+    }
+  ]
+}

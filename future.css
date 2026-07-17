@@ -38,3 +38,68 @@
   .future-brand{font-size:.67rem}.quiet-link{font-size:.59rem}
   .product-bridge>div{grid-template-columns:1fr}.product-bridge i{text-align:center}
 }
+
+/* Data-derived one-wagon allocation */
+.allocation-panel{display:flex;flex-direction:column;gap:14px}
+.resource-head{display:grid;grid-template-columns:1fr repeat(3,auto);gap:7px;align-items:end;padding-bottom:15px;border-bottom:1px solid var(--line)}
+.resource-head>div{grid-row:1/3}
+.resource-head small{display:block;color:var(--muted);font-size:.62rem;letter-spacing:.1em}
+.resource-head strong{display:block;margin-top:2px;font-size:3.7rem;line-height:1;letter-spacing:-.08em}
+.resource-head strong em{margin-left:5px;color:var(--muted);font-size:.22em;font-style:normal;letter-spacing:0}
+.resource-head>span{padding:7px 8px;border:1px solid var(--line);background:#161b17;color:#bdc6bf;font-size:.57rem;white-space:nowrap}
+.optimize-button{display:flex;align-items:center;justify-content:space-between;width:100%;padding:16px;border:1px solid var(--recover);background:var(--recover);color:#11160f;font-size:.76rem;font-weight:900;cursor:pointer;transition:filter .2s,transform .2s}
+.optimize-button:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.optimize-button span{font-size:.55rem;letter-spacing:.15em}
+.optimize-button.is-calculating{background:transparent;color:var(--recover);animation:calcPulse .5s ease-in-out infinite alternate}
+.scenario-list{display:grid;gap:8px}
+.candidate-loading{margin:20px 0;color:var(--muted);font-size:.7rem}
+.scenario-card{position:relative;display:grid;grid-template-columns:31px 1fr auto;gap:9px;align-items:center;width:100%;min-height:74px;padding:10px 11px;border:1px solid var(--line);background:#161b17;text-align:left;cursor:pointer;transition:border-color .2s,background .2s,transform .2s}
+.scenario-card:hover{transform:translateX(-3px);border-color:rgba(255,255,255,.38)}
+.scenario-card.selected{border-color:var(--recover);background:rgba(185,255,102,.09);box-shadow:inset 3px 0 var(--recover)}
+.scenario-rank{color:#6f7a71;font-size:.61rem;letter-spacing:.1em}
+.scenario-copy b,.scenario-copy small{display:block}
+.scenario-copy b{margin-bottom:5px;font-size:.82rem}
+.scenario-copy small{color:var(--muted);font-size:.59rem}
+.scenario-card>strong{color:var(--recover);font-size:1.2rem;letter-spacing:-.04em}
+.scenario-card>strong em{margin-left:2px;color:var(--muted);font-size:.48em;font-style:normal}
+.scenario-card>i{position:absolute;top:-1px;right:-1px;padding:3px 6px;background:var(--recover);color:#11160f;font-size:.48rem;font-style:normal;font-weight:900;letter-spacing:.08em}
+.scenario-line{fill:none;stroke:var(--recover);stroke-width:6;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;filter:drop-shadow(0 0 8px rgba(185,255,102,.78));stroke-dasharray:10 7;animation:routeFlow 1.4s linear infinite}
+.scenario-stop{fill:#0b0e0c;stroke:var(--recover);stroke-width:4;vector-effect:non-scaling-stroke;filter:drop-shadow(0 0 6px var(--recover))}
+.scenario-hospital{fill:var(--signal);stroke:#fff;stroke-width:4;vector-effect:non-scaling-stroke;filter:drop-shadow(0 0 10px var(--signal))}
+.map-tooltip strong{display:block;margin-top:5px;color:var(--recover)}
+.journey-proof{display:grid;grid-template-columns:minmax(250px,.55fr) minmax(500px,1.45fr);gap:45px;max-width:1420px;margin:18px auto 0;padding:clamp(25px,4vw,52px);border:1px solid rgba(185,255,102,.38);background:linear-gradient(135deg,rgba(185,255,102,.08),rgba(17,21,18,.96) 45%)}
+.proof-heading h3{margin:0;font-size:clamp(2rem,3.8vw,4.2rem);line-height:1.05;letter-spacing:-.045em}
+.proof-heading h3 span{color:var(--recover)}
+.proof-heading>p:last-child{max-width:430px;margin:24px 0 0;color:var(--muted);font-size:.77rem;line-height:1.8}
+.proof-compare{display:grid;grid-template-columns:1fr 80px 1.35fr;align-items:stretch}
+.proof-card{display:flex;flex-direction:column;justify-content:center;min-height:218px;padding:24px;border:1px solid var(--line);background:#111512}
+.proof-card>span{color:var(--muted);font-size:.58rem;font-weight:800;letter-spacing:.15em}
+.proof-card>b{margin:18px 0 7px;color:var(--signal);font-size:1.45rem}
+.proof-card p{margin:8px 0;color:#dbe1dc;font-size:.77rem;line-height:1.65}
+.proof-card p strong{font-size:1.3rem}
+.proof-card small{color:#717c74;font-size:.58rem;line-height:1.5}
+.proof-after{border-color:rgba(185,255,102,.36);background:rgba(185,255,102,.055)}
+.proof-route{display:flex;align-items:center;gap:9px;margin:18px 0 10px}
+.proof-route b{font-size:clamp(.82rem,1.25vw,1.05rem)}
+.proof-route i{color:var(--recover);font-style:normal}
+.proof-after p strong{color:var(--recover)}
+.proof-after p span{padding:3px 6px;background:rgba(185,255,102,.12);color:var(--recover)}
+.proof-arrow{display:grid;place-content:center;text-align:center}
+.proof-arrow i{display:block;width:55px;height:1px;background:var(--recover)}
+.proof-arrow b{margin-top:8px;color:var(--recover);font-size:.5rem;letter-spacing:.12em}
+.proof-trace{grid-column:2;display:flex;align-items:center;gap:13px;margin-top:-25px;padding:12px 15px;border:1px solid var(--line);background:#0d100e}
+.proof-trace>span{flex:0 0 auto;color:var(--cyan);font-size:.53rem;font-weight:900;letter-spacing:.15em}
+.proof-trace p{margin:0;color:var(--muted);font-size:.64rem;line-height:1.6}
+.proof-trace b{color:var(--recover);font-size:.82rem}
+#report-hospital{font-size:1rem;line-height:1.35}
+@keyframes routeFlow{to{stroke-dashoffset:-34}}
+@keyframes calcPulse{to{box-shadow:inset 0 0 35px rgba(185,255,102,.16)}}
+@media(max-width:1050px){
+  .journey-proof{grid-template-columns:1fr}.proof-heading>p:last-child{max-width:none}.proof-trace{grid-column:1;margin-top:0}
+}
+@media(max-width:720px){
+  .section-heading .kicker{margin-bottom:18px}
+  .resource-head{grid-template-columns:1fr 1fr}.resource-head>div{grid-column:1/-1;grid-row:auto}.resource-head>span:last-child{grid-column:1/-1}
+  .proof-compare{grid-template-columns:1fr}.proof-arrow{min-height:60px}.proof-arrow i{width:1px;height:32px;margin:auto}.proof-route{align-items:flex-start;flex-direction:column}.proof-route i{transform:rotate(90deg)}
+  .proof-trace{display:block}.proof-trace>span{display:block;margin-bottom:7px}
+}
