@@ -122,6 +122,24 @@
     return { rides: pruneRides(rides).slice(0, 3), reachable: true };
   }
 
+  function searchArriveBy(originIdx, facility, date, arriveByMin, afterMin = 0, maxWalkM) {
+    const walkLimit = maxWalkM || DEFAULT_MAX_WALK;
+    const cand = D.stops.map((s, i) => ({ i, d: distM(s.lat, s.lon, facility.lat, facility.lon) }))
+      .filter(x => x.d <= walkLimit)
+      .sort((a, b) => a.d - b.d);
+    if (!cand.length) return { rides: [], reachable: false };
+    const destIdxs = cand.map(c => c.i);
+    const walkByIdx = Object.fromEntries(cand.map(c => [c.i, c.d]));
+    let rides = directRides(originIdx, destIdxs, date, afterMin, false, walkByIdx);
+    rides = rides.concat(transferRides(originIdx, destIdxs, date, afterMin, false));
+    rides.forEach(r => { r.walkM = walkByIdx[r.alight]; });
+    rides = pruneRides(rides)
+      .filter(r => r.arr + walkMin(r.walkM || 0) <= arriveByMin)
+      .sort((a, b) => b.dep - a.dep || a.arr - b.arr)
+      .slice(0, 3);
+    return { rides, reachable: true };
+  }
+
   // バス停ごとの「行き先までの状況」を判定(灰色化に使用)
   //   ok:   今日これから乗れる便がある(nextDep: 最速の発車時刻)
   //   gone: 路線はつながっているが今日はもう便が無い
@@ -182,6 +200,7 @@
   const state = {
     cat: null, facility: null, originIdx: null, day: "today",
     travelDate: null, originWalkM: 0, maxWalkM: DEFAULT_MAX_WALK,
+    assistantPosition: null, assistantFacility: null, assistantOriginIdx: null,
   };
 
   const SCREENS = {
@@ -384,6 +403,317 @@
   $("#concierge-result").addEventListener("click", e => {
     if (e.target.closest(".js-fixed-search")) show("dest");
   });
+
+  // ---------- 生活移動アシスタント ----------
+  const EXTRA_DESTINATIONS = ["イオン穂波店", "ゆめタウン飯塚", "新飯塚駅"];
+  const destinationCatalog = (() => {
+    const all = [...D.facilities];
+    for (const name of EXTRA_DESTINATIONS) {
+      if (all.some(f => f.name === name)) continue;
+      const stop = D.stops.find(s => s.name === name);
+      if (stop) all.push({
+        name, kana: name, cat: "life", lat: stop.lat, lon: stop.lon,
+        tel: "", note: "地域交通の停留所に接続"
+      });
+    }
+    return all;
+  })();
+
+  function normalizeSearch(value) {
+    return String(value || "").toLowerCase()
+      .replace(/[「」『』、。,.!?！？\s]/g, "")
+      .replace(/へ行きたい|に行きたい|までに|行きたい|行く/g, "");
+  }
+
+  function destinationMatches(query) {
+    const normalized = normalizeSearch(query);
+    if (!normalized) return [];
+    const aliases = [
+      ["市役所", "飯塚市役所"],
+      ["買い物", "イオン穂波店"],
+      ["スーパー", "イオン穂波店"],
+      ["駅", "新飯塚駅"]
+    ];
+    const alias = aliases.find(([needle]) => normalized.includes(needle));
+    const scored = destinationCatalog.map(f => {
+      const name = normalizeSearch(f.name);
+      const kana = normalizeSearch(f.kana);
+      let score = 0;
+      if (normalized.includes(name) || name.includes(normalized)) score += 100;
+      if (kana && (normalized.includes(kana) || kana.includes(normalized))) score += 60;
+      if (alias && f.name === alias[1]) score += 90;
+      if (/病院|医院|クリニック/.test(normalized) && f.cat === "hospital") score += 10 + (f.pri || 0);
+      return { f, score };
+    }).filter(item => item.score > 0);
+    return scored.sort((a, b) => b.score - a.score ||
+      (b.f.pri || 0) - (a.f.pri || 0)).map(item => item.f).slice(0, 6);
+  }
+
+  function renderAssistantSuggestions(query) {
+    const box = $("#assist-suggestions");
+    const matches = destinationMatches(query);
+    box.innerHTML = "";
+    for (const facility of matches) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.setAttribute("role", "option");
+      button.innerHTML = `<b>${esc(facility.name)}</b><small>${esc(facility.note || "目的地")}</small>`;
+      button.addEventListener("click", () => {
+        state.assistantFacility = facility;
+        $("#assist-dest").value = facility.name;
+        box.innerHTML = "";
+      });
+      box.appendChild(button);
+    }
+    return matches;
+  }
+
+  function parseIntentDate(text) {
+    const now = new Date();
+    if (text.includes("明日")) now.setDate(now.getDate() + 1);
+    const dateMatch = text.match(/(\d{1,2})月(\d{1,2})日/);
+    if (dateMatch) now.setMonth(Number(dateMatch[1]) - 1, Number(dateMatch[2]));
+    const timeMatch = text.match(/(\d{1,2})時(?:(\d{1,2})分|半)?/);
+    if (timeMatch) {
+      const minutes = text.includes("半", timeMatch.index) ? 30 : Number(timeMatch[2] || 0);
+      $("#assist-time").value = `${String(Number(timeMatch[1])).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+    }
+    if (text.includes("今日") || text.includes("明日") || dateMatch) {
+      $("#assist-date").value = localDateValue(now);
+    }
+  }
+
+  function nextOpenDay(from = new Date()) {
+    let date = addDays(from, 1);
+    while (isTaxiClosedDate(date)) date = addDays(date, 1);
+    return date;
+  }
+
+  function parseAssistantDate() {
+    const value = $("#assist-date").value;
+    const time = $("#assist-time").value;
+    if (!value || !time) return null;
+    const [y, m, d] = value.split("-").map(Number);
+    const [hh, mm] = time.split(":").map(Number);
+    return { date: new Date(y, m - 1, d), byMin: hh * 60 + mm, dateValue: value, time };
+  }
+
+  function bestJourneyFromPosition(position, facility, date, arriveByMin) {
+    const now = new Date();
+    const isToday = localDateValue(date) === localDateValue(now);
+    const near = D.stops.map((s, i) => ({
+      i, d: distM(s.lat, s.lon, position.latitude, position.longitude)
+    })).filter(item => item.d <= 1200).sort((a, b) => a.d - b.d);
+    const seen = new Set();
+    const journeys = [];
+    for (const item of near) {
+      const stop = D.stops[item.i];
+      const key = `${stop.feed}:${stop.name}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      const afterMin = isToday
+        ? now.getHours() * 60 + now.getMinutes() + walkMin(item.d) + 2
+        : 0;
+      for (const originIdx of sameStopIdxs(item.i)) {
+        const result = searchArriveBy(originIdx, facility, date, arriveByMin, afterMin, 800);
+        for (const ride of result.rides) {
+          journeys.push({ ride, originIdx, originWalkM: item.d, leaveAt: ride.dep - walkMin(item.d) - 2 });
+        }
+      }
+      if (seen.size >= 12) break;
+    }
+    return journeys.sort((a, b) => b.leaveAt - a.leaveAt || a.ride.arr - b.ride.arr)[0] || null;
+  }
+
+  function assistantRideHtml(journey) {
+    const { ride, originIdx, originWalkM, leaveAt } = journey;
+    const from = D.stops[originIdx];
+    const to = D.stops[ride.alight];
+    const destinationWalk = walkMin(ride.walkM || 0);
+    const routeNames = ride.legs.map(leg => D.routeNames[leg.trip.feed]).join(" → ");
+    const stopUrl = `https://www.google.com/maps/dir/?api=1&travelmode=walking&destination=${from.lat},${from.lon}`;
+    return `<section class="journey-choice">
+      <div class="journey-top"><span>間に合う便</span><b>${fmt(leaveAt)}までに出発</b></div>
+      <p class="journey-route">${esc(routeNames)}</p>
+      <div class="journey-timeline">
+        <div><time>${fmt(ride.dep)}</time><span>乗る</span><b>${esc(from.name)}</b><small>ここまで徒歩約${walkMin(originWalkM)}分</small></div>
+        <i aria-hidden="true"></i>
+        <div><time>${fmt(ride.arr)}</time><span>降りる</span><b>${esc(to.name)}</b><small>目的地まで徒歩約${destinationWalk}分</small></div>
+      </div>
+      <div class="journey-foot"><b>到着 ${fmt(ride.arr + destinationWalk)}</b><span>運賃 ${ride.fare == null ? "車内確認" : ride.fare + "円"}</span></div>
+      <a class="mission-primary-action" href="${stopUrl}" target="_blank" rel="noopener">現在地から乗り場へ案内する</a>
+    </section>`;
+  }
+
+  function assistantReservationHtml(result) {
+    if (!result) {
+      return `<section class="reservation-summary neutral"><span>予約交通</span><b>地区を選ぶと、利用資格と予約期限も確認できます。</b></section>`;
+    }
+    if (result.status === "wagon") {
+      return `<section class="reservation-summary wagon-summary"><span>地域交通</span><b>${esc(result.district)}地区はエリアワゴンの対象です。</b><p>定時便が表示された場合は、そのまま乗車できます。運行日・最新情報は公式案内でも確認できます。</p><a href="${BOOKING.official}" target="_blank" rel="noopener">公式案内を確認する</a></section>`;
+    }
+    if (result.status === "fixed") {
+      return `<section class="reservation-summary neutral"><span>地域交通</span><b>${esc(result.district)}地区は定時バスを確認してください。</b></section>`;
+    }
+    if (result.status === "closed" || result.status === "expired") {
+      return `<section class="reservation-summary alert"><span>予約交通</span><b>${esc(result.title)}</b><p>${esc(result.detail || "日時を変えてもう一度確認してください。")}</p><a href="tel:${BOOKING.phone}">予約センターへ相談する ${BOOKING.phoneLabel}</a></section>`;
+    }
+    if (result.status === "register") {
+      return `<section class="reservation-summary action"><span>今すること</span><b>最初に利用登録をしてください。</b><p>登録完了まで2〜4日かかるため、今日始めるのが最短です。</p><a href="${BOOKING.register}" target="_blank" rel="noopener">利用登録を始める</a></section>`;
+    }
+    if (result.status === "verify") {
+      return `<section class="reservation-summary action"><span>今すること</span><b>登録状況だけ確認すれば、予約へ進めます。</b><p>制度を調べ直す必要はありません。予約センターで氏名を伝えて確認できます。</p><a href="tel:${BOOKING.phone}">電話で確認する ${BOOKING.phoneLabel}</a></section>`;
+    }
+    const action = result.onlineBookable
+      ? `<a href="${BOOKING.online}" target="_blank" rel="noopener">ネットで予約する</a>`
+      : result.phoneBookable
+        ? `<a href="tel:${BOOKING.phone}">電話で予約する ${BOOKING.phoneLabel}</a>`
+        : `<a href="tel:${BOOKING.phone}">受付時間を確認する ${BOOKING.phoneLabel}</a>`;
+    return `<section class="reservation-summary action"><span>今すること</span><b>予約乗合タクシーを利用できます。</b><p>${shortDate(result.ride)} ${fmt(result.ride.getHours() * 60 + result.ride.getMinutes())}利用予定・1乗車300円</p>${action}</section>`;
+  }
+
+  function renderAssistantAnswer(facility, timing, journey, reservation) {
+    const box = $("#assistant-result");
+    const dateLabel = `${timing.date.getMonth() + 1}/${timing.date.getDate()}（${WD[timing.date.getDay()]}）${timing.time}まで`;
+    const routeHtml = journey
+      ? assistantRideHtml(journey)
+      : `<section class="journey-missing"><b>この条件では、間に合う定時便を確認できませんでした。</b><p>${state.assistantPosition ? "予約交通の判定を確認してください。" : "現在地を使うと、近い乗り場から定時便も自動で探せます。"}</p></section>`;
+    box.innerHTML = `<article class="mission-answer">
+      <header><span>YOUR PLAN / 生活移動プラン</span><h3>${esc(facility.name)}へ行く</h3><p>${dateLabel}</p></header>
+      ${routeHtml}
+      ${assistantReservationHtml(reservation)}
+      <div class="answer-proof"><b>なぜこの答え？</b><span>GTFS-JP、施設一覧、地域交通の利用条件を端末内で照合しました。</span></div>
+      <button class="answer-retry" type="button">条件を変えてもう一度</button>
+    </article>`;
+    box.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function renderAssistantError(message) {
+    $("#assistant-result").innerHTML = `<div class="assistant-error"><b>${esc(message)}</b><span>入力した内容は消えていません。上の項目を確認してください。</span></div>`;
+    $("#assistant-result").scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  $("#assist-dest").addEventListener("input", event => {
+    state.assistantFacility = null;
+    parseIntentDate(event.target.value);
+    renderAssistantSuggestions(event.target.value);
+  });
+  document.querySelectorAll("[data-assist-dest]").forEach(button => {
+    button.addEventListener("click", () => {
+      $("#assist-dest").value = button.dataset.assistDest;
+      const matches = renderAssistantSuggestions(button.dataset.assistDest);
+      state.assistantFacility = matches[0] || null;
+      $("#assist-suggestions").innerHTML = "";
+    });
+  });
+
+  $("#assist-location").addEventListener("click", () => {
+    const button = $("#assist-location");
+    button.disabled = true;
+    button.querySelector("b").textContent = "現在地を確認中…";
+    $("#assist-origin-status").textContent = "端末の位置情報を確認しています。";
+    navigator.geolocation.getCurrentPosition(position => {
+      state.assistantPosition = position.coords;
+      state.assistantOriginIdx = null;
+      button.disabled = false;
+      button.classList.add("selected");
+      $("#assist-demo-origin").classList.remove("selected");
+      button.querySelector("b").textContent = "現在地を設定しました";
+      $("#assist-origin-status").textContent = "現在地から徒歩1.2km以内の乗り場を自動で比較します。";
+    }, () => {
+      button.disabled = false;
+      button.querySelector("b").textContent = "現在地を使う";
+      $("#assist-origin-status").textContent = "現在地を取得できませんでした。地区を選ぶか、菰田の例をお試しください。";
+    }, { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 });
+  });
+
+  $("#assist-demo-origin").addEventListener("click", () => {
+    const originIdx = D.stops.findIndex(stop => stop.name === "忠隈住民センター" && stop.feed === "wagon_honami");
+    const origin = D.stops[originIdx];
+    state.assistantOriginIdx = originIdx;
+    state.assistantPosition = { latitude: origin.lat, longitude: origin.lon };
+    $("#assist-district").value = "菰田";
+    $("#assist-demo-origin").classList.add("selected");
+    $("#assist-location").classList.remove("selected");
+    $("#assist-origin-status").textContent = "菰田・忠隈住民センター付近から出発する例です。";
+  });
+
+  $("#assist-district").addEventListener("change", event => {
+    $("#home-district").value = event.target.value;
+  });
+
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  $("#assist-voice").addEventListener("click", () => {
+    if (!SpeechRecognition) {
+      toast("この端末では音声入力を利用できません");
+      return;
+    }
+    const recognition = new SpeechRecognition();
+    recognition.lang = "ja-JP";
+    recognition.interimResults = false;
+    $("#assist-voice").classList.add("listening");
+    $("#assist-voice").innerHTML = '<span aria-hidden="true">●</span> 聞いています';
+    recognition.addEventListener("result", event => {
+      const text = event.results[0][0].transcript;
+      $("#assist-dest").value = text;
+      parseIntentDate(text);
+      renderAssistantSuggestions(text);
+    });
+    recognition.addEventListener("end", () => {
+      $("#assist-voice").classList.remove("listening");
+      $("#assist-voice").innerHTML = '<span aria-hidden="true">●</span> 話す';
+    });
+    recognition.start();
+  });
+
+  $("#assistant-form").addEventListener("submit", event => {
+    event.preventDefault();
+    const query = $("#assist-dest").value.trim();
+    parseIntentDate(query);
+    const matches = state.assistantFacility ? [state.assistantFacility] : destinationMatches(query);
+    const exact = matches.find(f => normalizeSearch(query).includes(normalizeSearch(f.name))) || matches[0];
+    if (!exact) {
+      renderAssistantError("行き先が見つかりません。施設名を入力するか、候補から選んでください。");
+      return;
+    }
+    const timing = parseAssistantDate();
+    if (!timing) {
+      renderAssistantError("到着したい日と時刻を選んでください。");
+      return;
+    }
+    if (!state.assistantPosition && !$("#assist-district").value) {
+      renderAssistantError("現在地を使うか、お住まいの地区を選んでください。");
+      return;
+    }
+    state.assistantFacility = exact;
+    state.facility = exact;
+    const journey = state.assistantPosition
+      ? bestJourneyFromPosition(state.assistantPosition, exact, timing.date, timing.byMin)
+      : null;
+    if (journey) {
+      state.originIdx = journey.originIdx;
+      state.originWalkM = journey.originWalkM;
+    }
+    const district = $("#assist-district").value;
+    const registered = document.querySelector('input[name="assist-registered"]:checked').value;
+    const reservation = district ? evaluateConcierge({
+      district, tripKind: "facility", registered,
+      date: timing.dateValue, time: timing.time
+    }) : null;
+    renderAssistantAnswer(exact, timing, journey, reservation);
+  });
+
+  $("#assistant-result").addEventListener("click", event => {
+    if (event.target.closest(".answer-retry")) {
+      $("#assistant-result").innerHTML = "";
+      $("#assist-dest").focus();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  });
+
+  const assistantDefaultDate = nextOpenDay(new Date());
+  $("#assist-date").min = localDateValue(new Date());
+  $("#assist-date").value = localDateValue(assistantDefaultDate);
 
   // STEP1: カテゴリ → 施設リスト
   document.querySelectorAll(".cat-btn").forEach(btn => {
@@ -707,8 +1037,8 @@
   }
 
   $("#share-btn").addEventListener("click", async () => {
-    const text = `${D.stops[state.originIdx].name}から${state.facility.name}への行き方を「いいづか のりものナビ」で確認しました。`;
-    const payload = { title: "いいづか のりものナビ", text, url: location.href };
+    const text = `${D.stops[state.originIdx].name}から${state.facility.name}への行き方を「いいづか 行けるナビ」で確認しました。`;
+    const payload = { title: "いいづか 行けるナビ", text, url: location.href };
     try {
       if (navigator.share) await navigator.share(payload);
       else {
@@ -738,5 +1068,5 @@
   });
 
   // ヘッドレステスト用
-  window.__engine = { search, directRides, transferRides, serviceActive, fareFor, distM, hubs, evaluateConcierge, isTaxiClosedDate, tripPlan };
+  window.__engine = { search, searchArriveBy, directRides, transferRides, serviceActive, fareFor, distM, hubs, evaluateConcierge, isTaxiClosedDate, tripPlan };
 })();

@@ -1,7 +1,7 @@
 {
-  "name": "いいづか のりものナビ",
-  "short_name": "のりものナビ",
-  "description": "飯塚市の予約乗合タクシー・エリアワゴンの利用可否と予約期限を案内する交通コンシェルジュ",
+  "name": "いいづか 行けるナビ",
+  "short_name": "行けるナビ",
+  "description": "行き先と到着時刻から、飯塚市のバス・エリアワゴン・予約交通をまとめて案内する生活移動アシスタント",
   "lang": "ja",
   "start_url": "./index.html",
   "scope": "./",
@@ -12,8 +12,8 @@
   "categories": ["navigation", "travel", "accessibility"],
   "shortcuts": [
     {
-      "name": "予約交通を調べる",
-      "short_name": "予約判定",
+      "name": "行き方を調べる",
+      "short_name": "行けるナビ",
       "url": "./index.html"
     },
     {

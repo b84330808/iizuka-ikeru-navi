@@ -18,6 +18,10 @@
     towns: [],
     timer: null,
     seconds: 0,
+    voiceAudio: null,
+    voiceCues: null,
+    voiceReady: null,
+    callTimeouts: [],
     lastMetrics: { recoveredPeople: 0, recoveredTowns: 0, score: 28 }
   };
   const callLines = [
@@ -43,7 +47,71 @@
       || voices.find((v) => v.lang.startsWith("ja")) || null;
     speechSynthesis.speak(utterance);
   }
-  function startCall() {
+
+  async function prepareGeneratedVoice() {
+    try {
+      const response = await fetch("./audio/future-call.json", { cache: "no-store" });
+      if (!response.ok) return false;
+      const metadata = await response.json();
+      if (!Array.isArray(metadata.lineStarts) || metadata.lineStarts.length !== callLines.length) return false;
+      const audio = new Audio("./audio/future-call.mp3");
+      audio.preload = "auto";
+      state.voiceAudio = audio;
+      state.voiceCues = metadata.lineStarts;
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  function presentCallLine(index, withSpeech = false) {
+    $("#resident-line").textContent = callLines[index];
+    if (withSpeech) speak(callLines[index]);
+    if (index >= 1) $("#evidence-card").hidden = false;
+  }
+
+  function finishCall() {
+    $("#change-future").hidden = false;
+  }
+
+  function runFallbackCall() {
+    let lineIndex = 0;
+    const showLine = () => {
+      presentCallLine(lineIndex, true);
+      lineIndex += 1;
+      if (lineIndex < callLines.length) {
+        const timeout = setTimeout(showLine, lineIndex === 1 ? 3700 : 4700);
+        state.callTimeouts.push(timeout);
+      } else {
+        finishCall();
+      }
+    };
+    showLine();
+  }
+
+  function runGeneratedCall() {
+    const audio = state.voiceAudio;
+    let visibleLine = -1;
+    const syncLine = () => {
+      const lineIndex = state.voiceCues.reduce(
+        (current, start, index) => audio.currentTime >= start ? index : current,
+        0
+      );
+      if (lineIndex !== visibleLine) {
+        visibleLine = lineIndex;
+        presentCallLine(lineIndex);
+      }
+    };
+    audio.addEventListener("timeupdate", syncLine);
+    audio.addEventListener("ended", finishCall, { once: true });
+    presentCallLine(0);
+    return audio.play().catch(() => {
+      audio.removeEventListener("timeupdate", syncLine);
+      runFallbackCall();
+    });
+  }
+
+  async function startCall() {
     $("#incoming-view").hidden = true;
     $("#active-view").hidden = false;
     state.seconds = 0;
@@ -51,16 +119,9 @@
       state.seconds += 1;
       $("#call-seconds").textContent = String(state.seconds).padStart(2, "0");
     }, 1000);
-    let lineIndex = 0;
-    const showLine = () => {
-      $("#resident-line").textContent = callLines[lineIndex];
-      speak(callLines[lineIndex]);
-      if (lineIndex === 1) $("#evidence-card").hidden = false;
-      lineIndex += 1;
-      if (lineIndex < callLines.length) setTimeout(showLine, lineIndex === 1 ? 3700 : 4700);
-      else $("#change-future").hidden = false;
-    };
-    showLine();
+    const generatedVoiceAvailable = await state.voiceReady;
+    if (generatedVoiceAvailable && state.sound) runGeneratedCall();
+    else runFallbackCall();
   }
   $("#answer-call").addEventListener("click", startCall);
   $("#decline-call").addEventListener("click", () => {
@@ -76,10 +137,13 @@
   });
   $("#change-future").addEventListener("click", () => {
     clearInterval(state.timer);
+    state.callTimeouts.forEach(clearTimeout);
+    if (state.voiceAudio) state.voiceAudio.pause();
     $("#impact").scrollIntoView({ behavior: "smooth" });
   });
   setClock();
   setInterval(setClock, 30000);
+  state.voiceReady = prepareGeneratedVoice();
 
   function buildStopLossGrid() {
     const grid = $("#stop-loss-grid");
