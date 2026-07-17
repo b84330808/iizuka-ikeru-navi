@@ -103,3 +103,53 @@
   .proof-compare{grid-template-columns:1fr}.proof-arrow{min-height:60px}.proof-arrow i{width:1px;height:32px;margin:auto}.proof-route{align-items:flex-start;flex-direction:column}.proof-route i{transform:rotate(90deg)}
   .proof-trace{display:block}.proof-trace>span{display:block;margin-bottom:7px}
 }
+
+/* Compact desktop rhythm: keep each decision chapter scannable in one viewport. */
+@media(min-width:1051px){
+  .impact{padding-top:96px;padding-bottom:96px}
+  .impact-intro{margin-bottom:64px}
+  .impact-intro>p:last-child{margin-top:28px}
+  .impact-scenes{gap:18px}
+  .stop-scene{padding-top:42px;padding-bottom:42px}
+  .stop-shift{margin-top:24px;margin-bottom:24px}
+  .stop-loss-grid{margin-top:34px;margin-bottom:20px}
+  .stop-scene>p{margin-top:24px}
+  .geography-scene{min-height:540px}
+  .impact-map-shell{min-height:540px;padding:38px}
+  .scene-number{margin-top:24px}
+  .scene-copy h3,.komoda-scene h3{margin-top:12px;margin-bottom:18px}
+  .komoda-scene{gap:42px;padding-top:52px;padding-bottom:52px}
+  .decision-gate{margin-top:82px}
+  .decision-gate h2{margin-top:20px}
+  .decision-gate p{margin-top:24px;margin-bottom:24px}
+
+  .simulator{padding-top:78px;padding-bottom:78px}
+  .section-heading{grid-template-columns:minmax(0,1.08fr) minmax(360px,.92fr);margin-bottom:32px;gap:clamp(28px,5vw,80px)}
+  .section-heading .kicker{margin-bottom:-8px}
+  .section-heading h2,.method h2,.report h2{font-size:clamp(2.7rem,4.5vw,5rem)}
+  .section-heading>p:last-child{line-height:1.72}
+  .map-wrap,#iizuka-map{min-height:510px;height:510px}
+  .policy-panel{padding:16px}
+  .allocation-panel{gap:10px}
+  .resource-head{padding-bottom:11px}
+  .resource-head strong{font-size:3rem}
+  .resource-head>span{padding:6px 7px}
+  .optimize-button{padding:13px 15px}
+  .scenario-list{gap:6px}
+  .scenario-card{min-height:64px;padding:8px 10px}
+  .scenario-copy b{margin-bottom:3px}
+  .outcome-panel{margin-top:14px;padding:19px 20px}
+  .journey-proof{margin-top:14px;padding-top:38px;padding-bottom:38px}
+  .proof-card{min-height:184px;padding:20px}
+  .report{padding-top:78px;padding-bottom:78px}
+  .method{padding-top:86px;padding-bottom:86px}
+}
+
+@media(min-width:1051px) and (max-height:850px){
+  .simulator{padding-top:62px;padding-bottom:62px}
+  .section-heading{margin-bottom:24px}
+  .section-heading h2{font-size:clamp(2.5rem,3.7vw,3.95rem)}
+  .map-wrap,#iizuka-map{min-height:460px;height:460px}
+  .scenario-card{min-height:59px}
+  .journey-proof{padding-top:30px;padding-bottom:30px}
+}
