@@ -1,33 +1,24 @@
 (() => {
   "use strict";
-  const TOTAL_AFFECTED = 3484;
-  const BUDGET_MAX = 100;
-  const POLICY_LIMIT = 3;
-  const POLICY_NAMES = {
-    ondemand: "AIオンデマンド交通",
-    mobilecare: "移動診療・介護巡回",
-    hub: "交流センター生活ハブ",
-    restore: "定時路線の重点復活",
-    concierge: "予約・移動コンシェルジュ"
-  };
   const $ = (sel) => document.querySelector(sel);
   const $$ = (sel) => [...document.querySelectorAll(sel)];
   const state = {
     sound: true,
-    policies: new Map(),
     towns: [],
+    scenarios: [],
+    selectedScenario: null,
+    project: null,
     timer: null,
     seconds: 0,
     voiceAudio: null,
     voiceCues: null,
     voiceReady: null,
-    callTimeouts: [],
-    lastMetrics: { recoveredPeople: 0, recoveredTowns: 0, score: 28 }
+    callTimeouts: []
   };
   const callLines = [
-    "「聞こえますか？ 2040年の菰田から電話しています。」",
-    "「私の町は、定時バスの徒歩圏が92.3%から0%になりました。」",
-    "「ワゴンは残っています。でも、医療や介護と別々で、使いこなすのが難しいんです。」",
+    "「聞こえますか？ 2040年の鹿毛馬から電話しています。」",
+    "「私の小地域は、定時バスの徒歩圏が100%から0%になりました。」",
+    "「使えるワゴンは一台だけ。どこを走れば、いちばん多くの暮らしを救えますか？」",
     "「私は、この町で暮らし続けられますか？」"
   ];
 
@@ -171,10 +162,17 @@
   }
   async function loadMap() {
     try {
-      const response = await fetch("./towns.geojson");
-      if (!response.ok) throw new Error("map data unavailable");
-      const geo = await response.json();
+      const [mapResponse, scenarioResponse] = await Promise.all([
+        fetch("./towns.geojson"),
+        fetch("./wagon-scenarios.json", { cache: "no-store" })
+      ]);
+      if (!mapResponse.ok || !scenarioResponse.ok) throw new Error("map data unavailable");
+      const [geo, scenarioData] = await Promise.all([
+        mapResponse.json(),
+        scenarioResponse.json()
+      ]);
       state.towns = geo.features;
+      state.scenarios = scenarioData.scenarios;
       const points = geo.features.flatMap((f) => geometryPoints(f.geometry));
       const lons = points.map((p) => p[0]), lats = points.map((p) => p[1]);
       const minLon = Math.min(...lons), maxLon = Math.max(...lons);
@@ -183,6 +181,7 @@
       const offsetX = (720 - (maxLon - minLon) * scale) / 2;
       const offsetY = (760 - (maxLat - minLat) * scale) / 2;
       const project = (lon, lat) => [offsetX + (lon - minLon) * scale, offsetY + (maxLat - lat) * scale];
+      state.project = project;
       const fragment = document.createDocumentFragment();
       const impactFragment = document.createDocumentFragment();
       geo.features
@@ -215,7 +214,8 @@
       $("#iizuka-map").appendChild(fragment);
       $("#impact-map").appendChild(impactFragment);
       $("#map-loading").hidden = true;
-      updateSimulator();
+      renderScenarioList();
+      resetScenario();
     } catch (err) {
       $("#map-loading").textContent = "地図データを読み込めませんでした。";
       console.error(err);
@@ -224,10 +224,11 @@
   function showTownTooltip(event) {
     const el = event.currentTarget;
     const affected = Number(el.dataset.affected);
+    const recovery = Number(el.dataset.recovery || 0);
     const before = Math.round(Number(el.dataset.before) * 1000) / 10;
     const after = Math.round(Number(el.dataset.after) * 1000) / 10;
     const tip = $("#map-tooltip");
-    tip.innerHTML = `<b>${escapeHtml(el.dataset.name)}</b><span>65歳以上 ${Number(el.dataset.elderly).toLocaleString("ja-JP")}人</span><span>定時バス徒歩圏 ${before}% → ${after}%</span>${affected ? `<span>影響推計 ${affected.toLocaleString("ja-JP")}人</span>` : ""}`;
+    tip.innerHTML = `<b>${escapeHtml(el.dataset.name)}</b><span>65歳以上 ${Number(el.dataset.elderly).toLocaleString("ja-JP")}人</span><span>定時バス徒歩圏 ${before}% → ${after}%</span>${affected ? `<span>影響推計 ${affected.toLocaleString("ja-JP")}人</span>` : ""}${recovery ? `<strong>選択案で回復推計 ${recovery.toLocaleString("ja-JP")}人</strong>` : ""}`;
     tip.hidden = false;
     moveTownTooltip(event);
   }
@@ -242,23 +243,6 @@
     return String(value).replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   }
 
-  function combinedImpact() {
-    let remaining = 1;
-    state.policies.forEach((policy) => { remaining *= 1 - policy.impact; });
-    return 1 - remaining;
-  }
-  function policyVariation(key, policyId) {
-    let hash = 0, text = `${key}:${policyId}`;
-    for (let i = 0; i < text.length; i += 1) hash = (hash * 31 + text.charCodeAt(i)) >>> 0;
-    return 0.82 + (hash % 37) / 100;
-  }
-  function townRecoveryRate(path) {
-    let remaining = 1;
-    state.policies.forEach((policy, id) => {
-      remaining *= 1 - Math.min(.85, policy.impact * policyVariation(path.dataset.key, id));
-    });
-    return 1 - remaining;
-  }
   function animateNumber(el, target) {
     const from = Number(el.textContent.replace(/,/g, "")) || 0, start = performance.now(), duration = 480;
     const tick = (now) => {
@@ -268,89 +252,159 @@
     };
     requestAnimationFrame(tick);
   }
-  function updateAvailability(budget) {
-    $$(".policy-card").forEach((card) => {
-      const selected = state.policies.has(card.dataset.policy);
-      const unavailable = !selected && (Number(card.dataset.cost) > budget || state.policies.size >= POLICY_LIMIT);
-      card.classList.toggle("unavailable", unavailable);
-      card.disabled = unavailable;
+  function renderScenarioList() {
+    $("#scenario-list").innerHTML = state.scenarios.map((scenario) => `
+      <button class="scenario-card" type="button" data-scenario="${scenario.id}" aria-pressed="false">
+        <span class="scenario-rank">0${scenario.rank}</span>
+        <span class="scenario-copy">
+          <b>${escapeHtml(scenario.shortName)}</b>
+          <small>${escapeHtml(scenario.hospital.name)}へ / ${scenario.corridorKm}km</small>
+        </span>
+        <strong>${scenario.recoveredElderly.toLocaleString("ja-JP")}<em>人</em></strong>
+        ${scenario.recommended ? '<i>DATA BEST</i>' : ""}
+      </button>
+    `).join("");
+    $$(".scenario-card").forEach((card) => {
+      card.addEventListener("click", () => {
+        const scenario = state.scenarios.find((item) => item.id === card.dataset.scenario);
+        selectScenario(scenario);
+      });
+    });
+  }
+
+  function drawScenarioOverlay(scenario) {
+    $$(".scenario-overlay").forEach((element) => element.remove());
+    if (!scenario || !state.project) return;
+    const namespace = "http://www.w3.org/2000/svg";
+    const group = document.createElementNS(namespace, "g");
+    group.classList.add("scenario-overlay");
+    const line = document.createElementNS(namespace, "path");
+    const pathData = scenario.routeCoordinates.map(([lon, lat], index) => {
+      const [x, y] = state.project(lon, lat);
+      return `${index ? "L" : "M"}${x.toFixed(1)},${y.toFixed(1)}`;
+    }).join(" ");
+    line.setAttribute("d", pathData);
+    line.classList.add("scenario-line");
+    group.appendChild(line);
+    scenario.selectedStops.forEach((stop, index) => {
+      const [x, y] = state.project(stop.lon, stop.lat);
+      const circle = document.createElementNS(namespace, "circle");
+      circle.setAttribute("cx", x.toFixed(1));
+      circle.setAttribute("cy", y.toFixed(1));
+      circle.setAttribute("r", "6");
+      circle.classList.add("scenario-stop");
+      const title = document.createElementNS(namespace, "title");
+      title.textContent = `${index + 1}. ${stop.name} / 回復推計 ${stop.individualRecovery}人`;
+      circle.appendChild(title);
+      group.appendChild(circle);
+    });
+    const [hospitalX, hospitalY] = state.project(scenario.hospital.lon, scenario.hospital.lat);
+    const hospital = document.createElementNS(namespace, "circle");
+    hospital.setAttribute("cx", hospitalX.toFixed(1));
+    hospital.setAttribute("cy", hospitalY.toFixed(1));
+    hospital.setAttribute("r", "10");
+    hospital.classList.add("scenario-hospital");
+    const title = document.createElementNS(namespace, "title");
+    title.textContent = scenario.hospital.name;
+    hospital.appendChild(title);
+    group.appendChild(hospital);
+    $("#iizuka-map").appendChild(group);
+  }
+
+  function updateJourneyProof(scenario) {
+    const example = scenario.residentExample;
+    $("#proof-town").textContent = example.town;
+    $("#proof-before-coverage").textContent = `${example.beforeCoveragePercent}%`;
+    $("#proof-stop").textContent = example.stop;
+    $("#proof-hospital").textContent = example.hospital;
+    $("#proof-departure").textContent = example.departure;
+    $("#proof-arrival").textContent = example.arrival;
+    $("#proof-duration").textContent = `${example.durationMinutes}分`;
+    $("#proof-recovered").textContent = example.afterRecoveredElderly.toLocaleString("ja-JP");
+    $("#journey-proof").hidden = false;
+  }
+
+  function selectScenario(scenario) {
+    if (!scenario) return;
+    state.selectedScenario = scenario;
+    $$(".scenario-card").forEach((card) => {
+      const selected = card.dataset.scenario === scenario.id;
+      card.classList.toggle("selected", selected);
       card.setAttribute("aria-pressed", String(selected));
     });
+    $$(".town").forEach((path) => {
+      const recovery = Number(scenario.townRecovery[path.dataset.key] || 0);
+      path.dataset.recovery = recovery;
+      path.classList.remove("town-recovering", "town-partial");
+      if (recovery >= 10) path.classList.add("town-recovering");
+      else if (recovery > 0) path.classList.add("town-partial");
+    });
+    drawScenarioOverlay(scenario);
+    animateNumber($("#recovered-count"), scenario.recoveredElderly);
+    animateNumber($("#recovered-towns"), scenario.recoveredTowns);
+    animateNumber($("#selected-stops"), scenario.selectedStops.length);
+    $("#outcome-label").textContent = `第${scenario.rank}位 ${scenario.shortName}：${scenario.hospital.name}へ接続`;
+    $("#future-reply").textContent = `「${scenario.residentExample.town}から${scenario.hospital.name}へ、もう一度ひとりで行けます。」`;
+    $("#scenario-hint").textContent = `${scenario.topTowns.map((town) => town.name).slice(0, 4).join("・")}を中心に、残る徒歩圏空白の${scenario.recoveredShare}%を再接続。`;
+    $("#make-report").disabled = false;
+    updateJourneyProof(scenario);
   }
-  function futureReply(impact) {
-    if (impact >= .72) return "「病院も、買い物も、ひとりで行ける未来になりました。ここで暮らし続けたいです。」";
-    if (impact >= .5) return "「前よりずっと近くなりました。でも、まだ取り残される隣の町があります。」";
-    if (impact > 0) return "「一歩、未来が変わりました。もう一つだけ、つながる方法を選べませんか？」";
-    return "「まだ、私の未来は変わっていません。」";
-  }
-  function updateSimulator() {
-    const spent = [...state.policies.values()].reduce((sum, p) => sum + p.cost, 0);
-    const budget = BUDGET_MAX - spent;
-    $("#budget-value").textContent = budget;
-    $("#budget-bar").style.width = `${budget}%`;
-    $("#budget-bar").style.background = budget < 20 ? "var(--signal)" : "var(--recover)";
-    let recoveredPeople = 0, recoveredTowns = 0;
+
+  function resetScenario() {
+    state.selectedScenario = null;
+    $$(".scenario-card").forEach((card) => {
+      card.classList.remove("selected");
+      card.setAttribute("aria-pressed", "false");
+    });
     $$(".town").forEach((path) => {
       path.classList.remove("town-recovering", "town-partial");
-      const affected = Number(path.dataset.affected);
-      const isTarget = path.classList.contains("town-lost") || path.classList.contains("town-reduced");
-      if (!isTarget || !affected || !state.policies.size) return;
-      const rate = townRecoveryRate(path);
-      recoveredPeople += affected * rate;
-      if (rate >= .48) { path.classList.add("town-recovering"); recoveredTowns += 1; }
-      else if (rate > .12) path.classList.add("town-partial");
+      path.dataset.recovery = "0";
     });
-    recoveredPeople = Math.min(TOTAL_AFFECTED, Math.round(recoveredPeople));
-    const overall = combinedImpact(), score = Math.min(96, Math.round(28 + overall * 68));
-    state.lastMetrics = { recoveredPeople, recoveredTowns, score };
-    animateNumber($("#recovered-count"), recoveredPeople);
-    animateNumber($("#recovered-towns"), recoveredTowns);
-    animateNumber($("#resilience-score"), score);
-    $("#outcome-label").textContent = state.policies.size ? `${state.policies.size}つの施策で、生活圏を再計算しました。` : "まだ未来は変わっていません。";
-    $("#future-reply").textContent = futureReply(overall);
-    $("#make-report").disabled = !state.policies.size;
-    updateAvailability(budget);
+    $$(".scenario-overlay").forEach((element) => element.remove());
+    animateNumber($("#recovered-count"), 0);
+    animateNumber($("#recovered-towns"), 0);
+    animateNumber($("#selected-stops"), 0);
+    $("#outcome-label").textContent = "4つの配置候補を比較します。";
+    $("#future-reply").textContent = "「一台を、どこへ置きますか？」";
+    $("#scenario-hint").textContent = "車両・便数・乗降点数を揃えて比較。距離差は各カードに表示しています。";
+    $("#make-report").disabled = true;
+    $("#journey-proof").hidden = true;
   }
-  $$(".policy-card").forEach((card) => {
-    card.addEventListener("click", () => {
-      const id = card.dataset.policy;
-      if (state.policies.has(id)) {
-        state.policies.delete(id); card.classList.remove("selected");
-      } else {
-        const cost = Number(card.dataset.cost);
-        const spent = [...state.policies.values()].reduce((sum, p) => sum + p.cost, 0);
-        if (state.policies.size >= POLICY_LIMIT || spent + cost > BUDGET_MAX) {
-          $("#policy-hint").textContent = state.policies.size >= POLICY_LIMIT ? "選べる施策は最大3つです。" : "予算が足りません。別の組み合わせを選んでください。";
-          return;
-        }
-        state.policies.set(id, { cost, impact: Number(card.dataset.impact) });
-        card.classList.add("selected");
-      }
-      $("#policy-hint").textContent = state.policies.size ? `${state.policies.size}/3施策を選択中` : "施策を選んでください。";
-      updateSimulator();
-    });
+
+  $("#reset-scenario").addEventListener("click", resetScenario);
+  $("#optimize-scenario").addEventListener("click", () => {
+    const button = $("#optimize-scenario");
+    button.classList.add("is-calculating");
+    button.innerHTML = "<span>CALCULATING</span>4候補の徒歩圏を再計算中…";
+    setTimeout(() => {
+      const recommended = state.scenarios.find((scenario) => scenario.recommended);
+      selectScenario(recommended);
+      button.classList.remove("is-calculating");
+      button.innerHTML = `<span>DATA BEST / #01</span>${escapeHtml(recommended.shortName)}へ配置する`;
+    }, 850);
   });
-  function resetPolicies() {
-    state.policies.clear();
-    $$(".policy-card").forEach((card) => card.classList.remove("selected"));
-    $("#policy-hint").textContent = "施策を選んでください。";
-    updateSimulator();
-  }
-  $("#reset-policies").addEventListener("click", resetPolicies);
+
   $("#make-report").addEventListener("click", () => {
-    const { recoveredPeople: people, score } = state.lastMetrics;
-    const spent = [...state.policies.values()].reduce((sum, p) => sum + p.cost, 0);
-    $("#report-id").textContent = Math.floor(100000 + Math.random() * 900000);
-    $("#report-policies").innerHTML = [...state.policies.keys()].map((id) => `<span>${escapeHtml(POLICY_NAMES[id])}</span>`).join("");
-    $("#report-people").textContent = people.toLocaleString("ja-JP");
-    $("#report-cost").textContent = spent;
-    $("#report-score").textContent = score;
-    $("#report-message").textContent = score >= 72 ? "「あなたが選んだ未来なら、私はこの町で暮らし続けられます。」" : "未来は動いた。けれど、まだ選び直せる。";
+    const scenario = state.selectedScenario;
+    if (!scenario) return;
+    $("#report-id").textContent = `${scenario.id}-0718`;
+    $("#report-route").textContent = scenario.shortName;
+    $("#report-policies").innerHTML = [
+      "追加ワゴン 1台",
+      "平日 3往復",
+      ...scenario.selectedStops.map((stop) => stop.name)
+    ].map((label) => `<span>${escapeHtml(label)}</span>`).join("");
+    $("#report-people").textContent = scenario.recoveredElderly.toLocaleString("ja-JP");
+    $("#report-towns").textContent = scenario.recoveredTowns;
+    $("#report-hospital").textContent = scenario.hospital.name;
+    $("#report-message").textContent = scenario.recommended
+      ? `4候補中1位。${scenario.recoveredElderly.toLocaleString("ja-JP")}人分の「歩いて乗れる」を、一台で取り戻す。`
+      : `${scenario.shortName}では、${scenario.recoveredElderly.toLocaleString("ja-JP")}人分の徒歩圏を取り戻せる。`;
     $("#report").hidden = false;
     $("#report").scrollIntoView({ behavior: "smooth" });
   });
   $("#restart-future").addEventListener("click", () => {
-    $("#report").hidden = true; resetPolicies(); $("#simulator").scrollIntoView({ behavior: "smooth" });
+    $("#report").hidden = true; resetScenario(); $("#simulator").scrollIntoView({ behavior: "smooth" });
   });
 
   document.documentElement.classList.add("motion-ready");
@@ -368,5 +422,4 @@
     $$(".reveal").forEach((element) => element.classList.add("is-visible"));
   }
   loadMap();
-  updateSimulator();
 })();

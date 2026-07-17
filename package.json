@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build_sites.mjs",
+    "analysis:wagon": "python scripts/build_wagon_scenarios.py",
     "voice:design": "node scripts/generate_future_voice.mjs design",
     "voice:render": "node scripts/generate_future_voice.mjs render"
   }

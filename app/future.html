@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>未来からの着信 — IIZUKA LIFE TWIN</title>
-<meta name="description" content="飯塚市のオープンデータで、未来の生活圏と政策効果を体験するシミュレーター。">
+<meta name="description" content="飯塚市の新旧GTFSと国勢調査から、追加ワゴン一台の最適配置を比較する生活圏シミュレーター。">
 <meta name="theme-color" content="#090b0a">
 <link rel="icon" href="favicon-32.png" sizes="32x32">
 <link rel="stylesheet" href="future.css">
@@ -36,7 +36,7 @@
         <div>
           <a href="index.html"><small>市民向け・今日</small><b>行けるナビ</b><span>行き方と予約を一つの答えに</span></a>
           <i aria-hidden="true">＋</i>
-          <span><small>行政向け・未来</small><b>LIFE TWIN</b><em>失われる生活圏と政策効果を可視化</em></span>
+          <span><small>行政向け・未来</small><b>LIFE TWIN</b><em>一台をどこへ置くか、根拠ごと可視化</em></span>
         </div>
       </div>
     </div>
@@ -47,7 +47,7 @@
         <p class="incoming-label"><span></span> 未来からの着信</p>
         <div class="resident-avatar" aria-hidden="true"><div class="avatar-scan"></div><div class="avatar-head"></div><div class="avatar-body"></div></div>
         <h2>澤田 房子</h2>
-        <p>82歳・菰田地区・ひとり暮らし</p>
+        <p>82歳・鹿毛馬地区・ひとり暮らし</p>
         <div class="call-actions">
           <button id="decline-call" class="call-button decline" type="button"><span>×</span>あとで</button>
           <button id="answer-call" class="call-button answer" type="button"><span>●</span>応答</button>
@@ -57,10 +57,10 @@
       <div id="active-view" class="phone-view active-view" hidden>
         <div class="call-live"><span></span> LIVE · 00:<b id="call-seconds">00</b></div>
         <div class="resident-avatar active" aria-hidden="true"><div class="avatar-scan"></div><div class="avatar-head"></div><div class="avatar-body"></div></div>
-        <p class="speaker">澤田 房子・2040年の菰田から</p>
+        <p class="speaker">澤田 房子・2040年の鹿毛馬から</p>
         <p class="ai-voice-note"><span aria-hidden="true"></span> AI生成音声・架空の生活シナリオ</p>
         <blockquote id="resident-line">「聞こえますか？」</blockquote>
-        <div id="evidence-card" class="evidence-card" hidden><span>DATA TRACE / 菰田</span><b>定時バス徒歩圏 92.3% → 0%</b><small>2022年路線再編前後・300m圏</small></div>
+        <div id="evidence-card" class="evidence-card" hidden><span>DATA TRACE / 鹿毛馬</span><b>定時バス徒歩圏 100% → 0%</b><small>2022年路線再編前後・300m圏</small></div>
         <button id="change-future" class="change-future" type="button" hidden>この未来を変える</button>
       </div>
     </article>
@@ -103,12 +103,12 @@
       <article class="impact-scene komoda-scene reveal">
         <div>
           <div class="scene-index">03 / ONE LIFE</div>
-          <p class="case-label">菰田地区 / 澤田房子さんの生活シナリオ</p>
+          <p class="case-label">鹿毛馬地区 / 澤田房子さんの生活シナリオ</p>
           <h3>ひとつの数字を、<br>ひとりの暮らしへ戻す。</h3>
-          <p>菰田の定時バス徒歩圏は、再編前の92.3%から0%へ。影響推計は65歳以上266人です。</p>
+          <p>鹿毛馬のこの小地域では、定時バス徒歩圏が再編前の100%から0%へ。65歳以上84人が固定路線の徒歩圏を失った推計です。</p>
         </div>
-        <div class="coverage-drop" aria-label="菰田の定時バス徒歩圏が92.3%から0%へ低下">
-          <div class="coverage-before"><span>BEFORE</span><strong>92.3<em>%</em></strong><i></i></div>
+        <div class="coverage-drop" aria-label="鹿毛馬の対象小地域で定時バス徒歩圏が100%から0%へ低下">
+          <div class="coverage-before"><span>BEFORE</span><strong>100<em>%</em></strong><i></i></div>
           <div class="coverage-arrow" aria-hidden="true">↓</div>
           <div class="coverage-after"><span>AFTER</span><strong>0<em>%</em></strong><i></i></div>
         </div>
@@ -119,73 +119,93 @@
     </div>
 
     <div class="decision-gate reveal">
-      <span>THE DECISION IS YOURS</span>
-      <h2>移動を戻す？<br>それとも、暮らしの方を動かす？</h2>
-      <p>正解を当てるゲームではありません。限られた予算で、どの未来を選ぶかを試してください。</p>
-      <a href="#simulator">予算100で未来を選ぶ <b aria-hidden="true">↓</b></a>
+      <span>ONE VEHICLE / ONE DECISION</span>
+      <h2>ワゴンは、<br>一台しかない。</h2>
+      <p>どこへ置けば、最も多くの「病院へ行ける」を取り戻せるか。感覚ではなく、いまあるオープンデータで答えを出します。</p>
+      <a href="#simulator">一台の配置を計算する <b aria-hidden="true">↓</b></a>
     </div>
   </section>
 
   <section id="simulator" class="simulator" aria-labelledby="sim-title">
     <div class="section-heading">
-      <p class="kicker">POLICY SIMULATOR / REAL GEOGRAPHY</p>
-      <h2 id="sim-title">予算100で、<br>誰の暮らしをつなぎ直す？</h2>
-      <p>施策を最大3つ選ぶと、149町丁の生活圏を再計算します。赤は定時バス徒歩圏を失った地域、光は選んだ施策で改善する可能性です。</p>
+      <p class="kicker">WAGON ALLOCATION ENGINE / REAL GTFS</p>
+      <h2 id="sim-title">ワゴンは一台。<br>答えは、データに聞く。</h2>
+      <p>現行固定路線と穂波・菰田エリアワゴンを重ねても、徒歩圏の空白は高齢者推計2,227人分残ります。追加ワゴン1台、平日3往復、乗降6地点。距離も開示して旧4路線を比較します。</p>
     </div>
     <div class="sim-grid">
       <div class="map-panel">
         <div class="map-toolbar">
-          <div><span class="live-dot"></span><b>飯塚市 生活圏マップ</b></div>
-          <div class="map-legend"><span><i class="lost"></i>徒歩圏喪失</span><span><i class="recovered"></i>改善可能性</span><span><i class="covered"></i>徒歩圏あり</span></div>
+          <div><span class="live-dot"></span><b>飯塚市 配置シミュレーション</b></div>
+          <div class="map-legend"><span><i class="lost"></i>徒歩圏喪失</span><span><i class="recovered"></i>選択案で回復</span><span><i class="covered"></i>現在も徒歩圏</span></div>
         </div>
         <div id="map-wrap" class="map-wrap">
           <div id="map-loading" class="map-loading"><span></span>149町丁を接続中…</div>
-          <svg id="iizuka-map" viewBox="0 0 720 760" role="img" aria-label="飯塚市149町丁の生活圏シミュレーション地図"></svg>
+          <svg id="iizuka-map" viewBox="0 0 720 760" role="img" aria-label="飯塚市のワゴン配置シミュレーション地図"></svg>
           <div id="map-tooltip" class="map-tooltip" hidden></div>
           <div class="map-scan" aria-hidden="true"></div>
         </div>
-        <div class="map-foot"><span>2020国勢調査 × 新旧GTFS-JP</span><button id="reset-policies" type="button">選択をリセット</button></div>
+        <div class="map-foot"><span>2020国勢調査 × 新旧GTFS-JP / 300m徒歩圏</span><button id="reset-scenario" type="button">全候補を比較</button></div>
       </div>
 
-      <aside class="policy-panel" aria-label="政策を選ぶ">
-        <div class="budget-head">
-          <div><small>残り予算</small><strong id="budget-value">100</strong></div>
-          <div class="budget-track"><span id="budget-bar"></span></div>
-          <small>最大3施策・シナリオ予算</small>
+      <aside class="policy-panel allocation-panel" aria-label="ワゴンの配置候補を選ぶ">
+        <div class="resource-head">
+          <div><small>使える車両</small><strong>1<em>台</em></strong></div>
+          <span>平日3往復</span><span>乗降6地点</span><span>医療拠点へ接続</span>
         </div>
-        <div id="policy-list" class="policy-list">
-          <button class="policy-card" type="button" data-policy="ondemand" data-cost="45" data-impact="0.55"><span class="policy-number">01</span><span><b>AIオンデマンド交通</b><small>需要に合わせてワゴンを動かす</small></span><strong>45</strong></button>
-          <button class="policy-card" type="button" data-policy="mobilecare" data-cost="40" data-impact="0.38"><span class="policy-number">02</span><span><b>移動診療・介護巡回</b><small>人ではなくサービスが移動する</small></span><strong>40</strong></button>
-          <button class="policy-card" type="button" data-policy="hub" data-cost="25" data-impact="0.28"><span class="policy-number">03</span><span><b>交流センター生活ハブ</b><small>交通・診療・買い物を一か所へ</small></span><strong>25</strong></button>
-          <button class="policy-card" type="button" data-policy="restore" data-cost="60" data-impact="0.48"><span class="policy-number">04</span><span><b>定時路線の重点復活</b><small>影響人口の多い区間を再接続</small></span><strong>60</strong></button>
-          <button class="policy-card" type="button" data-policy="concierge" data-cost="12" data-impact="0.18"><span class="policy-number">05</span><span><b>予約・移動コンシェルジュ</b><small>使える交通を予約までつなぐ</small></span><strong>12</strong></button>
-        </div>
-        <p id="policy-hint" class="policy-hint">施策を選んでください。</p>
+        <button id="optimize-scenario" class="optimize-button" type="button"><span>OPTIMIZE</span>最も多くの生活圏を戻す</button>
+        <div id="scenario-list" class="scenario-list" aria-live="polite"><p class="candidate-loading">候補を計算しています…</p></div>
+        <p id="scenario-hint" class="policy-hint">車両・便数・乗降点数を揃えて比較。距離差は各カードに表示しています。</p>
       </aside>
     </div>
 
     <div class="outcome-panel" aria-live="polite">
-      <div class="outcome-title"><span>SCENARIO RESULT</span><h3 id="outcome-label">まだ未来は変わっていません。</h3></div>
+      <div class="outcome-title"><span>CALCULATED RESULT</span><h3 id="outcome-label">4つの配置候補を比較します。</h3></div>
       <div class="outcome-metrics">
-        <div><small>移動機会が改善する可能性</small><strong><span id="recovered-count">0</span><em>人</em></strong></div>
-        <div><small>高齢者影響推計対象町丁</small><strong><span id="recovered-towns">0</span><em>/ 35</em></strong></div>
-        <div><small>生活圏レジリエンス</small><strong><span id="resilience-score">28</span><em>/ 100</em></strong></div>
+        <div><small>徒歩圏を回復できる高齢者推計</small><strong><span id="recovered-count">0</span><em>人</em></strong></div>
+        <div><small>10人以上改善する町丁</small><strong><span id="recovered-towns">0</span><em>町丁</em></strong></div>
+        <div><small>有効化する旧停留所</small><strong><span id="selected-stops">0</span><em>/ 6</em></strong></div>
       </div>
-      <div class="future-reply"><span class="reply-avatar" aria-hidden="true">F</span><p id="future-reply">「まだ、私の未来は変わっていません。」</p></div>
-      <button id="make-report" class="report-button" type="button" disabled>この未来の政策レポートを見る</button>
+      <div class="future-reply"><span class="reply-avatar" aria-hidden="true">F</span><p id="future-reply">「一台を、どこへ置きますか？」</p></div>
+      <button id="make-report" class="report-button" type="button" disabled>配置根拠を1枚で見る</button>
     </div>
+    <article id="journey-proof" class="journey-proof" hidden aria-live="polite">
+      <div class="proof-heading">
+        <p class="kicker">ONE LIFE / BEFORE &amp; AFTER</p>
+        <h3><span id="proof-town">鹿毛馬</span>の一人に、<br>何が起きる？</h3>
+        <p>地図上の改善推計を、旧GTFSの実所要時間を使って一つの通院行程に戻します。</p>
+      </div>
+      <div class="proof-compare">
+        <section class="proof-card proof-before">
+          <span>NOW / FIXED ROUTE</span>
+          <b>乗降地点の徒歩圏外</b>
+          <p>現行交通の徒歩圏 <strong id="proof-before-coverage">0%</strong></p>
+          <small>現行固定路線＋穂波・菰田エリアワゴン・300m圏</small>
+        </section>
+        <div class="proof-arrow" aria-hidden="true"><i></i><b>1 WAGON</b></div>
+        <section class="proof-card proof-after">
+          <span>SCENARIO / 3 ROUND TRIPS</span>
+          <div class="proof-route"><b id="proof-stop">頴田中央団地</b><i>→</i><b id="proof-hospital">頴田病院</b></div>
+          <p><strong id="proof-departure">10:34</strong> 発　<strong id="proof-arrival">10:40</strong> 着　<span id="proof-duration">6分</span></p>
+          <small>試算ダイヤ：旧GTFSの停留所間所要時間を再利用</small>
+        </section>
+      </div>
+      <div class="proof-trace">
+        <span>DATA TRACE</span>
+        <p>旧停留所300m圏 × 再編後の未被覆面積 × 町丁別65歳以上人口 ＝ <b><span id="proof-recovered">0</span>人</b>の回復推計</p>
+      </div>
+    </article>
   </section>
 
   <section id="report" class="report" hidden aria-labelledby="report-title">
     <div class="report-paper">
       <div class="report-code">IIZUKA / 2040 / <span id="report-id">000000</span></div>
-      <p class="kicker">YOUR POLICY RECEIPT</p>
-      <h2 id="report-title">あなたが選んだ、<br>飯塚市の未来。</h2>
+      <p class="kicker">ONE-WAGON DECISION SHEET</p>
+      <h2 id="report-title">一台を、<br><span id="report-route">頴田・飯塚</span>へ。</h2>
       <div id="report-policies" class="report-policies"></div>
-      <dl><div><dt>改善可能性</dt><dd><span id="report-people">0</span>人</dd></div><div><dt>使用予算</dt><dd><span id="report-cost">0</span>/100</dd></div><div><dt>生活圏スコア</dt><dd><span id="report-score">28</span>/100</dd></div></dl>
-      <blockquote id="report-message">未来は、まだ選び直せる。</blockquote>
-      <div class="report-actions"><a href="index.html">市民向け実用版「行けるナビ」を使う</a><button id="restart-future" type="button">別の未来を選ぶ</button></div>
-      <p class="report-note">この結果は政策比較のためのシナリオ推計です。公式な将来予測・事業評価ではありません。</p>
+      <dl><div><dt>回復推計</dt><dd><span id="report-people">0</span>人</dd></div><div><dt>対象町丁</dt><dd><span id="report-towns">0</span>町丁</dd></div><div><dt>医療接続</dt><dd id="report-hospital">—</dd></div></dl>
+      <blockquote id="report-message">限られた一台を、最も多くの暮らしへ。</blockquote>
+      <div class="report-actions"><a href="index.html">市民向け「行けるナビ」で移動を確かめる</a><button id="restart-future" type="button">別の配置を比較する</button></div>
+      <p class="report-note">車両・便数・乗降点数を揃えたアクセシビリティ比較試算です。距離差は表示しています。利用者数・収支・公式な運行計画ではありません。</p>
     </div>
   </section>
 
@@ -193,7 +213,7 @@
     <div><p class="kicker">NOT A BLACK BOX</p><h2 id="method-title">声の後ろに、<br>計算根拠がある。</h2></div>
     <div class="method-copy">
       <p>住民の台詞と地図は、飯塚市GTFS-JP、令和2年国勢調査小地域集計、2026年6月地域・年齢別人口、医療・介護・公共施設データを基に構成しています。</p>
-      <p>政策効果は、徒歩圏喪失推計3,484人を母数に、各施策の仮定係数を重複補正して比較するプロトタイプです。係数は公開し、将来は実証結果で更新します。</p>
+      <p>配置効果は、旧停留所の300m圏から現行固定路線と穂波・菰田エリアワゴンの徒歩圏を差し引き、町丁ポリゴンとの重なりを65歳以上人口で面積按分します。車両・便数・乗降点数を揃え、距離差は別に開示します。予約型交通は登録・地区・受付条件があるため固定の徒歩圏には加えず、市民向けナビ側で個別判定します。</p>
       <div class="method-links"><a href="analysis.html">元データと分析を見る</a><a href="index.html">今日の移動を解決する「行けるナビ」</a></div>
     </div>
   </section>

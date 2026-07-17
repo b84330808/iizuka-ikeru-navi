@@ -13,6 +13,7 @@
 - 現在地から停留所まで歩く時間を含めて、実際に間に合う便だけを表示
 - 運行終了・運休日・路線未接続を区別し、代替の予約交通と電話導線を表示
 - 大きな文字、キーボード操作、読み上げ用ステータス、オフライン利用に対応
+- 行政向け `LIFE TWIN` では、現行固定路線と穂波・菰田エリアワゴンを基準に、追加ワゴン1台を旧4路線のどこへ置くと最も多くの徒歩圏を回復できるかを比較
 
 発表・実証の進め方は [`COMPETITION_PLAYBOOK.md`](COMPETITION_PLAYBOOK.md) を参照。
 e-ZUKA スマートアプリコンテスト 2026 応募作品(分野: 福祉)。
@@ -22,10 +23,12 @@ e-ZUKA スマートアプリコンテスト 2026 応募作品(分野: 福祉)。
 - `app/` — 静的 Web アプリ(そのまま GitHub Pages 等でホスト可能)
   - `index.html` + `app.js` — 3ステップ検索(行き先 → 乗る場所 → 時刻・運賃)。大きな文字、乗換対応、土日祝ダイヤ対応
   - `analysis.html` + `killer_map.html` — データで見る交通課題(2022年廃線の影響分析)
+  - `future.html` + `wagon-scenarios.json` — 新旧GTFSと国勢調査から算出する「追加ワゴン1台」の配置デモ
   - `data.js` — ビルド済みデータ(GTFS 2路線 + 施設一覧 + 分析結果)
 - `scripts/`
   - `build_analysis.py` — 廃線前後のバス停300m徒歩圏 × 町丁別高齢者人口の疊圖生成
   - `build_app_data.py` — GTFS・施設CSVから `app/data.js` を生成
+  - `build_wagon_scenarios.py` — 旧4路線から乗降6地点を選び、回復する300m徒歩圏と高齢者人口を比較
   - `test_engine.mjs` — 検索エンジンのヘッドレステスト(`node scripts/test_engine.mjs`)
 - `data/` — オープンデータ(BODIK / e-Stat 由来)
 
@@ -35,11 +38,18 @@ e-ZUKA スマートアプリコンテスト 2026 応募作品(分野: 福祉)。
 pip install shapely pyshp folium
 python scripts/build_analysis.py   # 分析 + killer_map.html
 python scripts/build_app_data.py   # app/data.js
+python scripts/build_wagon_scenarios.py # app/wagon-scenarios.json
 cp output/killer_map.html app/
 node scripts/test_engine.mjs       # テスト
 ```
 
-アプリは `app/index.html` をブラウザで開くだけで動く(全データ埋め込み済み・サーバ不要)。
+ローカル起動(PowerShell):
+
+```powershell
+python -m http.server 4173 -d app
+```
+
+市民向けは `http://localhost:4173/`、LIFE TWIN は `http://localhost:4173/future.html` で開く。
 
 ## データ出典
 
