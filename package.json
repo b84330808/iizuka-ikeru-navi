@@ -1,0 +1,8 @@
+{
+  "name": "iizuka-life-twin",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build_sites.mjs"
+  }
+}

@@ -5,3 +5,5 @@ data/gtfs/chikuho/
 data/gtfs/old4routes/
 data/age2020/
 data/boundary/
+dist/
+*.tar.gz
