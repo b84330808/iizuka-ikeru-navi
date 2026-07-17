@@ -55,7 +55,66 @@
         <button id="change-future" class="change-future" type="button" hidden>この未来を変える</button>
       </div>
     </article>
-    <a class="scroll-cue" href="#simulator"><span></span> POLICY SIMULATOR</a>
+    <a class="scroll-cue" href="#impact"><span></span> SEE THE RIPPLE</a>
+  </section>
+
+  <section id="impact" class="impact" aria-labelledby="impact-title">
+    <div class="impact-intro reveal">
+      <p class="kicker">CHAPTER 02 / THE RIPPLE</p>
+      <h2 id="impact-title">消えたのは、<br><em>40の停留所だけじゃない。</em></h2>
+      <p>交通の空白は、通院、買い物、介護、交流へ連鎖します。これは時刻表だけの問題ではなく、この町に住み続けられるかという問いです。</p>
+    </div>
+
+    <div class="impact-scenes">
+      <article class="impact-scene stop-scene reveal">
+        <div class="scene-index">01 / NETWORK</div>
+        <div class="stop-shift" aria-label="停留所数が116から76へ減少">
+          <div><strong>116</strong><span>再編前</span></div>
+          <i aria-hidden="true">→</i>
+          <div><strong>76</strong><span>再編後</span></div>
+        </div>
+        <div id="stop-loss-grid" class="stop-loss-grid" aria-hidden="true"></div>
+        <p><b>40</b>の停留所がネットワークから消えた。点が消えるたび、その先の暮らしとの接続も細くなる。</p>
+      </article>
+
+      <article class="impact-scene geography-scene reveal">
+        <div class="scene-copy">
+          <div class="scene-index">02 / GEOGRAPHY</div>
+          <strong class="scene-number">34</strong>
+          <h3>町丁で、定時バスの<br>徒歩圏が実質消滅。</h3>
+          <p>赤く光るのは、路線再編後に300m徒歩圏を失った地域。中心部だけでは見えない変化を、149町丁の地理データで捉えました。</p>
+        </div>
+        <div class="impact-map-shell">
+          <div class="impact-map-label"><span></span> LOSS DETECTED</div>
+          <svg id="impact-map" viewBox="0 0 720 760" role="img" aria-label="定時バス徒歩圏を失った34町丁の地図"></svg>
+          <small>2020国勢調査小地域 × 新旧GTFS-JP / 300m徒歩圏</small>
+        </div>
+      </article>
+
+      <article class="impact-scene komoda-scene reveal">
+        <div>
+          <div class="scene-index">03 / ONE LIFE</div>
+          <p class="case-label">菰田地区 / 澤田房子さんの生活シナリオ</p>
+          <h3>ひとつの数字を、<br>ひとりの暮らしへ戻す。</h3>
+          <p>菰田の定時バス徒歩圏は、再編前の92.3%から0%へ。影響推計は65歳以上266人です。</p>
+        </div>
+        <div class="coverage-drop" aria-label="菰田の定時バス徒歩圏が92.3%から0%へ低下">
+          <div class="coverage-before"><span>BEFORE</span><strong>92.3<em>%</em></strong><i></i></div>
+          <div class="coverage-arrow" aria-hidden="true">↓</div>
+          <div class="coverage-after"><span>AFTER</span><strong>0<em>%</em></strong><i></i></div>
+        </div>
+        <div class="life-links" aria-label="移動が支える生活">
+          <span>通院</span><span>買い物</span><span>介護</span><span>交流</span>
+        </div>
+      </article>
+    </div>
+
+    <div class="decision-gate reveal">
+      <span>THE DECISION IS YOURS</span>
+      <h2>移動を戻す？<br>それとも、暮らしの方を動かす？</h2>
+      <p>正解を当てるゲームではありません。限られた予算で、どの未来を選ぶかを試してください。</p>
+      <a href="#simulator">予算100で未来を選ぶ <b aria-hidden="true">↓</b></a>
+    </div>
   </section>
 
   <section id="simulator" class="simulator" aria-labelledby="sim-title">
