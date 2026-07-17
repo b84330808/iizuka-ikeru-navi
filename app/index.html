@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>いいづか のりものナビ — 予約交通コンシェルジュ</title>
-<meta name="description" content="飯塚市の予約乗合タクシー・エリアワゴンの利用可否と予約期限を、地区と日時から案内する交通コンシェルジュ">
+<title>いいづか 行けるナビ — 生活移動アシスタント</title>
+<meta name="description" content="行き先と到着時刻から、飯塚市のバス・エリアワゴン・予約交通をまとめて判定し、今することを一つにする生活移動アシスタント">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#1a5c2e">
 <link rel="icon" href="favicon-32.png" sizes="32x32">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta property="og:title" content="いいづか のりものナビ">
-<meta property="og:description" content="飯塚市のコミュニティバス・エリアワゴンで病院や市役所へ。高齢者にやさしい乗り物案内。">
+<meta property="og:title" content="いいづか 行けるナビ">
+<meta property="og:description" content="交通の名前を知らなくても大丈夫。行き先と到着時刻から、今することが一つわかる生活移動アシスタント。">
 <meta property="og:type" content="website">
 <meta property="og:image" content="icon-512.png">
 <link rel="stylesheet" href="style.css">
@@ -19,8 +19,8 @@
 <a class="skip-link" href="#main">本文へ移動</a>
 <header>
   <div class="brand">
-    <span class="brand-mark" aria-hidden="true">🚌</span>
-    <div><h1 id="app-title">いいづか のりものナビ</h1><p>迷わず、乗れる。飯塚のやさしい交通案内</p></div>
+    <span class="brand-mark" aria-hidden="true">行</span>
+    <div><h1 id="app-title">いいづか 行けるナビ</h1><p>行きたいを、行けるに。</p></div>
   </div>
   <div class="header-btns">
     <button id="font-toggle" class="chip" aria-label="文字の大きさを変える">文字を大きく</button>
@@ -32,43 +32,100 @@
 
   <!-- STEP 1: 行き先 -->
   <section id="screen-dest" class="screen">
+    <div class="mission-hero">
+      <p class="eyebrow">飯塚市 生活移動アシスタント</p>
+      <h2>「行きたい」を、<br><em>「行ける」に。</em></h2>
+      <p>バス、エリアワゴン、予約乗合タクシーをまとめて確認。交通の名前を知らなくても、今することが一つわかります。</p>
+      <div class="open-data-proof"><span>OPEN DATA LIVE</span><b>116 → 76</b><small>定時バス停留所の変化を分析済み</small></div>
+    </div>
+
+    <form id="assistant-form" class="assistant-card">
+      <div class="assistant-progress" aria-label="入力は3項目です"><span class="active">1 行き先</span><i></i><span>2 出発地</span><i></i><span>3 到着時刻</span></div>
+
+      <label class="assistant-label" for="assist-dest"><span>1</span><b>どこへ、何をしに行きたいですか？</b></label>
+      <div class="intent-input-wrap">
+        <input id="assist-dest" type="search" inputmode="search" autocomplete="off"
+          placeholder="例：明日10時までに飯塚記念病院へ行きたい" aria-describedby="assist-dest-help">
+        <button id="assist-voice" type="button" aria-label="声で行き先を入力"><span aria-hidden="true">●</span> 話す</button>
+      </div>
+      <p id="assist-dest-help" class="input-help">場所の名前だけでも大丈夫です。</p>
+      <div id="assist-suggestions" class="assist-suggestions" role="listbox" aria-label="行き先候補"></div>
+      <div class="quick-intents" aria-label="よくある行き先">
+        <button type="button" data-assist-dest="飯塚記念病院">病院へ</button>
+        <button type="button" data-assist-dest="飯塚市役所">市役所へ</button>
+        <button type="button" data-assist-dest="イオン穂波店">買い物へ</button>
+      </div>
+
+      <fieldset class="assistant-fieldset">
+        <legend class="assistant-label"><span>2</span><b>どこから出発しますか？</b></legend>
+        <div class="origin-actions">
+          <button id="assist-location" class="origin-choice primary" type="button"><span aria-hidden="true">◎</span><b>現在地を使う</b><small>近い乗り場も自動で探す</small></button>
+          <button id="assist-demo-origin" class="origin-choice" type="button"><span aria-hidden="true">◇</span><b>菰田の例を試す</b><small>審査・体験デモ用</small></button>
+        </div>
+        <label class="district-label" for="assist-district">または、お住まいの地区
+          <select id="assist-district">
+            <option value="">地区を選ぶ（予約交通の判定に使用）</option>
+            <option>頴田</option><option>鯰田</option><option>幸袋</option><option>鎮西</option>
+            <option>二瀬</option><option>穂波</option><option>筑穂</option><option>飯塚東</option>
+            <option>庄内</option><option>菰田</option><option>立岩</option><option>飯塚・片島</option>
+          </select>
+        </label>
+        <p id="assist-origin-status" class="input-help" role="status">位置情報は端末内でのみ使用し、保存しません。</p>
+      </fieldset>
+
+      <div class="assistant-when">
+        <label class="assistant-label" for="assist-date"><span>3</span><b>いつまでに着きたいですか？</b></label>
+        <div><input id="assist-date" type="date"><input id="assist-time" type="time" value="10:00" min="06:00" max="22:00"></div>
+      </div>
+
+      <details class="registration-details">
+        <summary>予約交通の利用登録について</summary>
+        <p>わからないままで判定できます。必要な場合だけ、確認方法を案内します。</p>
+        <div class="registration-options">
+          <label><input type="radio" name="assist-registered" value="unknown" checked> わからない</label>
+          <label><input type="radio" name="assist-registered" value="yes"> 登録済み</label>
+          <label><input type="radio" name="assist-registered" value="no"> 初めて</label>
+        </div>
+      </details>
+
+      <button id="assist-submit" class="mission-cta" type="submit"><span>行き方と予約をまとめて確認</span><b aria-hidden="true">→</b></button>
+      <p class="privacy-note">入力内容は送信・保存されません。</p>
+    </form>
+
+    <div id="assistant-result" class="assistant-result" role="status" aria-live="polite"></div>
+
     <a class="future-call-banner" href="future.html">
       <span class="future-call-pulse" aria-hidden="true"></span>
-      <span><small>NEW EXPERIENCE / 2040</small><strong>未来の飯塚から、着信があります。</strong><em>Open Dataで生活圏と政策の未来を動かす</em></span>
+      <span><small>WHY THIS MATTERS / 2040</small><strong>このまま何もしなかった未来から、着信があります。</strong><em>Open Dataで生活圏と政策の未来を動かす</em></span>
       <b aria-hidden="true">応答する</b>
     </a>
-    <div class="hero">
-      <p class="eyebrow">飯塚市の予約交通・地域交通に対応</p>
-      <h2>検索だけでは乗れない交通を、<br><em>予約まで迷わない</em>案内へ。</h2>
-      <p>地区と利用日時を選ぶだけ。使える乗り物、予約期限、次にすることを一つずつ案内します。</p>
-      <div class="trust-row" aria-label="このサービスの特徴">
-        <span>✓ 30秒で判定</span><span>✓ 入力は保存しません</span><span>✓ 公式予約へ直結</span>
+
+    <details class="advanced-search">
+      <summary>停留所や交通制度から詳しく探す</summary>
+      <div class="advanced-inner">
+        <button id="concierge-start" class="concierge-hero">
+          <span class="concierge-icon" aria-hidden="true">予</span>
+          <span><strong>予約交通の利用条件だけ確認</strong><em>地区・登録状況・受付期限を詳しく見る</em></span>
+          <b aria-hidden="true">›</b>
+        </button>
+        <div class="section-divider"><span>定時のバス・ワゴンを時刻から探す</span></div>
+        <div class="step-head"><span>1</span><div><p>行き先の種類</p><h2 class="step-label">施設から探す</h2></div></div>
+        <div class="cat-grid">
+          <button class="cat-btn cat-wide" data-cat="hospital"><span aria-hidden="true">＋</span><strong>病院・医院</strong><small>通院する</small></button>
+          <button class="cat-btn" data-cat="city"><span aria-hidden="true">庁</span><strong>市役所・支所</strong><small>手続きに行く</small></button>
+          <button class="cat-btn" data-cat="community"><span aria-hidden="true">公</span><strong>公共施設</strong><small>交流センター・図書館など</small></button>
+        </div>
+        <a id="about-banner" class="about-banner" href="analysis.html">
+          <span class="ab-icon">DATA</span>
+          <span class="ab-text"><b>なぜこのアプリを作ったのか</b><small>34町丁・約3,500人への影響推計を見る →</small></span>
+        </a>
+        <div id="fac-picker" class="hidden">
+          <label class="field-label" for="fac-filter">行き先の名前で絞り込む</label>
+          <input id="fac-filter" type="search" inputmode="search" autocomplete="off" placeholder="例：飯塚病院">
+          <ul id="fac-list" class="big-list"></ul>
+        </div>
       </div>
-    </div>
-    <button id="concierge-start" class="concierge-hero">
-      <span class="concierge-icon" aria-hidden="true">🚕</span>
-      <span><small>おすすめ・新しい主役</small><strong>予約が必要な乗り物を調べる</strong><em>あなたの地区・日時から、利用可否と予約期限を判定</em></span>
-      <b aria-hidden="true">›</b>
-    </button>
-    <div class="section-divider"><span>定時のバス・ワゴンを時刻から探す</span></div>
-    <div class="step-head"><span>1</span><div><p>まずは</p><h2 class="step-label">どこへ行きますか?</h2></div></div>
-    <div class="cat-grid">
-      <button class="cat-btn cat-wide" data-cat="hospital"><span aria-hidden="true">🏥</span><strong>病院・医院</strong><small>通院する</small></button>
-      <button class="cat-btn" data-cat="city"><span aria-hidden="true">🏛️</span><strong>市役所・支所</strong><small>手続きに行く</small></button>
-      <button class="cat-btn" data-cat="community"><span aria-hidden="true">🏢</span><strong>公共施設</strong><small>交流センター・図書館など</small></button>
-    </div>
-    <a id="about-banner" class="about-banner" href="analysis.html">
-      <span class="ab-icon">🗺️</span>
-      <span class="ab-text">
-        <b>なぜこのアプリを作ったのか</b>
-        <small>2022年の路線見直しで、バス停が116→76に。データで見る飯塚の交通課題 →</small>
-      </span>
-    </a>
-    <div id="fac-picker" class="hidden">
-      <label class="field-label" for="fac-filter">行き先の名前で絞り込む</label>
-      <input id="fac-filter" type="search" inputmode="search" autocomplete="off" placeholder="例：飯塚病院">
-      <ul id="fac-list" class="big-list"></ul>
-    </div>
+    </details>
   </section>
 
   <!-- 予約交通コンシェルジュ -->

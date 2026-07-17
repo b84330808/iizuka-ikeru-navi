@@ -7,3 +7,5 @@ data/age2020/
 data/boundary/
 dist/
 *.tar.gz
+tmp/voice-previews/
+.env.local

@@ -129,6 +129,10 @@ check("最寄り停留所で降車(飯塚記念病院入口)",
       wr.rides.map(r => D.stops[r.alight].name).join(","));
 check("ワゴン運賃=100円", wr.rides.every(r => r.fare === 100));
 check("日曜はワゴン全便運休", E.search(chu, kinen, SUN, 0).rides.length === 0);
+const arriveByTen = E.searchArriveBy(chu, kinen, MON, 10 * 60, 0);
+check("菰田→飯塚記念病院: 10時までに着く便を逆算できる",
+      arriveByTen.rides.length > 0 && arriveByTen.rides.every(r => r.arr <= 10 * 60),
+      arriveByTen.rides.map(r => `${fmt(r.dep)}→${fmt(r.arr)}`).join(","));
 
 // 8) 予約交通コンシェルジュ
 const judgeNow = new Date(2026, 6, 14, 9, 0);

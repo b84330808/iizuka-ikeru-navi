@@ -3,6 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "node scripts/build_sites.mjs"
+    "build": "node scripts/build_sites.mjs",
+    "voice:design": "node scripts/generate_future_voice.mjs design",
+    "voice:render": "node scripts/generate_future_voice.mjs render"
   }
 }
