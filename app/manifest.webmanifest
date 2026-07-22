@@ -20,6 +20,11 @@
       "name": "交通課題を見る",
       "short_name": "交通課題",
       "url": "./analysis.html"
+    },
+    {
+      "name": "移動需要ダッシュボード",
+      "short_name": "需要を見る",
+      "url": "./dashboard.html"
     }
   ],
   "icons": [

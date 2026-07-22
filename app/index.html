@@ -12,7 +12,11 @@
 <meta property="og:title" content="いいづか 行けるナビ">
 <meta property="og:description" content="交通の名前を知らなくても大丈夫。行き先と到着時刻から、今することが一つわかる生活移動アシスタント。">
 <meta property="og:type" content="website">
-<meta property="og:image" content="icon-512.png">
+<meta property="og:image" content="__SITE_ORIGIN__/og.png">
+<meta property="og:image:width" content="1728">
+<meta property="og:image:height" content="900">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="__SITE_ORIGIN__/og.png">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -23,6 +27,7 @@
     <div><h1 id="app-title">いいづか 行けるナビ</h1><p>行きたいを、行けるに。</p></div>
   </div>
   <div class="header-btns">
+    <a class="chip" href="dashboard.html">行政ダッシュボード</a>
     <button id="font-toggle" class="chip" aria-label="文字の大きさを変える">文字を大きく</button>
     <button class="chip judge-chip" type="button" data-judge-demo>3分 審査デモ</button>
     <a class="chip" href="analysis.html">なぜこのアプリ?</a>
@@ -99,15 +104,15 @@
       </details>
 
       <button id="assist-submit" class="mission-cta" type="submit"><span>行き方と予約をまとめて確認</span><b aria-hidden="true">→</b></button>
-      <p class="privacy-note">入力内容は送信・保存されません。</p>
+      <p class="privacy-note">氏名・端末ID・緯度経度は保存しません。地区・目的・30分単位の希望時刻だけを匿名化し、交通改善の分析に利用します。</p>
     </form>
 
     <div id="assistant-result" class="assistant-result" role="status" aria-live="polite"></div>
 
-    <a class="future-call-banner" href="future.html?demo=judge">
+    <a class="future-call-banner" href="dashboard.html">
       <span class="future-call-pulse" aria-hidden="true"></span>
-      <span><small>審査デモ 2 / 2・行政向け LIFE TWIN</small><strong>一人の移動から、一台の政策判断へ。</strong><em>同じOpen Dataで、失われる生活圏と配置効果を体験する</em></span>
-      <b aria-hidden="true">続きを見る</b>
+      <span><small>行政・交通事業者向け MOBILITY TWIN</small><strong>今の「行きたい」が、次の一台を決める。</strong><em>匿名需要・実利用統計・配置シミュレーションを一画面に統合</em></span>
+      <b aria-hidden="true">需要を見る</b>
     </a>
 
     <details class="advanced-search">
@@ -235,7 +240,7 @@
   <p id="judge-demo-copy">40停留所が減り、65歳以上3,484人分の固定路線徒歩圏が失われた推計。ここから、菰田で暮らす一人の通院を解きます。</p>
   <div id="judge-demo-facts" class="judge-demo-facts"><span><b>116 → 76</b>停留所</span><span><b>3,484人</b>影響推計</span></div>
   <button id="judge-demo-next" class="judge-demo-next" type="button">市民のケースを見る <b aria-hidden="true">→</b></button>
-  <a id="judge-demo-policy" class="judge-demo-policy" href="future.html?demo=judge#simulator" hidden>同じデータで一台の配置を決める <b aria-hidden="true">→</b></a>
+  <a id="judge-demo-policy" class="judge-demo-policy" href="dashboard.html#optimizer-title" hidden>今の検索を行政ダッシュボードで見る <b aria-hidden="true">→</b></a>
 </aside>
 
 <footer>

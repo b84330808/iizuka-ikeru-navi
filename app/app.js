@@ -568,11 +568,53 @@
         <span>審査デモ 3 / 3・ONE DATA, TWO DECISIONS</span>
         <h4>一人の「行ける」を、まち全体の「住み続けられる」へ。</h4>
         <p>市民には今日の便と予約を返し、行政には同じデータから追加ワゴン一台の配置効果を返します。</p>
-        <a href="future.html?demo=judge#simulator">一台をどこへ置くか計算する <b aria-hidden="true">→</b></a>
+        <a href="dashboard.html#optimizer-title">この検索を行政ダッシュボードで見る <b aria-hidden="true">→</b></a>
       </section>` : ""}
       <button class="answer-retry" type="button">条件を変えてもう一度</button>
     </article>`;
     box.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function demandOutcome(journey, reservation) {
+    if (journey) return { outcome: "served", reason: "fixed_route", journeyType: "fixed" };
+    if (!reservation) return { outcome: "gap", reason: "no_matching_service", journeyType: "unresolved" };
+    if (reservation.status === "ready") {
+      return { outcome: "reservation", reason: "on_demand_available", journeyType: "on_demand" };
+    }
+    if (reservation.status === "register" || reservation.status === "verify") {
+      return { outcome: "friction", reason: "registration_required", journeyType: "on_demand" };
+    }
+    if (reservation.status === "expired") {
+      return { outcome: "friction", reason: "booking_expired", journeyType: "on_demand" };
+    }
+    if (reservation.status === "wagon") {
+      return { outcome: "gap", reason: "wagon_schedule", journeyType: "wagon" };
+    }
+    if (reservation.status === "closed") {
+      return { outcome: "gap", reason: "service_closed", journeyType: "on_demand" };
+    }
+    return { outcome: "gap", reason: "no_matching_service", journeyType: "unresolved" };
+  }
+
+  function recordDemandEvent(facility, timing, journey, reservation, district) {
+    const [hour, minute] = timing.time.split(":").map(Number);
+    const result = demandOutcome(journey, reservation);
+    const payload = {
+      originArea: district || "位置情報周辺",
+      destinationName: facility.name,
+      category: state.assistantCategory,
+      requestedDate: timing.dateValue,
+      hourBucket: hour * 2 + (minute >= 30 ? 1 : 0),
+      outcome: result.outcome,
+      reason: result.reason,
+      journeyType: result.journeyType
+    };
+    fetch("./api/demand-events", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(payload),
+      keepalive: true
+    }).catch(() => {});
   }
 
   function renderAssistantError(message) {
@@ -673,6 +715,7 @@
       date: timing.dateValue, time: timing.time
     }) : null;
     renderAssistantAnswer(exact, timing, journey, reservation);
+    recordDemandEvent(exact, timing, journey, reservation, district);
   });
 
   $("#assistant-result").addEventListener("click", event => {
