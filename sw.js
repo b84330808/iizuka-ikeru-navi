@@ -1,9 +1,10 @@
 /* いいづか のりものナビ — Service Worker(オフライン対応) */
-const CACHE = "norimono-2026-07-18-v14";
+const CACHE = "norimono-2026-07-22-v15";
 const ASSETS = [
-  "./", "./index.html", "./analysis.html", "./future.html", "./style.css", "./future.css",
+  "./", "./index.html", "./analysis.html", "./future.html", "./dashboard.html",
+  "./style.css", "./future.css", "./dashboard.css",
   "./data.js", "./app.js", "./killer_map.html",
-  "./future.js", "./towns.geojson", "./wagon-scenarios.json",
+  "./future.js", "./dashboard.js", "./towns.geojson", "./wagon-scenarios.json",
   "./manifest.webmanifest", "./icon-192.png", "./icon-512.png",
   "./apple-touch-icon.png", "./favicon-32.png",
 ];
@@ -25,6 +26,7 @@ self.addEventListener("activate", (e) => {
 // ネットワーク優先・オフライン時はキャッシュ(バスの時刻を圏外でも確認できる)
 self.addEventListener("fetch", (e) => {
   if (e.request.method !== "GET") return;
+  if (new URL(e.request.url).pathname.startsWith("/api/")) return;
   e.respondWith(
     fetch(e.request)
       .then((res) => {

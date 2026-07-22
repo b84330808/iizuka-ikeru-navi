@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>移動需要ダッシュボード — IIZUKA MOBILITY TWIN</title>
+<meta name="description" content="市民の匿名検索需要と飯塚市のオープンデータを重ね、交通の届いていない場所と時間を可視化する行政向け意思決定ダッシュボード。">
+<meta name="theme-color" content="#07110f">
+<meta property="og:title" content="IIZUKA MOBILITY TWIN">
+<meta property="og:description" content="まちの「行きたい」が、次の一台を決める。匿名移動需要とオープンデータの交通計画ダッシュボード。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="__SITE_ORIGIN__/og.png">
+<meta property="og:image:width" content="1728">
+<meta property="og:image:height" content="900">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="__SITE_ORIGIN__/og.png">
+<link rel="icon" href="favicon-32.png" sizes="32x32">
+<link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+<a class="skip-link" href="#dashboard-main">ダッシュボード本文へ移動</a>
+<header class="dash-header">
+  <a class="dash-brand" href="dashboard.html"><span aria-hidden="true"></span><b>IIZUKA</b> MOBILITY TWIN</a>
+  <div class="dash-status"><i></i><span id="connection-label">匿名需要データを接続中</span></div>
+  <nav aria-label="関連ページ">
+    <a href="index.html">市民向けナビ</a>
+    <a href="future.html">未来シナリオ</a>
+  </nav>
+</header>
+
+<main id="dashboard-main">
+  <section class="dash-hero" aria-labelledby="dash-title">
+    <div>
+      <p class="eyebrow">CITIZEN INTENT × OPEN DATA × DECISION</p>
+      <h1 id="dash-title">まちの「行きたい」が、<br><em>次の一台を決める。</em></h1>
+    </div>
+    <div class="hero-explain">
+      <p>行けるナビの匿名検索を、GTFS・人口・施設・実利用統計と重ねます。どこで、何時に、どんな移動が届いていないかを見つけ、追加車両の効果まで同じ画面で試算します。</p>
+      <div class="layer-legend" aria-label="データの区分">
+        <span><i class="official"></i><b>OFFICIAL</b> 公開実績</span>
+        <span><i class="live"></i><b>LIVE</b> 匿名検索</span>
+        <span><i class="demo"></i><b>DEMO</b> 実証前サンプル</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="control-bar" aria-label="表示条件">
+    <label>期間
+      <select id="filter-period">
+        <option value="7">直近7日</option>
+        <option value="30" selected>直近30日</option>
+        <option value="90">直近90日</option>
+        <option value="all">全期間</option>
+      </select>
+    </label>
+    <label>目的
+      <select id="filter-category">
+        <option value="all">すべて</option>
+        <option value="hospital">通院</option>
+        <option value="life">買い物</option>
+        <option value="city">行政手続き</option>
+        <option value="community">交流・活動</option>
+      </select>
+    </label>
+    <label>時間帯
+      <select id="filter-time">
+        <option value="all">終日</option>
+        <option value="morning">6:00–10:30</option>
+        <option value="midday">11:00–13:30</option>
+        <option value="afternoon">14:00–18:30</option>
+      </select>
+    </label>
+    <label>地区
+      <select id="filter-area"><option value="all">全地区</option></select>
+    </label>
+    <button id="refresh-data" type="button"><span aria-hidden="true">↻</span> 最新データ</button>
+    <p><i></i> 15秒ごとに更新</p>
+  </section>
+
+  <section class="kpi-grid" aria-label="移動需要の概要">
+    <article><span>SEARCH INTENTS</span><strong id="kpi-total">—</strong><small>選択期間の匿名検索</small></article>
+    <article class="alert-kpi"><span>MOBILITY GAP</span><strong id="kpi-gap-rate">—</strong><small id="kpi-gap-count">未充足需要を集計中</small></article>
+    <article><span>TOP UNMET DESTINATION</span><strong id="kpi-destination">—</strong><small>行きたいのに届きにくい場所</small></article>
+    <article><span>PEAK GAP TIME</span><strong id="kpi-peak">—</strong><small>交通不足が集中する時間帯</small></article>
+  </section>
+
+  <section class="intelligence-grid" aria-label="需要分析">
+    <article class="demand-map-panel">
+      <div class="panel-head">
+        <div><span>01 / SPATIAL GAP</span><h2>交通需要ヒートマップ</h2></div>
+        <div class="map-legend"><span><i class="gap-dot"></i>未充足</span><span><i class="served-dot"></i>移動可能</span></div>
+      </div>
+      <div id="demand-map-wrap" class="demand-map-wrap">
+        <div id="map-loading" class="map-loading"><i></i>149町丁と需要を接続中…</div>
+        <svg id="demand-map" viewBox="0 0 720 760" role="img" aria-label="飯塚市の地区別交通需要ヒートマップ"></svg>
+        <div id="map-tooltip" class="map-tooltip" hidden></div>
+        <div class="privacy-grid" aria-hidden="true"></div>
+      </div>
+      <div class="map-foot">
+        <span>位置情報は保存せず、地区・30分単位へ匿名化</span>
+        <button id="reset-map" type="button">全地区を表示</button>
+      </div>
+    </article>
+
+    <aside class="signal-column">
+      <article class="live-panel">
+        <div class="panel-head compact"><div><span>02 / LIVE SIGNAL</span><h2>いま届いた「行きたい」</h2></div><i class="live-pulse"></i></div>
+        <ol id="event-feed" class="event-feed" aria-live="polite"><li class="feed-loading">匿名需要を読み込み中…</li></ol>
+      </article>
+      <article class="gap-panel">
+        <div class="panel-head compact"><div><span>03 / WHY NOT</span><h2>移動できない理由</h2></div></div>
+        <div id="reason-bars" class="reason-bars"></div>
+      </article>
+    </aside>
+  </section>
+
+  <section class="official-section" aria-labelledby="official-title">
+    <div class="section-heading">
+      <div><p class="eyebrow">OFFICIAL BASELINE / R6 ACTUAL</p><h2 id="official-title">実績を基準に、<br>需要の変化を見る。</h2></div>
+      <p>検索ログだけで利用実績を装いません。飯塚市公表の年間利用者数と目標値を基準線として、アプリが捉えた「まだ乗車になっていない需要」を別レイヤーで表示します。</p>
+    </div>
+    <div class="official-grid">
+      <article data-current="44164" data-target="48000"><span>予約乗合タクシー</span><strong>44,164<em>人 / 年</em></strong><div><i></i></div><small>R9目標 48,000人</small></article>
+      <article data-current="36607" data-target="39000"><span>エリアワゴン</span><strong>36,607<em>人 / 年</em></strong><div><i></i></div><small>R9目標 39,000人</small></article>
+      <article data-current="27926" data-target="30000"><span>市コミュニティバス2路線</span><strong>27,926<em>人 / 年</em></strong><div><i></i></div><small>R9目標 30,000人</small></article>
+      <article class="cost-card"><span>コミュニティ交通</span><strong>1,279<em>円 / 人</em></strong><p>利用者1人あたり平均事業費</p><small>R9目標 1,150円</small></article>
+    </div>
+    <p class="source-note">出典：飯塚市地域公共交通協議会 令和6年度実績。匿名検索は利用者数・乗車数ではありません。</p>
+  </section>
+
+  <section class="optimizer-section" aria-labelledby="optimizer-title">
+    <div class="section-heading optimizer-heading">
+      <div><p class="eyebrow">SPATIOTEMPORAL MOBILITY GAP OPTIMIZER</p><h2 id="optimizer-title">条件を変えて、<br>次の一台を決める。</h2></div>
+      <p>公開データによる徒歩圏回復推計と、匿名検索の未充足需要を同時に評価。車両・便数・歩行条件を変えるたびに、配置候補を再順位付けします。</p>
+    </div>
+
+    <div class="optimizer-shell">
+      <form id="optimizer-form" class="optimizer-controls">
+        <div class="control-title"><span>CONSTRAINTS</span><h3>運行条件</h3></div>
+        <label><span>追加車両</span><output id="vehicles-output">1台</output><input id="vehicles" type="range" min="1" max="3" value="1"></label>
+        <label><span>1日の往復数</span><output id="trips-output">3往復</output><input id="trips" type="range" min="2" max="6" value="3"></label>
+        <label><span>許容歩行距離</span><output id="walk-output">300m</output><input id="walk" type="range" min="300" max="800" step="100" value="300"></label>
+        <label class="select-control"><span>優先する生活目的</span>
+          <select id="priority">
+            <option value="all">全目的を公平に評価</option>
+            <option value="hospital">通院を優先</option>
+            <option value="life">買い物を優先</option>
+            <option value="city">行政手続きを優先</option>
+            <option value="community">交流・活動を優先</option>
+          </select>
+        </label>
+        <button id="run-optimizer" type="submit"><span>OPTIMIZE</span>需要と徒歩圏を再計算</button>
+        <p>最大被覆問題の説明可能な比較試算です。公式運行計画ではありません。</p>
+      </form>
+
+      <div class="optimizer-result" aria-live="polite">
+        <div class="result-head"><div><span>RECOMMENDED ALLOCATION</span><h3 id="recommendation-title">頴田・飯塚コリドー</h3></div><b id="confidence-label">DATA BEST</b></div>
+        <div id="scenario-ranking" class="scenario-ranking"></div>
+        <div class="result-metrics">
+          <article><small>徒歩圏回復推計</small><strong id="result-elderly">—</strong><span>65歳以上</span></article>
+          <article><small>改善できる検索需要</small><strong id="result-demand">—</strong><span>件 / 選択期間</span></article>
+          <article><small>重点地区</small><strong id="result-areas">—</strong><span>候補コリドー</span></article>
+        </div>
+        <div class="decision-trace"><span>WHY THIS?</span><p id="decision-copy">需要データと徒歩圏データを読み込み中です。</p></div>
+        <a href="future.html#report">配置後の一人の生活シナリオを見る <b aria-hidden="true">→</b></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="method-section" aria-labelledby="method-title">
+    <div><p class="eyebrow">AUDITABLE, NOT A BLACK BOX</p><h2 id="method-title">数字の出どころを、<br>混ぜない。</h2></div>
+    <div class="method-grid">
+      <article><span>01 / OFFICIAL</span><h3>行政公開データ</h3><p>GTFS-JP、町丁別人口、施設一覧、交通協議会の利用実績。現在の交通網と基準値に使用します。</p></article>
+      <article><span>02 / LIVE</span><h3>匿名需要ログ</h3><p>地区、目的、施設、希望日、30分時間帯、判定結果のみ。氏名、端末ID、緯度経度は保存しません。</p></article>
+      <article><span>03 / MODEL</span><h3>配置比較試算</h3><p>未充足需要と徒歩圏回復推計を、車両・便数・歩行距離の制約下で順位付けします。</p></article>
+    </div>
+  </section>
+</main>
+
+<footer><span>IIZUKA MOBILITY TWIN / DECISION PROTOTYPE</span><span>OPEN DATA UPDATED 2026.07</span></footer>
+<script src="dashboard.js"></script>
+</body>
+</html>
