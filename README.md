@@ -1,5 +1,11 @@
 # いいづか 行けるナビ
 
+**公開URL: https://b84330808.github.io/iizuka-ikeru-navi/**
+
+- 市民向けナビ: https://b84330808.github.io/iizuka-ikeru-navi/
+- 交通課題の分析: https://b84330808.github.io/iizuka-ikeru-navi/analysis.html
+- 行政ダッシュボード: https://b84330808.github.io/iizuka-ikeru-navi/dashboard.html
+
 「どこへ、いつまでに行きたいか」から、飯塚市のコミュニティバス・エリアワゴン・予約乗合タクシーをまとめて判定する市民向けナビと、匿名検索需要から交通計画を支援する行政向け Mobility Twin。
 
 ## この作品の違い
