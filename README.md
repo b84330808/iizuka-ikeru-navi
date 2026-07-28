@@ -34,6 +34,7 @@ e-ZUKA スマートアプリコンテスト 2026 応募作品(分野: 福祉)。
   - `build_analysis.py` — 廃線前後のバス停300m徒歩圏 × 町丁別高齢者人口の疊圖生成
   - `build_app_data.py` — GTFS・施設CSVから `app/data.js` を生成
   - `build_wagon_scenarios.py` — 旧4路線から乗降6地点を選び、回復する300m徒歩圏と高齢者人口を比較
+  - `build_anchors.py` — 立地適正化計画の都市機能誘導拠点16か所と、2022年再編前後のGTFSを突合。拠点がバス停名で定義されているか、徒歩圏を失ったかを判定
   - `test_engine.mjs` — 検索エンジンのヘッドレステスト(`node scripts/test_engine.mjs`)
 - `worker/index.js` — 匿名需要イベントの登録・取得APIと静的配信
 - `db/schema.ts` + `drizzle/` — D1の需要ログスキーマとマイグレーション
@@ -50,6 +51,7 @@ pip install shapely pyshp folium
 python scripts/build_analysis.py   # 分析 + killer_map.html
 python scripts/build_app_data.py   # app/data.js
 python scripts/build_wagon_scenarios.py # app/wagon-scenarios.json
+python scripts/build_anchors.py    # app/anchors.json(立地適正化計画×廃線の突合)
 cp output/killer_map.html app/
 node scripts/test_engine.mjs       # テスト
 ```

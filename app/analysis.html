@@ -32,6 +32,24 @@
   .cta { display: block; margin: 22px auto; padding: 14px; text-align: center; color: #fff; background: var(--c-main); border-radius: 12px; text-decoration: none; font-weight: bold; }
   .method { padding-left: 1.2em; }
   .method li { margin: 8px 0; }
+  /* 立地適正化計画 × 廃線 の突合 */
+  .anchor-block { border: 3px solid #b3261e; background: #fff6f5; border-radius: 20px; padding: 22px; margin: 24px 0; }
+  .anchor-block > h2 { margin: 0 0 6px; font-size: clamp(1.25em,4.4vw,1.7em); line-height: 1.35; color: #7f1d1a; }
+  .anchor-block .kicker { display: inline-block; background: #b3261e; color: #fff; font-size: .72em; font-weight: bold; padding: 4px 12px; border-radius: 999px; margin-bottom: 10px; }
+  .anchor-lede { font-size: .95em; margin: 10px 0 18px; }
+  .anchor-lede b { color: #7f1d1a; }
+  .anchor-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin: 16px 0; }
+  .anchor-card { background: #fff; border: 2px solid #e6c3c0; border-radius: 14px; padding: 14px; }
+  .anchor-card .an { font-weight: bold; font-size: .95em; }
+  .anchor-card .bus-tag { display: block; font-size: .62em; font-weight: normal; color: #7f1d1a; background: #f7e6e4; border-radius: 6px; padding: 2px 7px; margin-top: 5px; }
+  .anchor-card .ad { font-size: 1.9em; font-weight: bold; color: #b3261e; line-height: 1.1; margin: 6px 0 2px; }
+  .anchor-card .au { font-size: .72em; color: #555; }
+  .anchor-card .aw { font-size: .72em; color: #7f1d1a; margin-top: 6px; }
+  .lost-table { width: 100%; border-collapse: collapse; font-size: .82em; background: #fff; border-radius: 12px; overflow: hidden; }
+  .lost-table th, .lost-table td { padding: 9px 12px; border-bottom: 1px solid #eadedd; text-align: left; }
+  .lost-table th { background: #f3e4e2; color: #7f1d1a; }
+  .lost-table td:last-child { text-align: right; font-weight: bold; color: #b3261e; white-space: nowrap; }
+  .anchor-caveat { font-size: .75em; color: #555; background: #fff; border-left: 4px solid #c9a227; padding: 10px 14px; border-radius: 0 10px 10px 0; margin-top: 16px; }
 </style>
 </head>
 <body>
@@ -54,6 +72,20 @@
   </article>
 
   <div class="stat-grid" id="stats"></div>
+
+  <!-- 立地適正化計画 × コミュニティバス再編 の突合 -->
+  <section class="anchor-block" id="anchor-block" hidden>
+    <span class="kicker">市の2つの公開データを重ねると</span>
+    <h2 id="anchor-headline"></h2>
+    <p class="anchor-lede" id="anchor-lede"></p>
+    <div class="anchor-cards" id="anchor-cards"></div>
+    <h3 style="font-size:.95em;margin:22px 0 8px;color:#7f1d1a;">再編でコミュニティバスの徒歩圏を失った生活拠点</h3>
+    <table class="lost-table">
+      <thead><tr><th>廃止された停留所</th><th>最寄りの現行停留所</th><th>距離</th></tr></thead>
+      <tbody id="lost-body"></tbody>
+    </table>
+    <p class="anchor-caveat" id="anchor-caveat"></p>
+  </section>
 
   <div class="case">
     <h2>60秒でわかる、代表的な利用場面</h2>
@@ -113,6 +145,54 @@
     ["約" + h.elderly_affected_weighted.toLocaleString() + "人", "徒歩圏を失った65歳以上(面積按分推計)"],
     ["32.3%", "飯塚市の高齢化率"],
   ].map(([n, l]) => `<div class="stat"><div class="num">${n}</div><div class="lab">${l}</div></div>`).join("");
+</script>
+<script>
+/* 立地適正化計画(法定計画)の都市機能誘導拠点 × コミュニティバス再編 の突合を描画。
+   データ生成: scripts/build_anchors.py(市の2つのオープンデータのみを使用) */
+(function () {
+  const esc = s => String(s ?? "").replace(/[&<>"']/g, c =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  fetch("anchors.json").then(r => r.ok ? r.json() : Promise.reject()).then(d => {
+    const s = d.summary;
+    const lost = d.anchors.filter(a => a.status === "lost")
+      .sort((a, b) => (b.nearestCurrent?.m || 0) - (a.nearestCurrent?.m || 0));
+
+    // 「バス停名で定義された拠点」かつ「徒歩圏を失った拠点」= 最も強く、かつ反証されない主張
+    const lostBusNamed = lost.filter(a => a.busNamed);
+
+    document.getElementById("anchor-headline").textContent =
+      `市が「まちの拠点」と定めた${s.anchorsTotal}か所のうち${s.anchorsBusNamed}か所は、` +
+      `バス停の名前で定義されている。そのうち${lostBusNamed.length}か所は、そのバスがもう来ない。`;
+
+    document.getElementById("anchor-lede").innerHTML =
+      `飯塚市は法定計画である<b>立地適正化計画</b>で、都市機能を集約する拠点を${s.anchorsTotal}か所指定しています。` +
+      `その施設名には「穂波農協<b>(バス)</b>」「頴田支所<b>(バス)</b>」「綱分<b>(バス)</b>」のように、` +
+      `<b>市自身がバス停名を書き込んでいます</b>。` +
+      `一方で市は2022年3月にコミュニティバスを5路線→2路線へ再編し、` +
+      `${s.stopsBefore}停留所のうち<b>${s.stopsAbolished}を廃止</b>しました。` +
+      `2つの公開データを重ねると、計画上の拠点${lost.length}か所が` +
+      `徒歩圏(${s.walkThresholdM}m)から外れています。`;
+
+    document.getElementById("anchor-cards").innerHTML = lost.map(a => `
+      <div class="anchor-card">
+        <div class="an">${esc(a.name)}${a.busNamed ? '<span class="bus-tag">市の計画がバス停名で定義</span>' : ""}</div>
+        <div class="ad">${a.nearestCurrent ? a.nearestCurrent.m.toLocaleString() : "—"}<span style="font-size:.45em"> m</span></div>
+        <div class="au">最寄りの現行コミュニティバス停留所まで</div>
+        <div class="aw">徒歩 約${Math.ceil((a.nearestCurrent?.m || 0) / 60)}分(高齢者の歩行速度60m/分で換算)</div>
+      </div>`).join("");
+
+    document.getElementById("lost-body").innerHTML = d.lostFacilities.slice(0, 10).map(x =>
+      `<tr><td>${esc(x.stop)}</td><td>${esc(x.nearest)}</td><td>${x.toNearestM.toLocaleString()} m</td></tr>`).join("");
+
+    document.getElementById("anchor-caveat").innerHTML =
+      `<b>この数字の限界。</b> ${esc(s.caveat)} ` +
+      `${s.anchorsNoData}か所は該当なしとして集計から除外しています。` +
+      `距離は直線距離で、実際の歩行経路はこれより長くなります。` +
+      `出典: ${s.sources.map(esc).join(" / ")}。再現コードは <code>scripts/build_anchors.py</code>。`;
+
+    document.getElementById("anchor-block").hidden = false;
+  }).catch(() => {});
+})();
 </script>
 <script>if("serviceWorker" in navigator){addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});}</script>
 </body>

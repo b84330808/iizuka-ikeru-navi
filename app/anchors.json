@@ -1,0 +1,449 @@
+{
+ "summary": {
+  "anchorsTotal": 16,
+  "anchorsBusNamed": 10,
+  "anchorsLost": 5,
+  "anchorsServed": 6,
+  "anchorsNoData": 5,
+  "stopsBefore": 58,
+  "stopsAfter": 55,
+  "stopsAbolished": 38,
+  "walkThresholdM": 300,
+  "sources": [
+   "飯塚市 立地適正化計画 都市機能誘導区域(BODIK, GeoJSON)",
+   "飯塚市 コミュニティバス GTFS-JP 廃止4路線(令和3年版)・現行2路線(BODIK)"
+  ],
+  "caveat": "no_community_bus_data はコミュニティバスGTFSに該当停留所が無いことのみを示し、西鉄バス等の他事業者による運行の有無は判定していない。"
+ },
+ "anchors": [
+  {
+   "name": "穂波農協(バス)",
+   "zone": "穂波支所周辺",
+   "kind": "地域拠点型",
+   "district": "穂波地域拠点型",
+   "busNamed": true,
+   "lat": 33.620119,
+   "lon": 130.679493,
+   "status": "lost",
+   "nearestCurrent": {
+    "name": "椿(サンキ飯塚店)",
+    "m": 996
+   },
+   "nearestAbolished": {
+    "name": "穂波庁舎",
+    "m": 213
+   },
+   "densH22": 27.9939544762,
+   "densH47": 23.3996793663,
+   "popH22": 3233.606463,
+   "popH47": 2702.917678
+  },
+  {
+   "name": "筑穂支所(コミュニティバス）",
+   "zone": "筑穂支所周辺",
+   "kind": "地域拠点型",
+   "district": "筑穂地域拠点型",
+   "busNamed": true,
+   "lat": 33.569644,
+   "lon": 130.646851,
+   "status": "served",
+   "nearestCurrent": {
+    "name": "筑穂支所",
+    "m": 58
+   },
+   "nearestAbolished": {
+    "name": "筑穂支所",
+    "m": 58
+   },
+   "densH22": 18.2990800243,
+   "densH47": 12.6645289092,
+   "popH22": 835.25679,
+   "popH47": 578.069157
+  },
+  {
+   "name": "九工大入口(バス)",
+   "zone": "二瀬公民館・九工大周辺",
+   "kind": "コミュニティ+",
+   "district": "二瀬コミュニティ拠点型",
+   "busNamed": true,
+   "lat": 33.651612,
+   "lon": 130.669729,
+   "status": "no_community_bus_data",
+   "nearestCurrent": {
+    "name": "イオン穂波店",
+    "m": 1701
+   },
+   "nearestAbolished": {
+    "name": "二瀬交流センター",
+    "m": 310
+   },
+   "densH22": 32.0471427153,
+   "densH47": 27.0992469992,
+   "popH22": 2192.959156,
+   "popH47": 1854.378793
+  },
+  {
+   "name": "東小学校(バス)",
+   "zone": "飯塚東公民館周辺",
+   "kind": "コミュニティ",
+   "district": "飯塚東コミュニティ拠点型",
+   "busNamed": true,
+   "lat": 33.633682,
+   "lon": 130.704949,
+   "status": "no_community_bus_data",
+   "nearestCurrent": {
+    "name": "新飯塚駅",
+    "m": 1558
+   },
+   "nearestAbolished": {
+    "name": "下三緒団地",
+    "m": 723
+   },
+   "densH22": 39.0497244397,
+   "densH47": 26.7689213923,
+   "popH22": 1234.118917,
+   "popH47": 845.999114
+  },
+  {
+   "name": "世尊寺",
+   "zone": "飯塚第三中学跡地周辺",
+   "kind": "コミュニティ",
+   "district": "鯰田コミュニティ拠点型",
+   "busNamed": false,
+   "lat": 33.665858,
+   "lon": 130.699923,
+   "status": "served",
+   "nearestCurrent": {
+    "name": "鯰田上町",
+    "m": 279
+   },
+   "nearestAbolished": {
+    "name": "川食鯰田店",
+    "m": 122
+   },
+   "densH22": 20.5391379557,
+   "densH47": 16.5156871878,
+   "popH22": 1253.763047,
+   "popH47": 1008.161021
+  },
+  {
+   "name": "イオン穂波店",
+   "zone": "イオン穂波店周辺",
+   "kind": "暮らし維持型",
+   "district": "イオン穂波店暮らし維持型",
+   "busNamed": false,
+   "lat": 33.63642,
+   "lon": 130.675346,
+   "status": "served",
+   "nearestCurrent": {
+    "name": "イオン穂波店",
+    "m": 155
+   },
+   "nearestAbolished": {
+    "name": "イオン穂波店",
+    "m": 162
+   },
+   "densH22": 23.9090733708,
+   "densH47": 19.5370533026,
+   "popH22": 735.982693,
+   "popH47": 601.400685
+  },
+  {
+   "name": "近畿大学（学内）",
+   "zone": "近畿大周辺",
+   "kind": "学園都市型",
+   "district": "近畿大学学園都市型",
+   "busNamed": false,
+   "lat": 33.644194,
+   "lon": 130.712263,
+   "status": "no_community_bus_data",
+   "nearestCurrent": {
+    "name": "新飯塚駅",
+    "m": 1704
+   },
+   "nearestAbolished": {
+    "name": "下三緒団地",
+    "m": 1142
+   },
+   "densH22": 14.2452138825,
+   "densH47": 12.1995981232,
+   "popH22": 671.100881,
+   "popH47": 574.730651
+  },
+  {
+   "name": "頴田支所(バス)",
+   "zone": "頴田支所周辺１",
+   "kind": "地域拠点型",
+   "district": "頴田地域拠点型",
+   "busNamed": true,
+   "lat": 33.686882,
+   "lon": 130.724866,
+   "status": "lost",
+   "nearestCurrent": {
+    "name": "鯰田渡",
+    "m": 3011
+   },
+   "nearestAbolished": {
+    "name": "JA頴田支所前",
+    "m": 167
+   },
+   "densH22": 36.7573075794,
+   "densH47": 24.8395810614,
+   "popH22": 223.519704,
+   "popH47": 151.04849
+  },
+  {
+   "name": "頴田支所(バス)",
+   "zone": "頴田支所周辺２",
+   "kind": "地域拠点型",
+   "district": "頴田地域拠点型",
+   "busNamed": true,
+   "lat": 33.680784,
+   "lon": 130.719391,
+   "status": "lost",
+   "nearestCurrent": {
+    "name": "鯰田駅",
+    "m": 2199
+   },
+   "nearestAbolished": {
+    "name": "頴田高齢者福祉センター",
+    "m": 265
+   },
+   "densH22": 23.6348113308,
+   "densH47": 18.518870255,
+   "popH22": 223.389279,
+   "popH47": 175.03491
+  },
+  {
+   "name": "綱分(バス)",
+   "zone": "庄内支所周辺",
+   "kind": "地域拠点型",
+   "district": "庄内地域拠点型",
+   "busNamed": true,
+   "lat": 33.636001,
+   "lon": 130.730271,
+   "status": "lost",
+   "nearestCurrent": {
+    "name": "新飯塚駅",
+    "m": 3495
+   },
+   "nearestAbolished": {
+    "name": "庄内保健福祉総合センター",
+    "m": 237
+   },
+   "densH22": 17.3086553378,
+   "densH47": 13.7218258739,
+   "popH22": 440.51812,
+   "popH47": 349.230649
+  },
+  {
+   "name": "幸袋公民館(バス)",
+   "zone": "幸袋公民館周辺",
+   "kind": "コミュニティ",
+   "district": "幸袋コミュニティ拠点型",
+   "busNamed": true,
+   "lat": 33.662531,
+   "lon": 130.685487,
+   "status": "served",
+   "nearestCurrent": {
+    "name": "旧幸袋交流センター前",
+    "m": 170
+   },
+   "nearestAbolished": {
+    "name": "幸袋交流センター",
+    "m": 226
+   },
+   "densH22": 31.9967240053,
+   "densH47": 27.2288316511,
+   "popH22": 1119.906054,
+   "popH47": 953.026735
+  },
+  {
+   "name": "新飯塚駅",
+   "zone": "中心拠点周辺３",
+   "kind": "中心拠点型",
+   "district": "中心拠点型",
+   "busNamed": false,
+   "lat": 33.636711,
+   "lon": 130.684809,
+   "status": "served",
+   "nearestCurrent": {
+    "name": "街なか子育てひろば前",
+    "m": 80
+   },
+   "nearestAbolished": {
+    "name": "街なか子育てひろば前",
+    "m": 80
+   },
+   "densH22": 37.0482953273,
+   "densH47": 31.5470068089,
+   "popH22": 9062.104238,
+   "popH47": 7716.475524
+  },
+  {
+   "name": "筑前大分駅",
+   "zone": "筑前大分駅周辺",
+   "kind": "暮らし維持型",
+   "district": "筑前大分駅暮らし維持型",
+   "busNamed": false,
+   "lat": 33.588847,
+   "lon": 130.630227,
+   "status": "served",
+   "nearestCurrent": {
+    "name": "大分駅前団地",
+    "m": 153
+   },
+   "nearestAbolished": {
+    "name": "うぐいす台",
+    "m": 153
+   },
+   "densH22": 35.0633372016,
+   "densH47": 29.889525133,
+   "popH22": 740.878678,
+   "popH47": 631.557451
+  },
+  {
+   "name": "清水谷団地口",
+   "zone": "清水谷団地口バス停周辺",
+   "kind": "暮らし維持型",
+   "district": "清水谷暮らし維持型",
+   "busNamed": true,
+   "lat": 33.654781,
+   "lon": 130.658811,
+   "status": "no_community_bus_data",
+   "nearestCurrent": {
+    "name": "イオン穂波店",
+    "m": 2438
+   },
+   "nearestAbolished": {
+    "name": "二瀬病院",
+    "m": 410
+   },
+   "densH22": 46.2541756843,
+   "densH47": 40.0483597988,
+   "popH22": 1070.193766,
+   "popH47": 926.608341
+  },
+  {
+   "name": "柏の森",
+   "zone": "柏の森バス停周辺",
+   "kind": "暮らし維持型",
+   "district": "柏の森暮らし維持型",
+   "busNamed": true,
+   "lat": 33.641043,
+   "lon": 130.696217,
+   "status": "no_community_bus_data",
+   "nearestCurrent": {
+    "name": "新飯塚駅",
+    "m": 419
+   },
+   "nearestAbolished": {
+    "name": "飯塚市役所",
+    "m": 734
+   },
+   "densH22": 63.8453555496,
+   "densH47": 65.6172433229,
+   "popH22": 1754.638209,
+   "popH47": 1803.334343
+  },
+  {
+   "name": "菰田小学校",
+   "zone": "近畿短大周辺",
+   "kind": "学園都市型",
+   "district": "近畿短大学園都市型",
+   "busNamed": false,
+   "lat": 33.629356,
+   "lon": 130.692615,
+   "status": "lost",
+   "nearestCurrent": {
+    "name": "ゆめタウン飯塚",
+    "m": 685
+   },
+   "nearestAbolished": {
+    "name": "菰田交流センター",
+    "m": 87
+   },
+   "densH22": 35.1320056511,
+   "densH47": 25.4503999192,
+   "popH22": 1575.533501,
+   "popH47": 1141.351225
+  }
+ ],
+ "lostFacilities": [
+  {
+   "stop": "建花寺本村公民館",
+   "toNearestM": 3812,
+   "nearest": "尾多羅"
+  },
+  {
+   "stop": "庄内保健福祉総合センター",
+   "toNearestM": 3355,
+   "nearest": "新飯塚駅"
+  },
+  {
+   "stop": "頴田交流センター",
+   "toNearestM": 3149,
+   "nearest": "鯰田駅"
+  },
+  {
+   "stop": "旧鎮西公民館",
+   "toNearestM": 2875,
+   "nearest": "市立病院"
+  },
+  {
+   "stop": "庄内交流センター",
+   "toNearestM": 2869,
+   "nearest": "新飯塚駅"
+  },
+  {
+   "stop": "JA頴田支所前",
+   "toNearestM": 2844,
+   "nearest": "鯰田渡"
+  },
+  {
+   "stop": "頴田病院",
+   "toNearestM": 2558,
+   "nearest": "鯰田渡"
+  },
+  {
+   "stop": "二瀬病院",
+   "toNearestM": 2521,
+   "nearest": "庄司本村"
+  },
+  {
+   "stop": "頴田高齢者福祉センター",
+   "toNearestM": 2351,
+   "nearest": "鯰田駅"
+  },
+  {
+   "stop": "鎮西交流センター",
+   "toNearestM": 2044,
+   "nearest": "市立病院"
+  },
+  {
+   "stop": "二瀬交流センター",
+   "toNearestM": 1430,
+   "nearest": "イオン穂波店"
+  },
+  {
+   "stop": "飯塚記念病院入口",
+   "toNearestM": 1320,
+   "nearest": "ゆめタウン飯塚"
+  },
+  {
+   "stop": "穂波庁舎",
+   "toNearestM": 1201,
+   "nearest": "椿(サンキ飯塚店)"
+  },
+  {
+   "stop": "穂波交流センター",
+   "toNearestM": 713,
+   "nearest": "椿(サンキ飯塚店)"
+  },
+  {
+   "stop": "菰田交流センター",
+   "toNearestM": 654,
+   "nearest": "ゆめタウン飯塚"
+  }
+ ]
+}

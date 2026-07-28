@@ -1,10 +1,11 @@
 /* いいづか のりものナビ — Service Worker(オフライン対応) */
-const CACHE = "norimono-2026-07-22-v15";
+const CACHE = "norimono-2026-07-28-v16";
 const ASSETS = [
   "./", "./index.html", "./analysis.html", "./future.html", "./dashboard.html",
   "./style.css", "./future.css", "./dashboard.css",
   "./data.js", "./app.js", "./killer_map.html",
   "./future.js", "./dashboard.js", "./towns.geojson", "./wagon-scenarios.json",
+  "./anchors.json",
   "./manifest.webmanifest", "./icon-192.png", "./icon-512.png",
   "./apple-touch-icon.png", "./favicon-32.png",
 ];
