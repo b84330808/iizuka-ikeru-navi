@@ -50,6 +50,12 @@
   .lost-table th { background: #f3e4e2; color: #7f1d1a; }
   .lost-table td:last-child { text-align: right; font-weight: bold; color: #b3261e; white-space: nowrap; }
   .anchor-caveat { font-size: .75em; color: #555; background: #fff; border-left: 4px solid #c9a227; padding: 10px 14px; border-radius: 0 10px 10px 0; margin-top: 16px; }
+  .limit-box { background: #fbf7ec; border: 2px solid #c9a227; border-radius: 14px; padding: 16px 18px; margin: 16px 0 20px; }
+  .limit-box h3 { margin: 0 0 8px; font-size: .98em; color: #6b5310; }
+  .limit-box p { font-size: .86em; margin: 8px 0; }
+  .limit-box ul { font-size: .82em; margin: 8px 0; padding-left: 1.2em; }
+  .limit-box li { margin: 4px 0; }
+  .limit-box .src { font-size: .74em; color: #6b6250; }
 </style>
 </head>
 <body>
@@ -129,7 +135,13 @@
       <li>各バス停の周囲300mを「歩いて利用できる範囲」として計算</li>
       <li>国勢調査の町丁別65歳以上人口と重ね、失われた範囲を面積按分で推計</li>
     </ol>
-    <p class="src">「約3,500人」は実人数の断定ではなく、公開データから地域への影響規模を把握するための概算です。前提と限界を明示し、再現可能な分析コードを作品に同梱しています。</p>
+    <p class="src">この推計は実人数の断定ではなく、公開データから地域への影響規模を把握するための概算です。前提と限界を明示し、再現可能な分析コードを作品に同梱しています。</p>
+    <div class="limit-box" id="limit-box" hidden>
+      <h3>自分で見つけた、この推計の弱点</h3>
+      <p id="limit-text"></p>
+      <ul id="limit-list"></ul>
+      <p class="src">この幅は <code>scripts/build_analysis.py</code> が病院の座標と町丁ポリゴンの包含判定から自動算出しており、再実行しても同じ値になります。</p>
+    </div>
   </article>
   <a class="cta" href="index.html">実際に、行き方を探してみる →</a>
 </main>
@@ -142,9 +154,30 @@
   document.getElementById("stats").innerHTML = [
     [h.stops_before + " → " + h.stops_after, "コミュニティバスのバス停数(2022年再編 前→後)"],
     [h.towns_lost + "町丁", "バス停300m徒歩圏が消滅した地区"],
-    ["約" + h.elderly_affected_weighted.toLocaleString() + "人", "徒歩圏を失った65歳以上(面積按分推計)"],
+    [h.elderly_affected_excl_institutional
+      ? `約${h.elderly_affected_excl_institutional.toLocaleString()}〜${h.elderly_affected_weighted.toLocaleString()}人`
+      : "約" + h.elderly_affected_weighted.toLocaleString() + "人",
+     "徒歩圏を失った65歳以上(面積按分推計・入院患者の扱いによる幅)"],
     ["32.3%", "飯塚市の高齢化率"],
   ].map(([n, l]) => `<div class="stat"><div class="num">${n}</div><div class="lab">${l}</div></div>`).join("");
+
+  // 推計の弱点(施設入所者の混入)を自分から開示する
+  if (h.institutional_towns && h.institutional_towns.length) {
+    const esc = s => String(s ?? "").replace(/[&<>"']/g, c =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    document.getElementById("limit-text").innerHTML =
+      `国勢調査の小地域集計は、病院の入院患者もその町丁の人口として数えます。` +
+      `つまりこの推計には、そもそも自力でバス停まで歩かない入院患者が含まれている可能性があります。` +
+      `${h.institutional_min_beds}床以上の病院が立地する町丁の寄与は` +
+      `<b>${h.elderly_affected_institutional.toLocaleString()}人</b>` +
+      `(全体の${Math.round(h.elderly_affected_institutional / h.elderly_affected_weighted * 100)}%)で、` +
+      `これを除くと<b>${h.elderly_affected_excl_institutional.toLocaleString()}人</b>になります。` +
+      `そのため上の数字は幅で示しています。`;
+    document.getElementById("limit-list").innerHTML = h.institutional_towns.map(t =>
+      `<li><b>${esc(t.name)}</b> — 推計影響 ${t.elderly_affected.toLocaleString()}人 / ${esc(t.facilities.join("、"))}` +
+      `${t.beds >= 300 ? "(この町丁の65歳以上人口を病床数が上回るため、影響が大きい)" : ""}</li>`).join("");
+    document.getElementById("limit-box").hidden = false;
+  }
 </script>
 <script>
 /* 立地適正化計画(法定計画)の都市機能誘導拠点 × コミュニティバス再編 の突合を描画。

@@ -7,7 +7,44 @@
   "towns_lost": 34,
   "towns_reduced": 2,
   "elderly_in_lost_towns": 11585,
-  "elderly_affected_weighted": 3484
+  "elderly_affected_weighted": 3484,
+  "institutional_min_beds": 20,
+  "institutional_towns": [
+   {
+    "name": "横田",
+    "elderly_affected": 232,
+    "facilities": [
+     "（医）社団親和会共立病院(139床)"
+    ],
+    "beds": 139
+   },
+   {
+    "name": "鶴三緒",
+    "elderly_affected": 229,
+    "facilities": [
+     "飯塚記念病院(400床)"
+    ],
+    "beds": 400
+   },
+   {
+    "name": "伊川",
+    "elderly_affected": 68,
+    "facilities": [
+     "社会保険二瀬病院(55床)"
+    ],
+    "beds": 55
+   },
+   {
+    "name": "口原",
+    "elderly_affected": 48,
+    "facilities": [
+     "頴田病院(96床)"
+    ],
+    "beds": 96
+   }
+  ],
+  "elderly_affected_institutional": 577,
+  "elderly_affected_excl_institutional": 2907
  },
  "towns": [
   {

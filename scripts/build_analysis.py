@@ -66,6 +66,55 @@ def num(v):
     return int(v) if v and v not in ("*", "X", "-") else None
 
 
+def institutional_sensitivity(affected_towns, geoms, min_beds=20):
+    """推計値に含まれる「施設入所者」の影響を定量化する。
+
+    国勢調査の小地域集計は、病院の入院患者や施設入所者をその町丁の人口として数える。
+    そのため「徒歩圏を失った高齢者」の推計には、そもそも自力でバス停まで歩かない
+    入院患者が混ざりうる。20床以上の病院が立地する町丁の寄与を切り出し、
+    推計の幅として公開する(隠さずに範囲を示す)。
+    """
+    beds = []
+    path = ROOT / "data" / "hospitals.csv"
+    if not path.exists():
+        return {}
+    with open(path, encoding="cp932") as f:
+        for r in csv.DictReader(f):
+            if not (r.get("緯度") and r.get("経度")):
+                continue
+            try:
+                b = int(r.get("病床数") or 0)
+            except ValueError:
+                b = 0
+            if b >= min_beds:
+                beds.append((r["名称"], b, float(r["緯度"]), float(r["経度"])))
+
+    by_key = {}
+    for name, b, la, lo in beds:
+        p = Point(*to_m(lo, la))
+        for key, glist in geoms.items():
+            if any(g.contains(p) for g in glist):
+                cur = by_key.get(key, {"beds": 0, "names": []})
+                cur["beds"] += b
+                cur["names"].append(f"{name}({b}床)")
+                by_key[key] = cur
+                break
+
+    hit = [t for t in affected_towns if t["key"] in by_key]
+    contrib = sum(t["elderly_affected"] for t in hit)
+    total = sum(t["elderly_affected"] for t in affected_towns)
+    return {
+        "institutional_min_beds": min_beds,
+        "institutional_towns": [
+            {"name": t["name"], "elderly_affected": t["elderly_affected"],
+             "facilities": by_key[t["key"]]["names"], "beds": by_key[t["key"]]["beds"]}
+            for t in sorted(hit, key=lambda x: -x["elderly_affected"])
+        ],
+        "elderly_affected_institutional": contrib,
+        "elderly_affected_excl_institutional": total - contrib,
+    }
+
+
 def main():
     gtfs = ROOT / "data" / "gtfs"
     old4 = load_stops(gtfs / "old4routes")
@@ -145,6 +194,7 @@ def main():
         "elderly_in_lost_towns": sum(t["pop_elderly"] for t in lost),
         "elderly_affected_weighted": sum(t["elderly_affected"] for t in lost + reduced),
     }
+    headline.update(institutional_sensitivity(lost + reduced, geoms))
 
     out = ROOT / "data" / "processed"
     out.mkdir(parents=True, exist_ok=True)
